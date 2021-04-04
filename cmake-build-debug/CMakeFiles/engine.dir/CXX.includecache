@@ -1,0 +1,44 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/inte/CLionProjects/utils/draw2DLine.cpp
+draw2DLine.h
+/home/inte/CLionProjects/utils/draw2DLine.h
+
+/home/inte/CLionProjects/utils/draw2DLine.h
+easy_image.h
+/home/inte/CLionProjects/utils/easy_image.h
+list
+-
+hulpFile.h
+/home/inte/CLionProjects/utils/hulpFile.h
+limits
+-
+assert.h
+/home/inte/CLionProjects/utils/assert.h
+
+/home/inte/CLionProjects/utils/easy_image.h
+stdint.h
+-
+vector
+-
+iostream
+-
+
+/home/inte/CLionProjects/utils/hulpFile.h
+easy_image.h
+/home/inte/CLionProjects/utils/easy_image.h
+cmath
+-
+draw2DLine.h
+/home/inte/CLionProjects/utils/draw2DLine.h
+vector
+-
+map
+-
+
