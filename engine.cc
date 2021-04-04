@@ -172,7 +172,9 @@ img::EasyImage generate_3DdrawingWithZbuffering(const ini::Configuration &config
 
     drieDdrawings newFaceAndPoints = zDriehoek.triangulate(drawing);
 
+
     return zDriehoek.drawTriangle(newFaceAndPoints.drieDfiguren, backColor);
+
 
 }
 
@@ -202,6 +204,7 @@ img::EasyImage generate_image(const ini::Configuration &configuration){
 int main(int argc, char const* argv[])
 {
 
+
     //hiermee kan ik de runtime meten voor het maken van alle foto's
     auto start = high_resolution_clock::now();
 
@@ -218,6 +221,7 @@ int main(int argc, char const* argv[])
         }
         for(std::string fileName : args)
         {
+
             ini::Configuration conf;
             try
             {

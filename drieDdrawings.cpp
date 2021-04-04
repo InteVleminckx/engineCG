@@ -122,21 +122,28 @@ void drieDdrawings::parse3Ddrawing(const ini::Configuration &configuration, int 
     }
 
 
-//    if(fractal != "Fractal"){
+    if(fractal != "Fractal"){
         newFigure.color.red = color[0];
         newFigure.color.green = color[1];
         newFigure.color.blue = color[2];
 
         drieDfiguren.push_back(newFigure);
 
-        if(!zBufDriehoek) createDrawVector(newFigure);
-//    }
+        if(!zBufDriehoek && !newFigure.points.empty()) createDrawVector(newFigure);
+    }
 
-//    else{
-//
-//
-//
-//    }
+    else{
+        for (auto &fractaal : fractalen) {
+            fractaal.color.red = color[0];
+            fractaal.color.green = color[1];
+            fractaal.color.blue = color[2];
+
+            drieDfiguren.push_back(fractaal);
+
+            if(!zBufDriehoek) createDrawVector(fractaal);
+
+        }
+    }
 
 
 }
@@ -776,60 +783,39 @@ Figure drieDdrawings::createTorus(int n, int m, double r, double R) {
 void drieDdrawings::generateFractal(Figure &fig, Figures3D &fractal, const int nr_iterations, double scale) {
 
     double scale1 = 1/scale;
-
     Matrix scaleM = scaleMatrix(scale1);
+    fractal.push_back(fig);
 
-    int aantalPuntenPerFiguur = fig.points.size();
-
-    vector<Vector3D> pointsFig1 = fig.points;
 
     for (int i = 0; i < nr_iterations; ++i) {
 
-        Figure scaledFigure;
-        Figure movedFigure;
+        Figures3D tempFiguren;
 
-        for (const auto&point : fig.points) scaledFigure.points.push_back(point*scaleM);
+        for (auto &fractaal : fractal) {
 
-        for (int j = 0; j < aantalPuntenPerFiguur; ++j) {
+            Figure scaledFigure;
 
-            Vector3D Pi = pointsFig1[j];
+            for (auto & point : fractaal.points) scaledFigure.points.push_back(point*scaleM);
 
-            Vector3D P_accent_i = scaledFigure.points[j*aantalPuntenPerFiguur + j%aantalPuntenPerFiguur];
-//            Vector3D P_accent_i = scaledFigure.points[j+i*aantalPuntenPerFiguur];
+            for (int j = 0; j < fractaal.points.size(); ++j) {
 
-            Vector3D moveVector = Vector3D::vector(Pi-P_accent_i);
+                Vector3D Pi = fractaal.points[j];
+                Vector3D P_accent = scaledFigure.points[j];
+                Vector3D moveVector = Vector3D::vector(Pi-P_accent);
 
+                Figure newFigure;
 
-            for (int k = 0; k < scaledFigure.points.size(); ++k) movedFigure.points.push_back(scaledFigure.points[k] + moveVector);
+                for (auto & point : scaledFigure.points) newFigure.points.push_back(point+moveVector);
 
-            int aantalFiguren = (movedFigure.points.size()/aantalPuntenPerFiguur)-1;
+                newFigure.faces = fractaal.faces;
 
-
-
-            for (int k = 0; k < fig.faces.size(); ++k) {
-
-//                scaledFigure.faces.push_back(fig.faces[k]);
-
-                Face newFace;
-                for (int l = 0; l < fig.faces[k].point_indexes.size(); ++l) {
-
-                    newFace.point_indexes.push_back(fig.faces[k].point_indexes[l]+(aantalFiguren*aantalPuntenPerFiguur));
-
-                }
-
-                movedFigure.faces.push_back(newFace);
+                tempFiguren.push_back(newFigure);
 
             }
         }
 
-        fig = movedFigure;
-
+        fractal = tempFiguren;
     }
-
-
-
-
-
 
 }
 
