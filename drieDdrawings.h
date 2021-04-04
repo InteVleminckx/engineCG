@@ -61,8 +61,6 @@ public:
 
     void eyePointTrans(const Vector3D &eyepoint);
 
-    void scaleMatrix(double &scale);
-
     void rotateXmatrix(const double &angle);
 
     void rotateYmatrix(const double &angle);
@@ -73,6 +71,11 @@ public:
 
     void createRotatieMatrix(const double &angleX, const double &angleY, const double &angleZ, double &scale, Vector3D &centerPoint);
 
+    void generateFractal(Figure& fig, Figures3D &fractal, const int nr_iterations, double scale);
+
+    void createDrawVector(Figure &figure);
+
+    Matrix scaleMatrix(double &scale);
 
     Figure createCube();
 
@@ -91,8 +94,6 @@ public:
     Figure createSphere(int n);
 
     Figure createTorus(int n, int m, double r, double R);
-
-    void createDrawVector(Figure &figure);
 
     Lines2D getLines() {return lines;}
 

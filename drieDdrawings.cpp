@@ -15,6 +15,16 @@ void drieDdrawings::parse3Ddrawing(const ini::Configuration &configuration, int 
     double scale = configuration[figurex]["scale"].as_double_or_die();
     vector<double> center = configuration[figurex]["center"].as_double_tuple_or_die();
     vector<double> color = configuration[figurex]["color"].as_double_tuple_or_die();
+    string fractal = type.substr(0, 7);
+    int nrIterations;
+    double fractalScale;
+    Figures3D fractalen;
+
+    if (fractal == "Fractal"){
+        nrIterations = configuration[figurex]["nrIterations"].as_int_or_die();
+        fractalScale = configuration[figurex]["fractalScale"].as_double_or_die();
+    }
+
 
     Vector3D centerPoint;
     centerPoint.x = center[0]; centerPoint.y = center[1]; centerPoint.z = center[2];
@@ -31,7 +41,7 @@ void drieDdrawings::parse3Ddrawing(const ini::Configuration &configuration, int 
         for (int i = 0; i < nrPoints; ++i) {
             string pointnumber = "point" + to_string(i);
             vector<double> points = configuration[figurex][pointnumber].as_double_tuple_or_die();
-            Vector3D vector3D = vector3D.point(points[0], points[1], points[2]);
+            Vector3D vector3D = Vector3D::point(points[0], points[1], points[2]);
 
             //hier al vermenigvuldigen
             vector3D *= rotatieMatrix * MatrixEyepoint;
@@ -48,7 +58,10 @@ void drieDdrawings::parse3Ddrawing(const ini::Configuration &configuration, int 
         }
     }
 
-    else if (type == "Cube"){newFigure = createCube();}
+    else if (type == "Cube" || type == "FractalCube"){
+        newFigure = createCube();
+        if (fractal == "Fractal") generateFractal(newFigure, fractalen, nrIterations, fractalScale);
+    }
 
     else if (type == "Cylinder"){
         int n = configuration[figurex]["n"].as_int_or_die();
@@ -79,13 +92,27 @@ void drieDdrawings::parse3Ddrawing(const ini::Configuration &configuration, int 
 
     }
 
-    else if (type == "Tetrahedron"){newFigure = createTetrahedron();}
+    else if (type == "Tetrahedron" || type == "FractalTetrahedron"){
+        newFigure = createTetrahedron();
 
-    else if (type == "Octahedron"){newFigure = createOctahedron();}
+        if (fractal == "Fractal") generateFractal(newFigure, fractalen, nrIterations, fractalScale);
 
-    else if (type == "Icosahedron"){newFigure = createIcosahedron();}
+    }
 
-    else if (type == "Dodecahedron"){ newFigure = createDodecahedron();}
+    else if (type == "Octahedron" || type == "FractalOctahedron"){
+        newFigure = createOctahedron();
+        if (fractal == "Fractal") generateFractal(newFigure, fractalen, nrIterations, fractalScale);
+    }
+
+    else if (type == "Icosahedron" || type == "FractalIcosahedron"){
+        newFigure = createIcosahedron();
+        if (fractal == "Fractal") generateFractal(newFigure, fractalen, nrIterations, fractalScale);
+    }
+
+    else if (type == "Dodecahedron" || type == "FractalDodecahedron"){
+        newFigure = createDodecahedron();
+        if (fractal == "Fractal") generateFractal(newFigure, fractalen, nrIterations, fractalScale);
+    }
 
     else if (type == "3DLSystem"){
         Matrix volledigeMatrix = rotatieMatrix * MatrixEyepoint;
@@ -95,13 +122,21 @@ void drieDdrawings::parse3Ddrawing(const ini::Configuration &configuration, int 
     }
 
 
-    newFigure.color.red = color[0];
-    newFigure.color.green = color[1];
-    newFigure.color.blue = color[2];
+//    if(fractal != "Fractal"){
+        newFigure.color.red = color[0];
+        newFigure.color.green = color[1];
+        newFigure.color.blue = color[2];
 
-    drieDfiguren.push_back(newFigure);
+        drieDfiguren.push_back(newFigure);
 
-    if(!zBufDriehoek) createDrawVector(newFigure);
+        if(!zBufDriehoek) createDrawVector(newFigure);
+//    }
+
+//    else{
+//
+//
+//
+//    }
 
 
 }
@@ -134,10 +169,17 @@ void drieDdrawings::eyePointTrans(const Vector3D &eyepoint) {
 
 }
 
-void drieDdrawings::scaleMatrix(double &scale) {
-    scaleFigure(1,1) = scale;
-    scaleFigure(2,2) = scale;
-    scaleFigure(3,3) = scale;
+Matrix drieDdrawings::scaleMatrix(double &scale) {
+
+    Matrix scaleMatrix;
+
+    scaleMatrix(1,1) = scale;
+    scaleMatrix(2,2) = scale;
+    scaleMatrix(3,3) = scale;
+
+
+    return scaleMatrix;
+
 }
 
 void drieDdrawings::rotateXmatrix(const double &angle) {
@@ -177,7 +219,7 @@ void drieDdrawings::translatieMatrix(Vector3D &centerPoint) {
 
 void drieDdrawings::createRotatieMatrix(const double &angleX, const double &angleY, const double &angleZ, double &scale, Vector3D &centerPoint) {
 
-    scaleMatrix(scale);
+    scaleFigure = scaleMatrix(scale);
     rotateXmatrix(angleX);
     rotateYmatrix(angleY);
     rotateZmatrix(angleZ);
@@ -729,5 +771,65 @@ Figure drieDdrawings::createTorus(int n, int m, double r, double R) {
     }
 
     return torus;
+}
+
+void drieDdrawings::generateFractal(Figure &fig, Figures3D &fractal, const int nr_iterations, double scale) {
+
+    double scale1 = 1/scale;
+
+    Matrix scaleM = scaleMatrix(scale1);
+
+    int aantalPuntenPerFiguur = fig.points.size();
+
+    vector<Vector3D> pointsFig1 = fig.points;
+
+    for (int i = 0; i < nr_iterations; ++i) {
+
+        Figure scaledFigure;
+        Figure movedFigure;
+
+        for (const auto&point : fig.points) scaledFigure.points.push_back(point*scaleM);
+
+        for (int j = 0; j < aantalPuntenPerFiguur; ++j) {
+
+            Vector3D Pi = pointsFig1[j];
+
+            Vector3D P_accent_i = scaledFigure.points[j*aantalPuntenPerFiguur + j%aantalPuntenPerFiguur];
+//            Vector3D P_accent_i = scaledFigure.points[j+i*aantalPuntenPerFiguur];
+
+            Vector3D moveVector = Vector3D::vector(Pi-P_accent_i);
+
+
+            for (int k = 0; k < scaledFigure.points.size(); ++k) movedFigure.points.push_back(scaledFigure.points[k] + moveVector);
+
+            int aantalFiguren = (movedFigure.points.size()/aantalPuntenPerFiguur)-1;
+
+
+
+            for (int k = 0; k < fig.faces.size(); ++k) {
+
+//                scaledFigure.faces.push_back(fig.faces[k]);
+
+                Face newFace;
+                for (int l = 0; l < fig.faces[k].point_indexes.size(); ++l) {
+
+                    newFace.point_indexes.push_back(fig.faces[k].point_indexes[l]+(aantalFiguren*aantalPuntenPerFiguur));
+
+                }
+
+                movedFigure.faces.push_back(newFace);
+
+            }
+        }
+
+        fig = movedFigure;
+
+    }
+
+
+
+
+
+
 }
 
