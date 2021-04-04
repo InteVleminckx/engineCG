@@ -1,4 +1,4 @@
-# Install script for directory: /home/inte/CLionProjects/utils
+# Install script for directory: /home/inte/CLionProjects/engineCG
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -38,25 +38,25 @@ if(NOT DEFINED CMAKE_CROSSCOMPILING)
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  if(EXISTS "$ENV{DESTDIR}/home/inte/CLionProjects/utils/engine" AND
-     NOT IS_SYMLINK "$ENV{DESTDIR}/home/inte/CLionProjects/utils/engine")
+  if(EXISTS "$ENV{DESTDIR}/home/inte/CLionProjects/engineCG/engine" AND
+     NOT IS_SYMLINK "$ENV{DESTDIR}/home/inte/CLionProjects/engineCG/engine")
     file(RPATH_CHECK
-         FILE "$ENV{DESTDIR}/home/inte/CLionProjects/utils/engine"
+         FILE "$ENV{DESTDIR}/home/inte/CLionProjects/engineCG/engine"
          RPATH "")
   endif()
   list(APPEND CMAKE_ABSOLUTE_DESTINATION_FILES
-   "/home/inte/CLionProjects/utils/engine")
+   "/home/inte/CLionProjects/engineCG/engine")
   if(CMAKE_WARN_ON_ABSOLUTE_INSTALL_DESTINATION)
     message(WARNING "ABSOLUTE path INSTALL DESTINATION : ${CMAKE_ABSOLUTE_DESTINATION_FILES}")
   endif()
   if(CMAKE_ERROR_ON_ABSOLUTE_INSTALL_DESTINATION)
     message(FATAL_ERROR "ABSOLUTE path INSTALL DESTINATION forbidden (by caller): ${CMAKE_ABSOLUTE_DESTINATION_FILES}")
   endif()
-file(INSTALL DESTINATION "/home/inte/CLionProjects/utils" TYPE EXECUTABLE FILES "/home/inte/CLionProjects/utils/cmake-build-debug/engine")
-  if(EXISTS "$ENV{DESTDIR}/home/inte/CLionProjects/utils/engine" AND
-     NOT IS_SYMLINK "$ENV{DESTDIR}/home/inte/CLionProjects/utils/engine")
+file(INSTALL DESTINATION "/home/inte/CLionProjects/engineCG" TYPE EXECUTABLE FILES "/home/inte/CLionProjects/engineCG/cmake-build-debug/engine")
+  if(EXISTS "$ENV{DESTDIR}/home/inte/CLionProjects/engineCG/engine" AND
+     NOT IS_SYMLINK "$ENV{DESTDIR}/home/inte/CLionProjects/engineCG/engine")
     if(CMAKE_INSTALL_DO_STRIP)
-      execute_process(COMMAND "/usr/bin/strip" "$ENV{DESTDIR}/home/inte/CLionProjects/utils/engine")
+      execute_process(COMMAND "/usr/bin/strip" "$ENV{DESTDIR}/home/inte/CLionProjects/engineCG/engine")
     endif()
   endif()
 endif()
@@ -69,5 +69,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "/home/inte/CLionProjects/utils/cmake-build-debug/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "/home/inte/CLionProjects/engineCG/cmake-build-debug/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")

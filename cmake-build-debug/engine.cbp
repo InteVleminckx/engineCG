@@ -8,38 +8,38 @@
 		<Option virtualFolders="CMake Files\;"/>
 		<Build>
 			<Target title="all">
-				<Option working_dir="/home/inte/CLionProjects/utils/cmake-build-debug"/>
+				<Option working_dir="/home/inte/CLionProjects/engineCG/cmake-build-debug"/>
 				<Option type="4"/>
 				<MakeCommands>
-					<Build command="/usr/bin/make -j8 -f &quot;/home/inte/CLionProjects/utils/cmake-build-debug/Makefile&quot;  VERBOSE=1 all"/>
-					<CompileFile command="/usr/bin/make -j8 -f &quot;/home/inte/CLionProjects/utils/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="/usr/bin/make -j8 -f &quot;/home/inte/CLionProjects/utils/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="/usr/bin/make -j8 -f &quot;/home/inte/CLionProjects/utils/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<Build command="/usr/bin/make -j8 -f &quot;/home/inte/CLionProjects/engineCG/cmake-build-debug/Makefile&quot;  VERBOSE=1 all"/>
+					<CompileFile command="/usr/bin/make -j8 -f &quot;/home/inte/CLionProjects/engineCG/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j8 -f &quot;/home/inte/CLionProjects/engineCG/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j8 -f &quot;/home/inte/CLionProjects/engineCG/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
 			<Target title="install/strip">
-				<Option working_dir="/home/inte/CLionProjects/utils/cmake-build-debug"/>
+				<Option working_dir="/home/inte/CLionProjects/engineCG/cmake-build-debug"/>
 				<Option type="4"/>
 				<MakeCommands>
-					<Build command="/usr/bin/make -j8 -f &quot;/home/inte/CLionProjects/utils/cmake-build-debug/Makefile&quot;  VERBOSE=1 install/strip"/>
-					<CompileFile command="/usr/bin/make -j8 -f &quot;/home/inte/CLionProjects/utils/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="/usr/bin/make -j8 -f &quot;/home/inte/CLionProjects/utils/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="/usr/bin/make -j8 -f &quot;/home/inte/CLionProjects/utils/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<Build command="/usr/bin/make -j8 -f &quot;/home/inte/CLionProjects/engineCG/cmake-build-debug/Makefile&quot;  VERBOSE=1 install/strip"/>
+					<CompileFile command="/usr/bin/make -j8 -f &quot;/home/inte/CLionProjects/engineCG/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j8 -f &quot;/home/inte/CLionProjects/engineCG/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j8 -f &quot;/home/inte/CLionProjects/engineCG/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
 			<Target title="install/local">
-				<Option working_dir="/home/inte/CLionProjects/utils/cmake-build-debug"/>
+				<Option working_dir="/home/inte/CLionProjects/engineCG/cmake-build-debug"/>
 				<Option type="4"/>
 				<MakeCommands>
-					<Build command="/usr/bin/make -j8 -f &quot;/home/inte/CLionProjects/utils/cmake-build-debug/Makefile&quot;  VERBOSE=1 install/local"/>
-					<CompileFile command="/usr/bin/make -j8 -f &quot;/home/inte/CLionProjects/utils/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="/usr/bin/make -j8 -f &quot;/home/inte/CLionProjects/utils/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="/usr/bin/make -j8 -f &quot;/home/inte/CLionProjects/utils/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<Build command="/usr/bin/make -j8 -f &quot;/home/inte/CLionProjects/engineCG/cmake-build-debug/Makefile&quot;  VERBOSE=1 install/local"/>
+					<CompileFile command="/usr/bin/make -j8 -f &quot;/home/inte/CLionProjects/engineCG/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j8 -f &quot;/home/inte/CLionProjects/engineCG/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j8 -f &quot;/home/inte/CLionProjects/engineCG/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
 			<Target title="engine">
-				<Option output="/home/inte/CLionProjects/utils/cmake-build-debug/engine" prefix_auto="0" extension_auto="0"/>
-				<Option working_dir="/home/inte/CLionProjects/utils/cmake-build-debug"/>
+				<Option output="/home/inte/CLionProjects/engineCG/cmake-build-debug/engine" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/inte/CLionProjects/engineCG/cmake-build-debug"/>
 				<Option object_output="./"/>
 				<Option type="1"/>
 				<Option compiler="gcc"/>
@@ -53,15 +53,15 @@
 					<Add directory="/usr/include"/>
 				</Compiler>
 				<MakeCommands>
-					<Build command="/usr/bin/make -j8 -f &quot;/home/inte/CLionProjects/utils/cmake-build-debug/Makefile&quot;  VERBOSE=1 engine"/>
-					<CompileFile command="/usr/bin/make -j8 -f &quot;/home/inte/CLionProjects/utils/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="/usr/bin/make -j8 -f &quot;/home/inte/CLionProjects/utils/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="/usr/bin/make -j8 -f &quot;/home/inte/CLionProjects/utils/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<Build command="/usr/bin/make -j8 -f &quot;/home/inte/CLionProjects/engineCG/cmake-build-debug/Makefile&quot;  VERBOSE=1 engine"/>
+					<CompileFile command="/usr/bin/make -j8 -f &quot;/home/inte/CLionProjects/engineCG/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j8 -f &quot;/home/inte/CLionProjects/engineCG/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j8 -f &quot;/home/inte/CLionProjects/engineCG/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
 			<Target title="engine/fast">
-				<Option output="/home/inte/CLionProjects/utils/cmake-build-debug/engine" prefix_auto="0" extension_auto="0"/>
-				<Option working_dir="/home/inte/CLionProjects/utils/cmake-build-debug"/>
+				<Option output="/home/inte/CLionProjects/engineCG/cmake-build-debug/engine" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/inte/CLionProjects/engineCG/cmake-build-debug"/>
 				<Option object_output="./"/>
 				<Option type="1"/>
 				<Option compiler="gcc"/>
@@ -75,117 +75,117 @@
 					<Add directory="/usr/include"/>
 				</Compiler>
 				<MakeCommands>
-					<Build command="/usr/bin/make -j8 -f &quot;/home/inte/CLionProjects/utils/cmake-build-debug/Makefile&quot;  VERBOSE=1 engine/fast"/>
-					<CompileFile command="/usr/bin/make -j8 -f &quot;/home/inte/CLionProjects/utils/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="/usr/bin/make -j8 -f &quot;/home/inte/CLionProjects/utils/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="/usr/bin/make -j8 -f &quot;/home/inte/CLionProjects/utils/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<Build command="/usr/bin/make -j8 -f &quot;/home/inte/CLionProjects/engineCG/cmake-build-debug/Makefile&quot;  VERBOSE=1 engine/fast"/>
+					<CompileFile command="/usr/bin/make -j8 -f &quot;/home/inte/CLionProjects/engineCG/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j8 -f &quot;/home/inte/CLionProjects/engineCG/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j8 -f &quot;/home/inte/CLionProjects/engineCG/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
 			<Target title="rebuild_cache">
-				<Option working_dir="/home/inte/CLionProjects/utils/cmake-build-debug"/>
+				<Option working_dir="/home/inte/CLionProjects/engineCG/cmake-build-debug"/>
 				<Option type="4"/>
 				<MakeCommands>
-					<Build command="/usr/bin/make -j8 -f &quot;/home/inte/CLionProjects/utils/cmake-build-debug/Makefile&quot;  VERBOSE=1 rebuild_cache"/>
-					<CompileFile command="/usr/bin/make -j8 -f &quot;/home/inte/CLionProjects/utils/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="/usr/bin/make -j8 -f &quot;/home/inte/CLionProjects/utils/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="/usr/bin/make -j8 -f &quot;/home/inte/CLionProjects/utils/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<Build command="/usr/bin/make -j8 -f &quot;/home/inte/CLionProjects/engineCG/cmake-build-debug/Makefile&quot;  VERBOSE=1 rebuild_cache"/>
+					<CompileFile command="/usr/bin/make -j8 -f &quot;/home/inte/CLionProjects/engineCG/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j8 -f &quot;/home/inte/CLionProjects/engineCG/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j8 -f &quot;/home/inte/CLionProjects/engineCG/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
 			<Target title="edit_cache">
-				<Option working_dir="/home/inte/CLionProjects/utils/cmake-build-debug"/>
+				<Option working_dir="/home/inte/CLionProjects/engineCG/cmake-build-debug"/>
 				<Option type="4"/>
 				<MakeCommands>
-					<Build command="/usr/bin/make -j8 -f &quot;/home/inte/CLionProjects/utils/cmake-build-debug/Makefile&quot;  VERBOSE=1 edit_cache"/>
-					<CompileFile command="/usr/bin/make -j8 -f &quot;/home/inte/CLionProjects/utils/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="/usr/bin/make -j8 -f &quot;/home/inte/CLionProjects/utils/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="/usr/bin/make -j8 -f &quot;/home/inte/CLionProjects/utils/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<Build command="/usr/bin/make -j8 -f &quot;/home/inte/CLionProjects/engineCG/cmake-build-debug/Makefile&quot;  VERBOSE=1 edit_cache"/>
+					<CompileFile command="/usr/bin/make -j8 -f &quot;/home/inte/CLionProjects/engineCG/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j8 -f &quot;/home/inte/CLionProjects/engineCG/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j8 -f &quot;/home/inte/CLionProjects/engineCG/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
 			<Target title="install">
-				<Option working_dir="/home/inte/CLionProjects/utils/cmake-build-debug"/>
+				<Option working_dir="/home/inte/CLionProjects/engineCG/cmake-build-debug"/>
 				<Option type="4"/>
 				<MakeCommands>
-					<Build command="/usr/bin/make -j8 -f &quot;/home/inte/CLionProjects/utils/cmake-build-debug/Makefile&quot;  VERBOSE=1 install"/>
-					<CompileFile command="/usr/bin/make -j8 -f &quot;/home/inte/CLionProjects/utils/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="/usr/bin/make -j8 -f &quot;/home/inte/CLionProjects/utils/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="/usr/bin/make -j8 -f &quot;/home/inte/CLionProjects/utils/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<Build command="/usr/bin/make -j8 -f &quot;/home/inte/CLionProjects/engineCG/cmake-build-debug/Makefile&quot;  VERBOSE=1 install"/>
+					<CompileFile command="/usr/bin/make -j8 -f &quot;/home/inte/CLionProjects/engineCG/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j8 -f &quot;/home/inte/CLionProjects/engineCG/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j8 -f &quot;/home/inte/CLionProjects/engineCG/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
 			<Target title="list_install_components">
-				<Option working_dir="/home/inte/CLionProjects/utils/cmake-build-debug"/>
+				<Option working_dir="/home/inte/CLionProjects/engineCG/cmake-build-debug"/>
 				<Option type="4"/>
 				<MakeCommands>
-					<Build command="/usr/bin/make -j8 -f &quot;/home/inte/CLionProjects/utils/cmake-build-debug/Makefile&quot;  VERBOSE=1 list_install_components"/>
-					<CompileFile command="/usr/bin/make -j8 -f &quot;/home/inte/CLionProjects/utils/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="/usr/bin/make -j8 -f &quot;/home/inte/CLionProjects/utils/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="/usr/bin/make -j8 -f &quot;/home/inte/CLionProjects/utils/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<Build command="/usr/bin/make -j8 -f &quot;/home/inte/CLionProjects/engineCG/cmake-build-debug/Makefile&quot;  VERBOSE=1 list_install_components"/>
+					<CompileFile command="/usr/bin/make -j8 -f &quot;/home/inte/CLionProjects/engineCG/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j8 -f &quot;/home/inte/CLionProjects/engineCG/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j8 -f &quot;/home/inte/CLionProjects/engineCG/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
 		</Build>
-		<Unit filename="/home/inte/CLionProjects/utils/DrieDLsystems.cpp">
+		<Unit filename="/home/inte/CLionProjects/engineCG/DrieDLsystems.cpp">
 			<Option target="engine"/>
 		</Unit>
-		<Unit filename="/home/inte/CLionProjects/utils/DrieDLsystems.h">
+		<Unit filename="/home/inte/CLionProjects/engineCG/DrieDLsystems.h">
 			<Option target="engine"/>
 		</Unit>
-		<Unit filename="/home/inte/CLionProjects/utils/Z_buffer_driehoeken.cpp">
+		<Unit filename="/home/inte/CLionProjects/engineCG/Z_buffer_driehoeken.cpp">
 			<Option target="engine"/>
 		</Unit>
-		<Unit filename="/home/inte/CLionProjects/utils/Z_buffer_driehoeken.h">
+		<Unit filename="/home/inte/CLionProjects/engineCG/Z_buffer_driehoeken.h">
 			<Option target="engine"/>
 		</Unit>
-		<Unit filename="/home/inte/CLionProjects/utils/_2DLsystems.cpp">
+		<Unit filename="/home/inte/CLionProjects/engineCG/_2DLsystems.cpp">
 			<Option target="engine"/>
 		</Unit>
-		<Unit filename="/home/inte/CLionProjects/utils/_2DLsystems.h">
+		<Unit filename="/home/inte/CLionProjects/engineCG/_2DLsystems.h">
 			<Option target="engine"/>
 		</Unit>
-		<Unit filename="/home/inte/CLionProjects/utils/draw2DLine.cpp">
+		<Unit filename="/home/inte/CLionProjects/engineCG/draw2DLine.cpp">
 			<Option target="engine"/>
 		</Unit>
-		<Unit filename="/home/inte/CLionProjects/utils/draw2DLine.h">
+		<Unit filename="/home/inte/CLionProjects/engineCG/draw2DLine.h">
 			<Option target="engine"/>
 		</Unit>
-		<Unit filename="/home/inte/CLionProjects/utils/drieDdrawings.cpp">
+		<Unit filename="/home/inte/CLionProjects/engineCG/drieDdrawings.cpp">
 			<Option target="engine"/>
 		</Unit>
-		<Unit filename="/home/inte/CLionProjects/utils/drieDdrawings.h">
+		<Unit filename="/home/inte/CLionProjects/engineCG/drieDdrawings.h">
 			<Option target="engine"/>
 		</Unit>
-		<Unit filename="/home/inte/CLionProjects/utils/easy_image.cc">
+		<Unit filename="/home/inte/CLionProjects/engineCG/easy_image.cc">
 			<Option target="engine"/>
 		</Unit>
-		<Unit filename="/home/inte/CLionProjects/utils/easy_image.h">
+		<Unit filename="/home/inte/CLionProjects/engineCG/easy_image.h">
 			<Option target="engine"/>
 		</Unit>
-		<Unit filename="/home/inte/CLionProjects/utils/engine.cc">
+		<Unit filename="/home/inte/CLionProjects/engineCG/engine.cc">
 			<Option target="engine"/>
 		</Unit>
-		<Unit filename="/home/inte/CLionProjects/utils/hulpFile.cpp">
+		<Unit filename="/home/inte/CLionProjects/engineCG/hulpFile.cpp">
 			<Option target="engine"/>
 		</Unit>
-		<Unit filename="/home/inte/CLionProjects/utils/hulpFile.h">
+		<Unit filename="/home/inte/CLionProjects/engineCG/hulpFile.h">
 			<Option target="engine"/>
 		</Unit>
-		<Unit filename="/home/inte/CLionProjects/utils/ini_configuration.cc">
+		<Unit filename="/home/inte/CLionProjects/engineCG/ini_configuration.cc">
 			<Option target="engine"/>
 		</Unit>
-		<Unit filename="/home/inte/CLionProjects/utils/ini_configuration.h">
+		<Unit filename="/home/inte/CLionProjects/engineCG/ini_configuration.h">
 			<Option target="engine"/>
 		</Unit>
-		<Unit filename="/home/inte/CLionProjects/utils/l_parser.cc">
+		<Unit filename="/home/inte/CLionProjects/engineCG/l_parser.cc">
 			<Option target="engine"/>
 		</Unit>
-		<Unit filename="/home/inte/CLionProjects/utils/l_parser.h">
+		<Unit filename="/home/inte/CLionProjects/engineCG/l_parser.h">
 			<Option target="engine"/>
 		</Unit>
-		<Unit filename="/home/inte/CLionProjects/utils/vector3d.cc">
+		<Unit filename="/home/inte/CLionProjects/engineCG/vector3d.cc">
 			<Option target="engine"/>
 		</Unit>
-		<Unit filename="/home/inte/CLionProjects/utils/vector3d.h">
+		<Unit filename="/home/inte/CLionProjects/engineCG/vector3d.h">
 			<Option target="engine"/>
 		</Unit>
-		<Unit filename="/home/inte/CLionProjects/utils/CMakeLists.txt">
+		<Unit filename="/home/inte/CLionProjects/engineCG/CMakeLists.txt">
 			<Option virtualFolder="CMake Files\"/>
 		</Unit>
 	</Project>

@@ -87,7 +87,7 @@ img::EasyImage generate_3Ddrawing(const ini::Configuration &configuration){
 
     vector<double> eyepointVec = configuration["General"]["eye"].as_double_tuple_or_die();
 
-    Vector3D eyepoint = eyepoint.point( eyepointVec[0], eyepointVec[1],eyepointVec[2]);
+    Vector3D eyepoint = Vector3D::point( eyepointVec[0], eyepointVec[1],eyepointVec[2]);
 
     int size = configuration["General"]["size"].as_int_or_die();
     vector<double> achtergrondKleur = configuration["General"]["backgroundcolor"].as_double_tuple_or_die();
@@ -119,7 +119,7 @@ img::EasyImage generate_3DdrawingWithZbufferingWireFrame(const ini::Configuratio
 
     vector<double> eyepointVec = configuration["General"]["eye"].as_double_tuple_or_die();
 
-    Vector3D eyepoint = eyepoint.point( eyepointVec[0], eyepointVec[1],eyepointVec[2]);
+    Vector3D eyepoint = Vector3D::point( eyepointVec[0], eyepointVec[1],eyepointVec[2]);
 
     int size = configuration["General"]["size"].as_int_or_die();
     vector<double> achtergrondKleur = configuration["General"]["backgroundcolor"].as_double_tuple_or_die();
@@ -151,7 +151,7 @@ img::EasyImage generate_3DdrawingWithZbuffering(const ini::Configuration &config
 
     vector<double> eyepointVec = configuration["General"]["eye"].as_double_tuple_or_die();
 
-    Vector3D eyepoint = eyepoint.point( eyepointVec[0], eyepointVec[1],eyepointVec[2]);
+    Vector3D eyepoint = Vector3D::point( eyepointVec[0], eyepointVec[1],eyepointVec[2]);
 
     int size = configuration["General"]["size"].as_int_or_die();
     vector<double> achtergrondKleur = configuration["General"]["backgroundcolor"].as_double_tuple_or_die();

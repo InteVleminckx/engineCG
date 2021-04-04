@@ -63,10 +63,10 @@ RM = /home/inte/Documents/clion-2020.3.2/bin/cmake/linux/bin/cmake -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/inte/CLionProjects/utils
+CMAKE_SOURCE_DIR = /home/inte/CLionProjects/engineCG
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/inte/CLionProjects/utils/cmake-build-debug
+CMAKE_BINARY_DIR = /home/inte/CLionProjects/engineCG/cmake-build-debug
 
 # Include any dependencies generated for this target.
 include CMakeFiles/engine.dir/depend.make
@@ -79,146 +79,146 @@ include CMakeFiles/engine.dir/flags.make
 
 CMakeFiles/engine.dir/easy_image.cc.o: CMakeFiles/engine.dir/flags.make
 CMakeFiles/engine.dir/easy_image.cc.o: ../easy_image.cc
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/inte/CLionProjects/utils/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/engine.dir/easy_image.cc.o"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/engine.dir/easy_image.cc.o -c /home/inte/CLionProjects/utils/easy_image.cc
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/inte/CLionProjects/engineCG/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/engine.dir/easy_image.cc.o"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/engine.dir/easy_image.cc.o -c /home/inte/CLionProjects/engineCG/easy_image.cc
 
 CMakeFiles/engine.dir/easy_image.cc.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/engine.dir/easy_image.cc.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/inte/CLionProjects/utils/easy_image.cc > CMakeFiles/engine.dir/easy_image.cc.i
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/inte/CLionProjects/engineCG/easy_image.cc > CMakeFiles/engine.dir/easy_image.cc.i
 
 CMakeFiles/engine.dir/easy_image.cc.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/engine.dir/easy_image.cc.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/inte/CLionProjects/utils/easy_image.cc -o CMakeFiles/engine.dir/easy_image.cc.s
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/inte/CLionProjects/engineCG/easy_image.cc -o CMakeFiles/engine.dir/easy_image.cc.s
 
 CMakeFiles/engine.dir/engine.cc.o: CMakeFiles/engine.dir/flags.make
 CMakeFiles/engine.dir/engine.cc.o: ../engine.cc
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/inte/CLionProjects/utils/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/engine.dir/engine.cc.o"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/engine.dir/engine.cc.o -c /home/inte/CLionProjects/utils/engine.cc
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/inte/CLionProjects/engineCG/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/engine.dir/engine.cc.o"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/engine.dir/engine.cc.o -c /home/inte/CLionProjects/engineCG/engine.cc
 
 CMakeFiles/engine.dir/engine.cc.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/engine.dir/engine.cc.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/inte/CLionProjects/utils/engine.cc > CMakeFiles/engine.dir/engine.cc.i
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/inte/CLionProjects/engineCG/engine.cc > CMakeFiles/engine.dir/engine.cc.i
 
 CMakeFiles/engine.dir/engine.cc.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/engine.dir/engine.cc.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/inte/CLionProjects/utils/engine.cc -o CMakeFiles/engine.dir/engine.cc.s
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/inte/CLionProjects/engineCG/engine.cc -o CMakeFiles/engine.dir/engine.cc.s
 
 CMakeFiles/engine.dir/ini_configuration.cc.o: CMakeFiles/engine.dir/flags.make
 CMakeFiles/engine.dir/ini_configuration.cc.o: ../ini_configuration.cc
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/inte/CLionProjects/utils/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/engine.dir/ini_configuration.cc.o"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/engine.dir/ini_configuration.cc.o -c /home/inte/CLionProjects/utils/ini_configuration.cc
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/inte/CLionProjects/engineCG/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/engine.dir/ini_configuration.cc.o"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/engine.dir/ini_configuration.cc.o -c /home/inte/CLionProjects/engineCG/ini_configuration.cc
 
 CMakeFiles/engine.dir/ini_configuration.cc.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/engine.dir/ini_configuration.cc.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/inte/CLionProjects/utils/ini_configuration.cc > CMakeFiles/engine.dir/ini_configuration.cc.i
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/inte/CLionProjects/engineCG/ini_configuration.cc > CMakeFiles/engine.dir/ini_configuration.cc.i
 
 CMakeFiles/engine.dir/ini_configuration.cc.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/engine.dir/ini_configuration.cc.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/inte/CLionProjects/utils/ini_configuration.cc -o CMakeFiles/engine.dir/ini_configuration.cc.s
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/inte/CLionProjects/engineCG/ini_configuration.cc -o CMakeFiles/engine.dir/ini_configuration.cc.s
 
 CMakeFiles/engine.dir/draw2DLine.cpp.o: CMakeFiles/engine.dir/flags.make
 CMakeFiles/engine.dir/draw2DLine.cpp.o: ../draw2DLine.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/inte/CLionProjects/utils/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/engine.dir/draw2DLine.cpp.o"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/engine.dir/draw2DLine.cpp.o -c /home/inte/CLionProjects/utils/draw2DLine.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/inte/CLionProjects/engineCG/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/engine.dir/draw2DLine.cpp.o"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/engine.dir/draw2DLine.cpp.o -c /home/inte/CLionProjects/engineCG/draw2DLine.cpp
 
 CMakeFiles/engine.dir/draw2DLine.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/engine.dir/draw2DLine.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/inte/CLionProjects/utils/draw2DLine.cpp > CMakeFiles/engine.dir/draw2DLine.cpp.i
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/inte/CLionProjects/engineCG/draw2DLine.cpp > CMakeFiles/engine.dir/draw2DLine.cpp.i
 
 CMakeFiles/engine.dir/draw2DLine.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/engine.dir/draw2DLine.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/inte/CLionProjects/utils/draw2DLine.cpp -o CMakeFiles/engine.dir/draw2DLine.cpp.s
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/inte/CLionProjects/engineCG/draw2DLine.cpp -o CMakeFiles/engine.dir/draw2DLine.cpp.s
 
 CMakeFiles/engine.dir/hulpFile.cpp.o: CMakeFiles/engine.dir/flags.make
 CMakeFiles/engine.dir/hulpFile.cpp.o: ../hulpFile.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/inte/CLionProjects/utils/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/engine.dir/hulpFile.cpp.o"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/engine.dir/hulpFile.cpp.o -c /home/inte/CLionProjects/utils/hulpFile.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/inte/CLionProjects/engineCG/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/engine.dir/hulpFile.cpp.o"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/engine.dir/hulpFile.cpp.o -c /home/inte/CLionProjects/engineCG/hulpFile.cpp
 
 CMakeFiles/engine.dir/hulpFile.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/engine.dir/hulpFile.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/inte/CLionProjects/utils/hulpFile.cpp > CMakeFiles/engine.dir/hulpFile.cpp.i
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/inte/CLionProjects/engineCG/hulpFile.cpp > CMakeFiles/engine.dir/hulpFile.cpp.i
 
 CMakeFiles/engine.dir/hulpFile.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/engine.dir/hulpFile.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/inte/CLionProjects/utils/hulpFile.cpp -o CMakeFiles/engine.dir/hulpFile.cpp.s
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/inte/CLionProjects/engineCG/hulpFile.cpp -o CMakeFiles/engine.dir/hulpFile.cpp.s
 
 CMakeFiles/engine.dir/l_parser.cc.o: CMakeFiles/engine.dir/flags.make
 CMakeFiles/engine.dir/l_parser.cc.o: ../l_parser.cc
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/inte/CLionProjects/utils/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object CMakeFiles/engine.dir/l_parser.cc.o"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/engine.dir/l_parser.cc.o -c /home/inte/CLionProjects/utils/l_parser.cc
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/inte/CLionProjects/engineCG/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object CMakeFiles/engine.dir/l_parser.cc.o"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/engine.dir/l_parser.cc.o -c /home/inte/CLionProjects/engineCG/l_parser.cc
 
 CMakeFiles/engine.dir/l_parser.cc.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/engine.dir/l_parser.cc.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/inte/CLionProjects/utils/l_parser.cc > CMakeFiles/engine.dir/l_parser.cc.i
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/inte/CLionProjects/engineCG/l_parser.cc > CMakeFiles/engine.dir/l_parser.cc.i
 
 CMakeFiles/engine.dir/l_parser.cc.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/engine.dir/l_parser.cc.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/inte/CLionProjects/utils/l_parser.cc -o CMakeFiles/engine.dir/l_parser.cc.s
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/inte/CLionProjects/engineCG/l_parser.cc -o CMakeFiles/engine.dir/l_parser.cc.s
 
 CMakeFiles/engine.dir/_2DLsystems.cpp.o: CMakeFiles/engine.dir/flags.make
 CMakeFiles/engine.dir/_2DLsystems.cpp.o: ../_2DLsystems.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/inte/CLionProjects/utils/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building CXX object CMakeFiles/engine.dir/_2DLsystems.cpp.o"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/engine.dir/_2DLsystems.cpp.o -c /home/inte/CLionProjects/utils/_2DLsystems.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/inte/CLionProjects/engineCG/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building CXX object CMakeFiles/engine.dir/_2DLsystems.cpp.o"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/engine.dir/_2DLsystems.cpp.o -c /home/inte/CLionProjects/engineCG/_2DLsystems.cpp
 
 CMakeFiles/engine.dir/_2DLsystems.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/engine.dir/_2DLsystems.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/inte/CLionProjects/utils/_2DLsystems.cpp > CMakeFiles/engine.dir/_2DLsystems.cpp.i
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/inte/CLionProjects/engineCG/_2DLsystems.cpp > CMakeFiles/engine.dir/_2DLsystems.cpp.i
 
 CMakeFiles/engine.dir/_2DLsystems.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/engine.dir/_2DLsystems.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/inte/CLionProjects/utils/_2DLsystems.cpp -o CMakeFiles/engine.dir/_2DLsystems.cpp.s
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/inte/CLionProjects/engineCG/_2DLsystems.cpp -o CMakeFiles/engine.dir/_2DLsystems.cpp.s
 
 CMakeFiles/engine.dir/drieDdrawings.cpp.o: CMakeFiles/engine.dir/flags.make
 CMakeFiles/engine.dir/drieDdrawings.cpp.o: ../drieDdrawings.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/inte/CLionProjects/utils/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Building CXX object CMakeFiles/engine.dir/drieDdrawings.cpp.o"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/engine.dir/drieDdrawings.cpp.o -c /home/inte/CLionProjects/utils/drieDdrawings.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/inte/CLionProjects/engineCG/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Building CXX object CMakeFiles/engine.dir/drieDdrawings.cpp.o"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/engine.dir/drieDdrawings.cpp.o -c /home/inte/CLionProjects/engineCG/drieDdrawings.cpp
 
 CMakeFiles/engine.dir/drieDdrawings.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/engine.dir/drieDdrawings.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/inte/CLionProjects/utils/drieDdrawings.cpp > CMakeFiles/engine.dir/drieDdrawings.cpp.i
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/inte/CLionProjects/engineCG/drieDdrawings.cpp > CMakeFiles/engine.dir/drieDdrawings.cpp.i
 
 CMakeFiles/engine.dir/drieDdrawings.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/engine.dir/drieDdrawings.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/inte/CLionProjects/utils/drieDdrawings.cpp -o CMakeFiles/engine.dir/drieDdrawings.cpp.s
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/inte/CLionProjects/engineCG/drieDdrawings.cpp -o CMakeFiles/engine.dir/drieDdrawings.cpp.s
 
 CMakeFiles/engine.dir/vector3d.cc.o: CMakeFiles/engine.dir/flags.make
 CMakeFiles/engine.dir/vector3d.cc.o: ../vector3d.cc
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/inte/CLionProjects/utils/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Building CXX object CMakeFiles/engine.dir/vector3d.cc.o"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/engine.dir/vector3d.cc.o -c /home/inte/CLionProjects/utils/vector3d.cc
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/inte/CLionProjects/engineCG/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Building CXX object CMakeFiles/engine.dir/vector3d.cc.o"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/engine.dir/vector3d.cc.o -c /home/inte/CLionProjects/engineCG/vector3d.cc
 
 CMakeFiles/engine.dir/vector3d.cc.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/engine.dir/vector3d.cc.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/inte/CLionProjects/utils/vector3d.cc > CMakeFiles/engine.dir/vector3d.cc.i
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/inte/CLionProjects/engineCG/vector3d.cc > CMakeFiles/engine.dir/vector3d.cc.i
 
 CMakeFiles/engine.dir/vector3d.cc.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/engine.dir/vector3d.cc.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/inte/CLionProjects/utils/vector3d.cc -o CMakeFiles/engine.dir/vector3d.cc.s
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/inte/CLionProjects/engineCG/vector3d.cc -o CMakeFiles/engine.dir/vector3d.cc.s
 
 CMakeFiles/engine.dir/DrieDLsystems.cpp.o: CMakeFiles/engine.dir/flags.make
 CMakeFiles/engine.dir/DrieDLsystems.cpp.o: ../DrieDLsystems.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/inte/CLionProjects/utils/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Building CXX object CMakeFiles/engine.dir/DrieDLsystems.cpp.o"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/engine.dir/DrieDLsystems.cpp.o -c /home/inte/CLionProjects/utils/DrieDLsystems.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/inte/CLionProjects/engineCG/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Building CXX object CMakeFiles/engine.dir/DrieDLsystems.cpp.o"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/engine.dir/DrieDLsystems.cpp.o -c /home/inte/CLionProjects/engineCG/DrieDLsystems.cpp
 
 CMakeFiles/engine.dir/DrieDLsystems.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/engine.dir/DrieDLsystems.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/inte/CLionProjects/utils/DrieDLsystems.cpp > CMakeFiles/engine.dir/DrieDLsystems.cpp.i
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/inte/CLionProjects/engineCG/DrieDLsystems.cpp > CMakeFiles/engine.dir/DrieDLsystems.cpp.i
 
 CMakeFiles/engine.dir/DrieDLsystems.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/engine.dir/DrieDLsystems.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/inte/CLionProjects/utils/DrieDLsystems.cpp -o CMakeFiles/engine.dir/DrieDLsystems.cpp.s
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/inte/CLionProjects/engineCG/DrieDLsystems.cpp -o CMakeFiles/engine.dir/DrieDLsystems.cpp.s
 
 CMakeFiles/engine.dir/Z_buffer_driehoeken.cpp.o: CMakeFiles/engine.dir/flags.make
 CMakeFiles/engine.dir/Z_buffer_driehoeken.cpp.o: ../Z_buffer_driehoeken.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/inte/CLionProjects/utils/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_11) "Building CXX object CMakeFiles/engine.dir/Z_buffer_driehoeken.cpp.o"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/engine.dir/Z_buffer_driehoeken.cpp.o -c /home/inte/CLionProjects/utils/Z_buffer_driehoeken.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/inte/CLionProjects/engineCG/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_11) "Building CXX object CMakeFiles/engine.dir/Z_buffer_driehoeken.cpp.o"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/engine.dir/Z_buffer_driehoeken.cpp.o -c /home/inte/CLionProjects/engineCG/Z_buffer_driehoeken.cpp
 
 CMakeFiles/engine.dir/Z_buffer_driehoeken.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/engine.dir/Z_buffer_driehoeken.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/inte/CLionProjects/utils/Z_buffer_driehoeken.cpp > CMakeFiles/engine.dir/Z_buffer_driehoeken.cpp.i
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/inte/CLionProjects/engineCG/Z_buffer_driehoeken.cpp > CMakeFiles/engine.dir/Z_buffer_driehoeken.cpp.i
 
 CMakeFiles/engine.dir/Z_buffer_driehoeken.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/engine.dir/Z_buffer_driehoeken.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/inte/CLionProjects/utils/Z_buffer_driehoeken.cpp -o CMakeFiles/engine.dir/Z_buffer_driehoeken.cpp.s
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/inte/CLionProjects/engineCG/Z_buffer_driehoeken.cpp -o CMakeFiles/engine.dir/Z_buffer_driehoeken.cpp.s
 
 # Object files for target engine
 engine_OBJECTS = \
@@ -250,7 +250,7 @@ engine: CMakeFiles/engine.dir/DrieDLsystems.cpp.o
 engine: CMakeFiles/engine.dir/Z_buffer_driehoeken.cpp.o
 engine: CMakeFiles/engine.dir/build.make
 engine: CMakeFiles/engine.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/inte/CLionProjects/utils/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_12) "Linking CXX executable engine"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/inte/CLionProjects/engineCG/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_12) "Linking CXX executable engine"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/engine.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.
@@ -263,6 +263,6 @@ CMakeFiles/engine.dir/clean:
 .PHONY : CMakeFiles/engine.dir/clean
 
 CMakeFiles/engine.dir/depend:
-	cd /home/inte/CLionProjects/utils/cmake-build-debug && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/inte/CLionProjects/utils /home/inte/CLionProjects/utils /home/inte/CLionProjects/utils/cmake-build-debug /home/inte/CLionProjects/utils/cmake-build-debug /home/inte/CLionProjects/utils/cmake-build-debug/CMakeFiles/engine.dir/DependInfo.cmake --color=$(COLOR)
+	cd /home/inte/CLionProjects/engineCG/cmake-build-debug && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/inte/CLionProjects/engineCG /home/inte/CLionProjects/engineCG /home/inte/CLionProjects/engineCG/cmake-build-debug /home/inte/CLionProjects/engineCG/cmake-build-debug /home/inte/CLionProjects/engineCG/cmake-build-debug/CMakeFiles/engine.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : CMakeFiles/engine.dir/depend
 
