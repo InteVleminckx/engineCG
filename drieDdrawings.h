@@ -95,6 +95,10 @@ public:
 
     Figure createTorus(int n, int m, double r, double R);
 
+    Figure createBuckyBall();
+
+    Figure createMengerSponge(int nrIterations);
+
     Lines2D getLines() {return lines;}
 
     Point2D doProjection(const Vector3D &point, double d = 1);

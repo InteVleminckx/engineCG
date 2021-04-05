@@ -114,6 +114,19 @@ void drieDdrawings::parse3Ddrawing(const ini::Configuration &configuration, int 
         if (fractal == "Fractal") generateFractal(newFigure, fractalen, nrIterations, fractalScale);
     }
 
+    else if ( type == "BuckyBall" || type == "FractalBuckyBall"){
+
+        newFigure = createBuckyBall();
+        if (fractal == "Fractal") generateFractal(newFigure, fractalen, nrIterations, fractalScale);
+    }
+
+    else if (type == "MengerSponge"){
+
+        nrIterations = configuration[figurex]["nrIterations"].as_int_or_die();
+        newFigure = createMengerSponge(nrIterations);
+
+    }
+
     else if (type == "3DLSystem"){
         Matrix volledigeMatrix = rotatieMatrix * MatrixEyepoint;
         DrieDLsystems system(volledigeMatrix);
@@ -817,5 +830,137 @@ void drieDdrawings::generateFractal(Figure &fig, Figures3D &fractal, const int n
         fractal = tempFiguren;
     }
 
+}
+
+Figure drieDdrawings::createBuckyBall() {
+    Figure buckyBall;
+    Figure icosahedron = createIcosahedron(true);
+
+    for (int i = 0; i < icosahedron.faces.size(); ++i) {
+
+        int Ai = icosahedron.faces[i].point_indexes[0]-1;
+        int Bi = icosahedron.faces[i].point_indexes[1]-1;
+        int Ci = icosahedron.faces[i].point_indexes[2]-1;
+
+        Vector3D A = icosahedron.points[Ai];
+        Vector3D B = icosahedron.points[Bi];
+        Vector3D C = icosahedron.points[Ci];
+
+        Vector3D D = A + ((B-A)/3);
+        Vector3D E = B - ((B-A)/3);
+
+        Vector3D F = B + ((C-B)/3);
+        Vector3D G = C - ((C-B)/3);
+
+        Vector3D H = C + ((A-C)/3);
+        Vector3D I = A - ((A-C)/3);
+
+
+        buckyBall.points.push_back(D*rotatieMatrix * MatrixEyepoint); //1 + 6i  D
+        buckyBall.points.push_back(E*rotatieMatrix * MatrixEyepoint); //2 + 6i  E
+        buckyBall.points.push_back(F*rotatieMatrix * MatrixEyepoint); //3 + 6i  F
+        buckyBall.points.push_back(G*rotatieMatrix * MatrixEyepoint); //4 + 6i  G
+        buckyBall.points.push_back(H*rotatieMatrix * MatrixEyepoint); //5 + 6i  H
+        buckyBall.points.push_back(I*rotatieMatrix * MatrixEyepoint); //6 + 6i  I
+
+        Face zeshoek;
+
+        //DEFGHI
+        zeshoek.point_indexes = {1+(6*i), 2+(6*i), 3+(6*i) , 4+(6*i), 5+(6*i), 6+(6*i)};
+
+        buckyBall.faces.push_back(zeshoek);
+
+    }
+
+    return buckyBall;
+}
+
+Figure drieDdrawings::createMengerSponge(int nrIterations) {
+    Figure cube = createCube();
+    Figure MengerSponge;
+
+
+    for (int i = 0; i < nrIterations; ++i) {
+
+        MengerSponge.faces.clear();
+        MengerSponge.points.clear();
+        for (int j = 0; j < cube.faces.size(); ++j) {
+
+            int Ai = cube.faces[i].point_indexes[0]-1;
+            int Bi = cube.faces[i].point_indexes[1]-1;
+            int Ci = cube.faces[i].point_indexes[2]-1;
+            int Di = cube.faces[i].point_indexes[3]-1;
+
+            Vector3D A = cube.points[Ai];
+            Vector3D B = cube.points[Bi];
+            Vector3D C = cube.points[Ci];
+            Vector3D D = cube.points[Di];
+            Vector3D E = A + ((B-A)/3);
+            Vector3D F = B - ((B-A)/3);
+            Vector3D G = B + ((C-B)/3);
+            Vector3D H = C - ((C-B)/3);
+            Vector3D I = C + ((D-C)/3);
+            Vector3D J = D - ((D-C)/3);
+            Vector3D K = D + ((A-D)/3);
+            Vector3D L = A - ((A-D)/3);
+            Vector3D M = L + ((G-L)/3);
+            Vector3D N = G - ((G-L)/3);
+            Vector3D O = H - ((H-K)/3);
+            Vector3D P = K + ((H-K)/3);
+
+            MengerSponge.points.push_back(A*rotatieMatrix * MatrixEyepoint); //1 + (16*i)   A
+            MengerSponge.points.push_back(B*rotatieMatrix * MatrixEyepoint); //2 + (16*i)   B
+            MengerSponge.points.push_back(C*rotatieMatrix * MatrixEyepoint); //3 + (16*i)   C
+            MengerSponge.points.push_back(D*rotatieMatrix * MatrixEyepoint); //4 + (16*i)   D
+            MengerSponge.points.push_back(E*rotatieMatrix * MatrixEyepoint); //5 + (16*i)   E
+            MengerSponge.points.push_back(F*rotatieMatrix * MatrixEyepoint); //6 + (16*i)   F
+            MengerSponge.points.push_back(G*rotatieMatrix * MatrixEyepoint); //7 + (16*i)   G
+            MengerSponge.points.push_back(H*rotatieMatrix * MatrixEyepoint); //8 + (16*i)   H
+            MengerSponge.points.push_back(I*rotatieMatrix * MatrixEyepoint); //9 + (16*i)   I
+            MengerSponge.points.push_back(J*rotatieMatrix * MatrixEyepoint); //10 + (16*i)  J
+            MengerSponge.points.push_back(K*rotatieMatrix * MatrixEyepoint); //11 + (16*i)  K
+            MengerSponge.points.push_back(L*rotatieMatrix * MatrixEyepoint); //12 + (16*i)  L
+            MengerSponge.points.push_back(M*rotatieMatrix * MatrixEyepoint); //13 + (16*i)  M
+            MengerSponge.points.push_back(N*rotatieMatrix * MatrixEyepoint); //14 + (16*i)  N
+            MengerSponge.points.push_back(O*rotatieMatrix * MatrixEyepoint); //15 + (16*i)  O
+            MengerSponge.points.push_back(P*rotatieMatrix * MatrixEyepoint); //16 + (16*i)  P
+
+            Face square1;
+            Face square2;
+            Face square3;
+            Face square4;
+            Face square5;
+            Face square6;
+            Face square7;
+            Face square8;
+
+            square1.point_indexes = {1 + (16*i),5 + (16*i),13 + (16*i),12 + (16*i)};
+            square2.point_indexes = {5 + (16*i),6 + (16*i),14 + (16*i),13 + (16*i)};
+            square3.point_indexes = {6 + (16*i),2 + (16*i),7 + (16*i),14 + (16*i)};
+            square4.point_indexes = {14 + (16*i),7 + (16*i),8 + (16*i),15 + (16*i)};
+            square5.point_indexes = {15 + (16*i),8 + (16*i),3 + (16*i),9 + (16*i)};
+            square6.point_indexes = {16 + (16*i),15 + (16*i),9 + (16*i),10 + (16*i)};
+            square7.point_indexes = {11 + (16*i),16 + (16*i),10 + (16*i),4 + (16*i)};
+            square8.point_indexes = {12 + (16*i),13 + (16*i),16 + (16*i),11 + (16*i)};
+
+
+            MengerSponge.faces.push_back(square1);
+            MengerSponge.faces.push_back(square2);
+            MengerSponge.faces.push_back(square3);
+            MengerSponge.faces.push_back(square4);
+            MengerSponge.faces.push_back(square5);
+            MengerSponge.faces.push_back(square6);
+            MengerSponge.faces.push_back(square7);
+            MengerSponge.faces.push_back(square8);
+
+        }
+
+        cube = MengerSponge;
+
+    }
+
+
+
+    return MengerSponge;
 }
 
