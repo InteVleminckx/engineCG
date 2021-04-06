@@ -50,9 +50,7 @@ public:
     Matrix rotateY;
     Matrix rotateZ;
     Matrix translatie;
-
     Matrix rotatieMatrix;
-
     Matrix MatrixEyepoint;
 
     Lines2D lines;
@@ -75,9 +73,11 @@ public:
 
     void createDrawVector(Figure &figure);
 
+    void createMengerSponge(int nrIterations, bool zBufdriehoek, vector<double> &color);
+
     Matrix scaleMatrix(double &scale);
 
-    Figure createCube();
+    Figure createCube(bool usage);
 
     Figure createTetrahedron();
 
@@ -96,8 +96,6 @@ public:
     Figure createTorus(int n, int m, double r, double R);
 
     Figure createBuckyBall();
-
-    Figure createMengerSponge(int nrIterations);
 
     Lines2D getLines() {return lines;}
 

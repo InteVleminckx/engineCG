@@ -59,7 +59,7 @@ void drieDdrawings::parse3Ddrawing(const ini::Configuration &configuration, int 
     }
 
     else if (type == "Cube" || type == "FractalCube"){
-        newFigure = createCube();
+        newFigure = createCube(false);
         if (fractal == "Fractal") generateFractal(newFigure, fractalen, nrIterations, fractalScale);
     }
 
@@ -123,7 +123,8 @@ void drieDdrawings::parse3Ddrawing(const ini::Configuration &configuration, int 
     else if (type == "MengerSponge"){
 
         nrIterations = configuration[figurex]["nrIterations"].as_int_or_die();
-        newFigure = createMengerSponge(nrIterations);
+        createMengerSponge(nrIterations, zBufDriehoek, color);
+        return;
 
     }
 
@@ -326,7 +327,7 @@ void drieDdrawings::createDrawVector(Figure &figure) {
 //    return lines;
 }
 
-Figure drieDdrawings::createCube() {
+Figure drieDdrawings::createCube(bool usage) {
     Figure cube;
 
     vector<vector<double>> punten;
@@ -349,7 +350,9 @@ Figure drieDdrawings::createCube() {
 
     for (int i = 0; i < punten[0].size(); ++i) {
         Vector3D vector3D = Vector3D::point(punten[0][i], punten[1][i], punten[2][i]);
-        vector3D *= rotatieMatrix * MatrixEyepoint;
+        if (!usage){
+            vector3D *= rotatieMatrix * MatrixEyepoint;
+        }
         cube.points.push_back(vector3D);
     }
 
@@ -875,92 +878,100 @@ Figure drieDdrawings::createBuckyBall() {
     return buckyBall;
 }
 
-Figure drieDdrawings::createMengerSponge(int nrIterations) {
-    Figure cube = createCube();
-    Figure MengerSponge;
+void drieDdrawings::createMengerSponge(int nrIterations, bool zBufdriehoek, vector<double> &color) {
+    Figure cube = createCube(false);
+
+    double scale =  1.0/3.0;
+
+    Matrix scaleM = scaleMatrix(scale);
+
+    Figures3D figuren;
+    figuren.push_back(cube);
+
+
+    if (nrIterations == 0){
+
+        cube.color.red = color[0];
+        cube.color.green = color[1];
+        cube.color.blue = color[2];
+
+        drieDfiguren.push_back(cube);
+
+        if(!zBufdriehoek) createDrawVector(cube);
+
+        return;
+    }
 
 
     for (int i = 0; i < nrIterations; ++i) {
 
-        MengerSponge.faces.clear();
-        MengerSponge.points.clear();
-        for (int j = 0; j < cube.faces.size(); ++j) {
+        Figures3D newFigures;
 
-            int Ai = cube.faces[i].point_indexes[0]-1;
-            int Bi = cube.faces[i].point_indexes[1]-1;
-            int Ci = cube.faces[i].point_indexes[2]-1;
-            int Di = cube.faces[i].point_indexes[3]-1;
+        for(Figure &figuur : figuren){
 
-            Vector3D A = cube.points[Ai];
-            Vector3D B = cube.points[Bi];
-            Vector3D C = cube.points[Ci];
-            Vector3D D = cube.points[Di];
-            Vector3D E = A + ((B-A)/3);
-            Vector3D F = B - ((B-A)/3);
-            Vector3D G = B + ((C-B)/3);
-            Vector3D H = C - ((C-B)/3);
-            Vector3D I = C + ((D-C)/3);
-            Vector3D J = D - ((D-C)/3);
-            Vector3D K = D + ((A-D)/3);
-            Vector3D L = A - ((A-D)/3);
-            Vector3D M = L + ((G-L)/3);
-            Vector3D N = G - ((G-L)/3);
-            Vector3D O = H - ((H-K)/3);
-            Vector3D P = K + ((H-K)/3);
+            for (int j = 0; j < figuur.faces.size()-2; ++j) {
 
-            MengerSponge.points.push_back(A*rotatieMatrix * MatrixEyepoint); //1 + (16*i)   A
-            MengerSponge.points.push_back(B*rotatieMatrix * MatrixEyepoint); //2 + (16*i)   B
-            MengerSponge.points.push_back(C*rotatieMatrix * MatrixEyepoint); //3 + (16*i)   C
-            MengerSponge.points.push_back(D*rotatieMatrix * MatrixEyepoint); //4 + (16*i)   D
-            MengerSponge.points.push_back(E*rotatieMatrix * MatrixEyepoint); //5 + (16*i)   E
-            MengerSponge.points.push_back(F*rotatieMatrix * MatrixEyepoint); //6 + (16*i)   F
-            MengerSponge.points.push_back(G*rotatieMatrix * MatrixEyepoint); //7 + (16*i)   G
-            MengerSponge.points.push_back(H*rotatieMatrix * MatrixEyepoint); //8 + (16*i)   H
-            MengerSponge.points.push_back(I*rotatieMatrix * MatrixEyepoint); //9 + (16*i)   I
-            MengerSponge.points.push_back(J*rotatieMatrix * MatrixEyepoint); //10 + (16*i)  J
-            MengerSponge.points.push_back(K*rotatieMatrix * MatrixEyepoint); //11 + (16*i)  K
-            MengerSponge.points.push_back(L*rotatieMatrix * MatrixEyepoint); //12 + (16*i)  L
-            MengerSponge.points.push_back(M*rotatieMatrix * MatrixEyepoint); //13 + (16*i)  M
-            MengerSponge.points.push_back(N*rotatieMatrix * MatrixEyepoint); //14 + (16*i)  N
-            MengerSponge.points.push_back(O*rotatieMatrix * MatrixEyepoint); //15 + (16*i)  O
-            MengerSponge.points.push_back(P*rotatieMatrix * MatrixEyepoint); //16 + (16*i)  P
+                int Ai = figuur.faces[j].point_indexes[0]-1;
+                int Bi = figuur.faces[j].point_indexes[1]-1;
+                int Ci = figuur.faces[j].point_indexes[2]-1;
+                int Di = figuur.faces[j].point_indexes[3]-1;
 
-            Face square1;
-            Face square2;
-            Face square3;
-            Face square4;
-            Face square5;
-            Face square6;
-            Face square7;
-            Face square8;
+                Vector3D A = figuur.points[Ai];
+                Vector3D B = figuur.points[Bi];
+                Vector3D C = figuur.points[Ci];
+                Vector3D D = figuur.points[Di];
+                Vector3D E = A + ((B-A)/3);
+                Vector3D L = A - ((A-D)/3);
+                Vector3D G = B + ((C-B)/3);
+                Vector3D J = D - ((D-C)/3);
 
-            square1.point_indexes = {1 + (16*i),5 + (16*i),13 + (16*i),12 + (16*i)};
-            square2.point_indexes = {5 + (16*i),6 + (16*i),14 + (16*i),13 + (16*i)};
-            square3.point_indexes = {6 + (16*i),2 + (16*i),7 + (16*i),14 + (16*i)};
-            square4.point_indexes = {14 + (16*i),7 + (16*i),8 + (16*i),15 + (16*i)};
-            square5.point_indexes = {15 + (16*i),8 + (16*i),3 + (16*i),9 + (16*i)};
-            square6.point_indexes = {16 + (16*i),15 + (16*i),9 + (16*i),10 + (16*i)};
-            square7.point_indexes = {11 + (16*i),16 + (16*i),10 + (16*i),4 + (16*i)};
-            square8.point_indexes = {12 + (16*i),13 + (16*i),16 + (16*i),11 + (16*i)};
+                Vector3D Ac = figuur.points[Ai]*scaleM;
+                Vector3D Bc = figuur.points[Bi]*scaleM;
+                Vector3D Cc = figuur.points[Ci]*scaleM;
+                Vector3D Dc = figuur.points[Di]*scaleM;
 
 
-            MengerSponge.faces.push_back(square1);
-            MengerSponge.faces.push_back(square2);
-            MengerSponge.faces.push_back(square3);
-            MengerSponge.faces.push_back(square4);
-            MengerSponge.faces.push_back(square5);
-            MengerSponge.faces.push_back(square6);
-            MengerSponge.faces.push_back(square7);
-            MengerSponge.faces.push_back(square8);
+                Vector3D mVec1 = Vector3D::vector(A-Ac);
+                Vector3D mVec2 = Vector3D::vector(E-Ac);
+                Vector3D mVec3 = Vector3D::vector(B-Bc);
+                Vector3D mVec4 = Vector3D::vector(L-Ac);
+                Vector3D mVec5 = Vector3D::vector(G-Bc);
+                Vector3D mVec6 = Vector3D::vector(D-Dc);
+                Vector3D mVec7 = Vector3D::vector(J-Dc);
+                Vector3D mVec8 = Vector3D::vector(C-Cc);
 
+                //voorkomt dubbele kubussen
+                vector<Vector3D> moveVectors1{mVec1, mVec2, mVec3, mVec4, mVec5, mVec6, mVec7, mVec8};
+                vector<Vector3D> moveVectors2{mVec2,mVec7};
+
+                vector<Vector3D> moveVectors;
+
+                if (j == 0 || j == 2) moveVectors = moveVectors1;
+                else moveVectors = moveVectors2;
+
+                for(Vector3D &moveVector : moveVectors){
+
+                    Figure newFigure;
+
+                    for (auto & point : figuur.points) newFigure.points.push_back((point*scaleM)+moveVector);
+
+                    newFigure.faces = figuur.faces;
+
+                    if (i == nrIterations-1){
+                        newFigure.color.red = color[0];
+                        newFigure.color.green = color[1];
+                        newFigure.color.blue = color[2];
+
+                        drieDfiguren.push_back(newFigure);
+
+                        if(!zBufdriehoek) createDrawVector(newFigure);
+                    }
+
+                    else newFigures.push_back(newFigure);
+                }
+            }
         }
-
-        cube = MengerSponge;
-
+        figuren = newFigures;
     }
-
-
-
-    return MengerSponge;
 }
 
