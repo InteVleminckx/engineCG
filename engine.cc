@@ -100,7 +100,7 @@ img::EasyImage generate_3Ddrawing(const ini::Configuration &configuration){
 
     drawing.eyePointTrans(eyepoint);
     for (int i = 0; i < nrFigures; ++i) {
-        drawing.parse3Ddrawing(configuration, i, false);
+        drawing.parse3Ddrawing(configuration, i, false, false);
     }
 
     drawlines = drawing.getLines();
@@ -132,7 +132,7 @@ img::EasyImage generate_3DdrawingWithZbufferingWireFrame(const ini::Configuratio
 
     drawing.eyePointTrans(eyepoint);
     for (int i = 0; i < nrFigures; ++i) {
-        drawing.parse3Ddrawing(configuration, i, false);
+        drawing.parse3Ddrawing(configuration, i, false, false);
     }
 
     drawlines = drawing.getLines();
@@ -164,8 +164,10 @@ img::EasyImage generate_3DdrawingWithZbuffering(const ini::Configuration &config
 
     drawing.eyePointTrans(eyepoint);
     for (int i = 0; i < nrFigures; ++i) {
-        drawing.parse3Ddrawing(configuration, i, true);
+        drawing.parse3Ddrawing(configuration, i, true, false);
     }
+
+    drawing.createLights(configuration, 1, false);
 
     Z_driehoek zDriehoek;
     zDriehoek.size = size;
@@ -173,12 +175,46 @@ img::EasyImage generate_3DdrawingWithZbuffering(const ini::Configuration &config
     drieDdrawings newFaceAndPoints = zDriehoek.triangulate(drawing);
 
 
-    return zDriehoek.drawTriangle(newFaceAndPoints.drieDfiguren, backColor);
+    return zDriehoek.drawTriangle(newFaceAndPoints.drieDfiguren, backColor, drawing.lights);
 
 
 }
 
+img::EasyImage generate_LightedZBuffering(const ini::Configuration &configuration){
 
+    img::Color backColor;
+    Lines2D drawlines;
+    drieDdrawings drawing;
+
+    vector<double> eyepointVec = configuration["General"]["eye"].as_double_tuple_or_die();
+    Vector3D eyepoint = Vector3D::point( eyepointVec[0], eyepointVec[1],eyepointVec[2]);
+
+    int size = configuration["General"]["size"].as_int_or_die();
+    vector<double> achtergrondKleur = configuration["General"]["backgroundcolor"].as_double_tuple_or_die();
+
+    backColor.red = achtergrondKleur[0]*255;
+    backColor.green = achtergrondKleur[1]*255;
+    backColor.blue = achtergrondKleur[2]*255;
+
+    int nrFigures = configuration["General"]["nrFigures"].as_int_or_die();
+    int nrLights = configuration["General"]["nrLights"].as_int_or_die();
+
+
+    drawing.eyePointTrans(eyepoint);
+    for (int i = 0; i < nrFigures; ++i) {
+        drawing.parse3Ddrawing(configuration, i, true, true);
+    }
+
+    drawing.createLights(configuration, nrLights, true);
+
+    Z_driehoek zDriehoek;
+    zDriehoek.size = size;
+
+    drieDdrawings newFaceAndPoints = zDriehoek.triangulate(drawing);
+
+    return zDriehoek.drawTriangle(newFaceAndPoints.drieDfiguren, backColor, drawing.lights);
+
+}
 
 img::EasyImage generate_image(const ini::Configuration &configuration){
 
@@ -193,6 +229,8 @@ img::EasyImage generate_image(const ini::Configuration &configuration){
     else if (configuration["General"]["type"].as_string_or_die() == "ZBufferedWireframe"){return generate_3DdrawingWithZbufferingWireFrame(configuration);}
 
     else if (configuration["General"]["type"].as_string_or_die() == "ZBuffering"){return generate_3DdrawingWithZbuffering(configuration);}
+
+    else if (configuration["General"]["type"].as_string_or_die() == "LightedZBuffering"){return generate_LightedZBuffering(configuration);}
 
 
         //hardcoded om lijnen te tekenen (test versie fucntie drawline)

@@ -4,7 +4,7 @@
 #define PI 3.141592653589793238462643383279502884197169399375105820974944592307816406286208998
 #include "drieDdrawings.h"
 
-void drieDdrawings::parse3Ddrawing(const ini::Configuration &configuration, int figureNumber, bool zBufDriehoek) {
+void drieDdrawings::parse3Ddrawing(const ini::Configuration &configuration, int figureNumber, bool zBufDriehoek, bool belichting) {
 
     string figurex = "Figure" + to_string(figureNumber);
 
@@ -14,7 +14,11 @@ void drieDdrawings::parse3Ddrawing(const ini::Configuration &configuration, int 
     double RotateZ = configuration[figurex]["rotateZ"].as_double_or_die();
     double scale = configuration[figurex]["scale"].as_double_or_die();
     vector<double> center = configuration[figurex]["center"].as_double_tuple_or_die();
-    vector<double> color = configuration[figurex]["color"].as_double_tuple_or_die();
+    vector<double> ambientReflection;
+
+    if (!belichting) ambientReflection = configuration[figurex]["color"].as_double_tuple_or_die();
+    else ambientReflection = configuration[figurex]["ambientReflection"].as_double_tuple_or_die();
+
     string fractal = type.substr(0, 7);
     int nrIterations;
     double fractalScale;
@@ -123,7 +127,7 @@ void drieDdrawings::parse3Ddrawing(const ini::Configuration &configuration, int 
     else if (type == "MengerSponge"){
 
         nrIterations = configuration[figurex]["nrIterations"].as_int_or_die();
-        createMengerSponge(nrIterations, zBufDriehoek, color);
+        createMengerSponge(nrIterations, zBufDriehoek, ambientReflection);
         return;
 
     }
@@ -137,9 +141,9 @@ void drieDdrawings::parse3Ddrawing(const ini::Configuration &configuration, int 
 
 
     if(fractal != "Fractal"){
-        newFigure.color.red = color[0];
-        newFigure.color.green = color[1];
-        newFigure.color.blue = color[2];
+        newFigure.ambientReflection.red = ambientReflection[0];
+        newFigure.ambientReflection.green = ambientReflection[1];
+        newFigure.ambientReflection.blue = ambientReflection[2];
 
         drieDfiguren.push_back(newFigure);
 
@@ -148,9 +152,9 @@ void drieDdrawings::parse3Ddrawing(const ini::Configuration &configuration, int 
 
     else{
         for (auto &fractaal : fractalen) {
-            fractaal.color.red = color[0];
-            fractaal.color.green = color[1];
-            fractaal.color.blue = color[2];
+            fractaal.ambientReflection.red = ambientReflection[0];
+            fractaal.ambientReflection.green = ambientReflection[1];
+            fractaal.ambientReflection.blue = ambientReflection[2];
 
             drieDfiguren.push_back(fractaal);
 
@@ -159,6 +163,152 @@ void drieDdrawings::parse3Ddrawing(const ini::Configuration &configuration, int 
         }
     }
 
+
+}
+
+void drieDdrawings::createLights(const ini::Configuration &configuration, int nrLights, bool light) {
+
+    if (light){
+        for (int i = 0; i < nrLights; ++i) {
+
+            string light = "Light" + to_string(i);
+
+            bool infinity, ambient, diffuse, specular, location, spotAngle, direction;
+
+            bool infinityExist = configuration[light]["infinity"].exists();
+            ambient = configuration[light]["ambientLight"].exists();
+            diffuse = configuration[light]["diffuseLight"].exists();
+            specular = configuration[light]["specularLight"].exists();
+            location = configuration[light]["location"].exists();
+            spotAngle = configuration[light]["spotAngle"].exists();
+            direction = configuration[light]["direction"].exists();
+
+            if (infinityExist) infinity = configuration[light]["infinity"].as_bool_or_die();
+            else infinity = false;
+
+            bool isAmbientLight, isDiffusePointLight, isDiffuseSourceLight, isSpecularLight;
+
+            //ambientlight
+            if (!infinity && ambient && !diffuse && !specular && !location && !spotAngle && !direction) {
+                isAmbientLight = true;
+                isDiffusePointLight = false;
+                isDiffuseSourceLight = false;
+                isSpecularLight = false;
+            }
+
+                //puntbron
+            else if (!infinity && ambient && diffuse && !specular && location && spotAngle && !direction) {
+                isAmbientLight = false;
+                isDiffusePointLight = true;
+                isDiffuseSourceLight = false;
+                isSpecularLight = false;
+            }
+
+                //lichtbron op oneindig
+            else if (infinity && ambient && diffuse && !specular && !location && !spotAngle && direction) {
+                isAmbientLight = false;
+                isDiffusePointLight = false;
+                isDiffuseSourceLight = true;
+                isSpecularLight = false;
+            }
+
+                //speculiar glazendlicht
+            else if (!infinity && ambient && diffuse && specular && location && !spotAngle && !direction) {
+                isAmbientLight = false;
+                isDiffusePointLight = false;
+                isDiffuseSourceLight = false;
+                isSpecularLight = true;
+            }
+
+
+            if (isAmbientLight) {
+                Light newLight;
+                vector<double> lightColors = configuration[light]["ambientLight"].as_double_tuple_or_die();
+                newLight.ambientLight.red = lightColors[0] * 1;
+                newLight.ambientLight.green = lightColors[1] * 1;
+                newLight.ambientLight.blue = lightColors[2] * 1;
+                lights.push_back(newLight);
+            }
+
+            else if (isDiffuseSourceLight) {
+                InfLight newLight;
+                vector<double> lightColors = configuration[light]["ambientLight"].as_double_tuple_or_die();
+                newLight.ambientLight.red = lightColors[0] * 1;
+                newLight.ambientLight.green = lightColors[1] * 1;
+                newLight.ambientLight.blue = lightColors[2] * 1;
+
+                lightColors = configuration[light]["diffuseLight"].as_double_tuple_or_die();
+                newLight.diffuseLight.red = lightColors[0] * 1;
+                newLight.diffuseLight.green = lightColors[1] * 1;
+                newLight.diffuseLight.blue = lightColors[2] * 1;
+
+                vector<double> direction = configuration[light]["direction"].as_double_tuple_or_die();
+
+                newLight.ldVector.x = direction[0];
+                newLight.ldVector.y = direction[1];
+                newLight.ldVector.z = direction[2];
+
+                lights.push_back(newLight);
+            }
+
+            else if (isDiffusePointLight) {
+                PointLight newLight;
+                vector<double> lightColors = configuration[light]["ambientLight"].as_double_tuple_or_die();
+                newLight.ambientLight.red = lightColors[0] * 1;
+                newLight.ambientLight.green = lightColors[1] * 1;
+                newLight.ambientLight.blue = lightColors[2] * 1;
+
+                lightColors = configuration[light]["diffuseLight"].as_double_tuple_or_die();
+                newLight.diffuseLight.red = lightColors[0] * 1;
+                newLight.diffuseLight.green = lightColors[1] * 1;
+                newLight.diffuseLight.blue = lightColors[2] * 1;
+
+
+                vector<double> location = configuration[light]["direction"].as_double_tuple_or_die();
+
+                newLight.location = Vector3D::point(location[0], location[1], location[2]);
+
+                double Angle = configuration[light]["spotAngle"].as_double_or_die();
+
+                newLight.spotAngle = Angle;
+
+                lights.push_back(newLight);
+            }
+
+            else if (isSpecularLight) {
+                PointLight newLight;
+                vector<double> lightColors = configuration[light]["ambientLight"].as_double_tuple_or_die();
+                newLight.ambientLight.red = lightColors[0] * 1;
+                newLight.ambientLight.green = lightColors[1] * 1;
+                newLight.ambientLight.blue = lightColors[2] * 1;
+
+                lightColors = configuration[light]["diffuseLight"].as_double_tuple_or_die();
+                newLight.diffuseLight.red = lightColors[0] * 1;
+                newLight.diffuseLight.green = lightColors[1] * 1;
+                newLight.diffuseLight.blue = lightColors[2] * 1;
+
+                lightColors = configuration[light]["specularLight"].as_double_tuple_or_die();
+                newLight.specularLight.red = lightColors[0] * 1;
+                newLight.specularLight.green = lightColors[1] * 1;
+                newLight.specularLight.blue = lightColors[2] * 1;
+
+                vector<double> location = configuration[light]["direction"].as_double_tuple_or_die();
+
+                newLight.location = Vector3D::point(location[0], location[1], location[2]);
+
+                lights.push_back(newLight);
+            }
+        }
+    }
+
+    else{
+        Light newLight;
+        newLight.ambientLight.red = 1.0;
+        newLight.ambientLight.green = 1.0;
+        newLight.ambientLight.blue = 1.0;
+
+        lights.push_back(newLight);
+    }
 
 }
 
@@ -291,7 +441,7 @@ void drieDdrawings::createDrawVector(Figure &figure) {
                     puntenLijn.push_back(punt);
                 }
 
-                Line2D lijn = Line2D(puntenLijn[0], puntenLijn[1], figure.color, zPoints[zPoints.size()-2], zPoints[zPoints.size()-1]);
+                Line2D lijn = Line2D(puntenLijn[0], puntenLijn[1], figure.ambientReflection, zPoints[zPoints.size()-2], zPoints[zPoints.size()-1]);
                 lines.push_back(lijn);
                 puntenLijn.clear();
             }
@@ -308,7 +458,7 @@ void drieDdrawings::createDrawVector(Figure &figure) {
                         Point2D punt2 = doProjection(points[punten[j+1]-1]);
                         double zPoint1 = points[punten[j]-1].z;
                         double zPoint2 = points[punten[j+1]-1].z;
-                        Line2D line2D = Line2D(punt1, punt2, figure.color, zPoint1,zPoint2);
+                        Line2D line2D = Line2D(punt1, punt2, figure.ambientReflection, zPoint1,zPoint2);
                         lines.push_back(line2D);
                     }
                     else {
@@ -316,7 +466,7 @@ void drieDdrawings::createDrawVector(Figure &figure) {
                         Point2D punt2 = doProjection(points[punten[0]-1]);
                         double zPoint1 = points[punten[j]-1].z;
                         double zPoint2 = points[punten[0]-1].z;
-                        Line2D line2D = Line2D(punt1, punt2, figure.color, zPoint1,zPoint2);
+                        Line2D line2D = Line2D(punt1, punt2, figure.ambientReflection, zPoint1,zPoint2);
                         lines.push_back(line2D);
                     }
                 }
@@ -839,6 +989,10 @@ Figure drieDdrawings::createBuckyBall() {
     Figure buckyBall;
     Figure icosahedron = createIcosahedron(true);
 
+    Figure tempFigure;
+
+    vector<Vector3D> middelPoints;
+
     for (int i = 0; i < icosahedron.faces.size(); ++i) {
 
         int Ai = icosahedron.faces[i].point_indexes[0]-1;
@@ -870,9 +1024,165 @@ Figure drieDdrawings::createBuckyBall() {
 
         //DEFGHI
         zeshoek.point_indexes = {1+(6*i), 2+(6*i), 3+(6*i) , 4+(6*i), 5+(6*i), 6+(6*i)};
-
         buckyBall.faces.push_back(zeshoek);
 
+
+        tempFigure.points.push_back(A*rotatieMatrix * MatrixEyepoint); //1 + 9i
+        tempFigure.points.push_back(D*rotatieMatrix * MatrixEyepoint); //2 + 9i
+        tempFigure.points.push_back(I*rotatieMatrix * MatrixEyepoint); //3 + 9i
+
+        Face tempFace;
+
+        tempFace.point_indexes = {1+(9*i), 2+(9*i), 3+(9*i)};
+
+        tempFigure.faces.push_back(tempFace);
+
+
+        tempFigure.points.push_back(B*rotatieMatrix * MatrixEyepoint); //4 + 9i
+        tempFigure.points.push_back(F*rotatieMatrix * MatrixEyepoint); //5 + 9i
+        tempFigure.points.push_back(E*rotatieMatrix * MatrixEyepoint); //6 + 9i
+
+
+        tempFace.point_indexes = {4+(9*i), 5+(9*i), 6+(9*i)};
+
+        tempFigure.faces.push_back(tempFace);
+
+        tempFigure.points.push_back(C*rotatieMatrix * MatrixEyepoint); //7 + 9i
+        tempFigure.points.push_back(H*rotatieMatrix * MatrixEyepoint); //8 + 9i
+        tempFigure.points.push_back(G*rotatieMatrix * MatrixEyepoint); //9 + 9i
+
+        tempFace.point_indexes = {7+(9*i), 8+(9*i), 9+(9*i)};
+
+        tempFigure.faces.push_back(tempFace);
+
+
+        middelPoints.push_back(A*rotatieMatrix*MatrixEyepoint);
+        middelPoints.push_back(B*rotatieMatrix*MatrixEyepoint);
+        middelPoints.push_back(C*rotatieMatrix*MatrixEyepoint);
+
+
+    }
+
+    bool sorted = true;
+
+    while (sorted){
+        bool isSorted = false;
+        for (int i = 0; i < middelPoints.size()-1; ++i) {
+
+            if (middelPoints[i].x > middelPoints[i+1].x){
+
+                Vector3D tempVec = middelPoints[i];
+                middelPoints[i] = middelPoints[i+1];
+                middelPoints[i+1] = tempVec;
+
+                isSorted = true;
+            }
+        }
+
+        sorted = isSorted;
+    }
+
+
+    Figure vijfhoek;
+    int counter = 0;
+
+    for (int i = 0; i < middelPoints.size(); ++i) {
+
+        if (i % 5 == 0){
+
+            Vector3D middePoint =  middelPoints[i];
+
+            Face newFace;
+
+
+            for (int j = 0; j < tempFigure.faces.size(); ++j) {
+                if (tempFigure.points[tempFigure.faces[j].point_indexes[0]-1].x == middePoint.x &&
+                    tempFigure.points[tempFigure.faces[j].point_indexes[0]-1].y == middePoint.y){
+
+
+                    vijfhoek.points.push_back(tempFigure.points[tempFigure.faces[j].point_indexes[2]-1]);
+
+                }
+            }
+
+
+            counter++;
+
+
+            switch (counter) {
+
+                case 1:
+                    newFace.point_indexes = {3+(5*(counter-1)), 4+(5*(counter-1)), 5+(5*(counter-1)) , 2+(5*(counter-1)), 1+(5*(counter-1))};
+                    break;
+                case 2:
+                    newFace.point_indexes = {1+(5*(counter-1)), 4+(5*(counter-1)), 5+(5*(counter-1)) , 3+(5*(counter-1)), 2 +(5*(counter-1))};
+
+                    break;
+                case 3:
+                    newFace.point_indexes = {1+(5*(counter-1)), 4+(5*(counter-1)), 5+(5*(counter-1)) , 3+(5*(counter-1)), 2 +(5*(counter-1))};
+                    break;
+
+                case 4:
+
+                    newFace.point_indexes = {2+(5*(counter-1)), 4+(5*(counter-1)), 5+(5*(counter-1)) , 3+(5*(counter-1)), 1+(5*(counter-1))};
+                    break;
+
+                case 5:
+
+                    newFace.point_indexes = {2+(5*(counter-1)), 5+(5*(counter-1)), 4+(5*(counter-1)) , 3+(5*(counter-1)), 1+(5*(counter-1))};
+                    break;
+                case 6:
+
+                    newFace.point_indexes = {1+(5*(counter-1)), 5+(5*(counter-1)), 4+(5*(counter-1)) , 3+(5*(counter-1)), 2+(5*(counter-1))};
+                    break;
+                case 7:
+
+                    newFace.point_indexes = {1+(5*(counter-1)), 5+(5*(counter-1)), 4+(5*(counter-1)) , 3+(5*(counter-1)), 2+(5*(counter-1))};
+                    break;
+
+                case 8:
+
+                    newFace.point_indexes = {2+(5*(counter-1)), 4+(5*(counter-1)), 5+(5*(counter-1)) , 3+(5*(counter-1)), 1+(5*(counter-1))};
+                    break;
+
+                case 9:
+
+                    newFace.point_indexes = {1+(5*(counter-1)), 4+(5*(counter-1)), 5+(5*(counter-1)) , 3+(5*(counter-1)), 2+(5*(counter-1))};
+                    break;
+                case 10:
+
+                    newFace.point_indexes = {2+(5*(counter-1)), 5+(5*(counter-1)), 4+(5*(counter-1)) , 3+(5*(counter-1)), 1+(5*(counter-1))};
+                    break;
+                case 11:
+
+                    newFace.point_indexes = {2+(5*(counter-1)), 5+(5*(counter-1)), 4+(5*(counter-1)) , 3+(5*(counter-1)), 1+(5*(counter-1))};
+                    break;
+
+                case 12:
+
+                    newFace.point_indexes = {1+(5*(counter-1)), 4+(5*(counter-1)), 5+(5*(counter-1)) , 3+(5*(counter-1)), 2+(5*(counter-1))};
+                    break;
+            }
+            vijfhoek.faces.push_back(newFace);
+        }
+    }
+
+    int points = buckyBall.points.size();
+
+    for (int i = 0; i < vijfhoek.faces.size(); ++i) {
+
+        Face face = vijfhoek.faces[i];
+
+        Face newFace;
+
+        for (int j = 0; j < face.point_indexes.size(); ++j) {
+            newFace.point_indexes.push_back(face.point_indexes[j]+points);
+        }
+        buckyBall.faces.push_back(newFace);
+    }
+
+    for (int i = 0; i < vijfhoek.points.size(); ++i) {
+        buckyBall.points.push_back(vijfhoek.points[i]);
     }
 
     return buckyBall;
@@ -890,15 +1200,11 @@ void drieDdrawings::createMengerSponge(int nrIterations, bool zBufdriehoek, vect
 
 
     if (nrIterations == 0){
-
-        cube.color.red = color[0];
-        cube.color.green = color[1];
-        cube.color.blue = color[2];
-
+        cube.ambientReflection.red = color[0];
+        cube.ambientReflection.green = color[1];
+        cube.ambientReflection.blue = color[2];
         drieDfiguren.push_back(cube);
-
         if(!zBufdriehoek) createDrawVector(cube);
-
         return;
     }
 
@@ -958,9 +1264,9 @@ void drieDdrawings::createMengerSponge(int nrIterations, bool zBufdriehoek, vect
                     newFigure.faces = figuur.faces;
 
                     if (i == nrIterations-1){
-                        newFigure.color.red = color[0];
-                        newFigure.color.green = color[1];
-                        newFigure.color.blue = color[2];
+                        newFigure.ambientReflection.red = color[0];
+                        newFigure.ambientReflection.green = color[1];
+                        newFigure.ambientReflection.blue = color[2];
 
                         drieDfiguren.push_back(newFigure);
 
@@ -974,4 +1280,6 @@ void drieDdrawings::createMengerSponge(int nrIterations, bool zBufdriehoek, vect
         figuren = newFigures;
     }
 }
+
+
 

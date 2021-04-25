@@ -33,17 +33,48 @@ public:
     std::vector<Vector3D> points;
     std::vector<Face> faces;
     vector<pair<Point2D, double>> points2D;
-    Color color;
+    Color ambientReflection;
+    Color diffuseRelfection;
+    Color speculaireReflection;
+    double reflectionCoefficient;
+};
 
+class Light
+{
+public:
+    //de ambiente licht component
+    Color ambientLight;
+    //de diffuse licht component
+    Color diffuseLight;
+    //de diffuse licht component
+    Color specularLight;
+};
+
+class InfLight : public Light
+{
+public:
+    //de richting waarin het licht schijnt
+    Vector3D ldVector;
+};
+
+class PointLight : public Light
+{
+public:
+    //de locatie van de puntbron
+    Vector3D location;
+    //de hoek van een spotlicht
+    double spotAngle;
 };
 
 typedef std::list<Figure> Figures3D;
-
+typedef std::list<Light> Lights3D;
 
 class drieDdrawings {
 public:
 
     Figures3D drieDfiguren;
+
+    Lights3D lights;
 
     Matrix scaleFigure;
     Matrix rotateX;
@@ -55,7 +86,9 @@ public:
 
     Lines2D lines;
 
-    void parse3Ddrawing(const ini::Configuration &configuration, int figureNumber, bool zBufDriehoek);
+    void parse3Ddrawing(const ini::Configuration &configuration, int figureNumber, bool zBufDriehoek, bool belichting);
+
+    void createLights(const ini::Configuration &configuration, int nrLights, bool light);
 
     void eyePointTrans(const Vector3D &eyepoint);
 

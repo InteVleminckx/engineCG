@@ -22,13 +22,16 @@ class Z_driehoek {
     double dx;
     double dy;
 
+    Lights3D lights3D;
+
     void createNewFace(const Face& curFace, Figure &newFigure);
 
     Point2D convert3Dto2D(const Vector3D &point);
 
-    void drawFaces(img::EasyImage &image, const Point2D &A, const Point2D &B, const Point2D &C, const Color& color, double &_1_over_Zg, const Face &face);
+    void drawFaces(img::EasyImage &image, const Point2D &A, const Point2D &B, const Point2D &C, const Figure& Figure, double &_1_over_Zg, const Face &face);
 
-    void drawZ_bufferd_triangle(unsigned int x0, unsigned int y0, unsigned int x1, unsigned int y1, const img::Color &color,
+    void drawZ_bufferd_triangle(unsigned int x0, unsigned int y0, unsigned int x1, unsigned int y1, const Color &ambientReflection,
+                                const Color &diffuseReflection,const Color &specularReflection, double reflectionCoeff,
                                 double dzdx, double  dzdy, double Xg, double Yg, double _1_over_Zg, img::EasyImage & image);
 
 public:
@@ -41,7 +44,7 @@ public:
 
     void doProjection();
 
-    img::EasyImage drawTriangle(Figures3D &figures3D, const img::Color& background);
+    img::EasyImage drawTriangle(Figures3D &figures3D, const img::Color& background, Lights3D& lights);
 
 };
 

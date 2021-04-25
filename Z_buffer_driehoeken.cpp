@@ -15,7 +15,7 @@ drieDdrawings Z_driehoek::triangulate(const drieDdrawings& oldDrawing) {
         Figure newFigure;
 
         //de points van de oude figuur blijven hetzelfde bij de nieuwe figuur als ook de kleur
-        newFigure.points = figure.points; newFigure.color = figure.color;
+        newFigure.points = figure.points; newFigure.ambientReflection = figure.ambientReflection;
 
         //we maken hier de nieuwe figuren aan
         for (const auto& currentFace : figure.faces) createNewFace(currentFace, newFigure);
@@ -92,10 +92,12 @@ void Z_driehoek::doProjection() {
 
 }
 
-img::EasyImage Z_driehoek::drawTriangle(Figures3D &figures3D, const img::Color &background) {
+img::EasyImage Z_driehoek::drawTriangle(Figures3D &figures3D, const img::Color &background, Lights3D& lights) {
 
     //we voeren de doProjection functie uit
     doProjection();
+
+    lights3D = lights;
 
     //maken een image aan met correcte formate (bepaald in doProjection)
     img::EasyImage image(roundToInt(imageX), roundToInt(imageY));
@@ -147,7 +149,7 @@ img::EasyImage Z_driehoek::drawTriangle(Figures3D &figures3D, const img::Color &
             //we voegen dit toe aan een vlak want elk vlak heeft zijn eigen dzdx en dzdy
             figure.faces[i].dzdx_dzdy = make_pair(dzdx, dzdy);
 
-            drawFaces(image, A_2D, B_2D, C_2D, figure.color, _1_over_Zg, figure.faces[i]);
+            drawFaces(image, A_2D, B_2D, C_2D, figure, _1_over_Zg, figure.faces[i]);
 
         }
     }
@@ -155,7 +157,9 @@ img::EasyImage Z_driehoek::drawTriangle(Figures3D &figures3D, const img::Color &
     return image;
 }
 
-void Z_driehoek::drawFaces(img::EasyImage &image, const Point2D &A, const Point2D &B, const Point2D &C, const Color& color, double &_1_over_Zg, const Face &face) {
+void Z_driehoek::drawFaces(img::EasyImage &image, const Point2D &A, const Point2D &B, const Point2D &C, const Figure& figure, double &_1_over_Zg, const Face &face) {
+
+
 
     //bereken Ymin en Ymax van de afbeelding
     int Ymin = roundToInt(min(A.y, min(B.y, C.y))+0.5);
@@ -170,12 +174,8 @@ void Z_driehoek::drawFaces(img::EasyImage &image, const Point2D &A, const Point2
     double dzdy = face.dzdx_dzdy.second;
 
     //maken een vector aan van de 3 lijnen waaruit de figuur bestaat
-    vector<Line2D> linesFace = vector<Line2D>{Line2D(A,B, color), Line2D(A,C, color), Line2D(B,C, color)};
+    vector<Line2D> linesFace = vector<Line2D>{Line2D(A,B, figure.ambientReflection), Line2D(A,C, figure.ambientReflection), Line2D(B,C, figure.ambientReflection)};
 
-    //vermenigvuldigen de kleur met 255 zodat de figuur uit de juiste kleur bestaat
-    img::Color lineColor(roundToInt(color.red*255),
-                         roundToInt(color.green*255),
-                         roundToInt(color.blue*255));
 
     //lopen over de hoogte van de figuur
     for (int Yi = Ymin; Yi <= Ymax; ++Yi) {
@@ -200,24 +200,48 @@ void Z_driehoek::drawFaces(img::EasyImage &image, const Point2D &A, const Point2
         unsigned int Xl = roundToInt(min(XlXr[0], XlXr[1])+0.5);
         unsigned int Xr = roundToInt(max(XlXr[0], XlXr[1])-0.5);
 
-        drawZ_bufferd_triangle(Xl, Yi, Xr, Yi, lineColor, dzdx, dzdy, Xg, Yg, _1_over_Zg, image);
+
+        drawZ_bufferd_triangle(Xl, Yi, Xr, Yi, figure.ambientReflection, figure.diffuseRelfection, figure.speculaireReflection, figure.reflectionCoefficient, dzdx, dzdy, Xg, Yg, _1_over_Zg, image);
 
     }
 }
 
-void Z_driehoek::drawZ_bufferd_triangle(unsigned int x0, unsigned int y0, unsigned int x1, unsigned int y1, const img::Color& color,
-                                        const double dzdx, const double  dzdy, const double Xg, const double Yg, const double _1_over_Zg, img::EasyImage & image ) {
+void Z_driehoek::drawZ_bufferd_triangle(unsigned int x0, unsigned int y0, unsigned int x1, unsigned int y1, const Color &ambientReflection,
+                                        const Color &diffuseReflection,const Color &specularReflection, double reflectionCoeff,
+                                        double dzdx, double  dzdy, double Xg, double Yg, double _1_over_Zg, img::EasyImage & image) {
 
 
     assert(x0 < image.get_width() && y0 < image.get_height());
     assert(x1 < image.get_width() && y1 < image.get_height());
+
+    img::Color newColor;
+
+    vector<double> colors{0,0,0};
+
+    for (auto light : lights3D) {
+
+        vector<double> tempVector{light.ambientLight.red, light.ambientLight.green, light.ambientLight.blue};
+
+        colors[0] += (tempVector[0]*ambientReflection.red);
+        colors[1] += (tempVector[1]*ambientReflection.green);
+        colors[2] += (tempVector[2]*ambientReflection.blue);
+
+    }
+
+    if (colors[0] > 1) colors[0] = 1;
+    if (colors[1] > 1) colors[1] = 1;
+    if (colors[2] > 1) colors[2] = 1;
+
+    newColor.red = colors[0]*255;
+    newColor.green = colors[1]*255;
+    newColor.blue = colors[2]*255;
 
     for (unsigned int i = x0; i <= x1; ++i) {
         double _1_over_Zi = _1_over_Zg + (i-Xg)*dzdx + (y0-Yg)*dzdy;
 
         if (zBuffer.zBuffer[i][y0] > _1_over_Zi){
             zBuffer.zBuffer[i][y0] = _1_over_Zi;
-            (image)(i, y0) = color;
+            (image)(i, y0) = newColor;
         }
     }
 
