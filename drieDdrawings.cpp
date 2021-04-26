@@ -1062,118 +1062,170 @@ Figure drieDdrawings::createBuckyBall() {
         buckyBall.faces.push_back(zeshoek);
     }
 
+    int pointsBuckyBall = buckyBall.points.size();
 
     //vijfhoeken
 
-    //vijfhoek1
-    Figure vijfhoek;
+    Vector3D p0 = icosahedron.points[0];
+    Vector3D p1 = icosahedron.points[1];
+    Vector3D p2 = icosahedron.points[2];
+    Vector3D p3 = icosahedron.points[3];
+    Vector3D p4 = icosahedron.points[4];
+    Vector3D p5 = icosahedron.points[5];
+    Vector3D p6 = icosahedron.points[6];
+    Vector3D p7 = icosahedron.points[7];
+    Vector3D p8 = icosahedron.points[8];
+    Vector3D p9 = icosahedron.points[9];
+    Vector3D p10 = icosahedron.points[10];
+    Vector3D p11 = icosahedron.points[11];
 
-    Vector3D middelpoint = icosahedron.points[0];
-    vijfhoek.points.push_back((middelpoint + ((icosahedron.points[1]-middelpoint)/3))*rotatieMatrix * MatrixEyepoint);
-    vijfhoek.points.push_back((middelpoint + ((icosahedron.points[2]-middelpoint)/3))*rotatieMatrix * MatrixEyepoint);
-    vijfhoek.points.push_back((middelpoint + ((icosahedron.points[3]-middelpoint)/3))*rotatieMatrix * MatrixEyepoint);
-    vijfhoek.points.push_back((middelpoint + ((icosahedron.points[4]-middelpoint)/3))*rotatieMatrix * MatrixEyepoint);
-    vijfhoek.points.push_back((middelpoint + ((icosahedron.points[5]-middelpoint)/3))*rotatieMatrix * MatrixEyepoint);
+    //vijfhoek1
+
+    Vector3D middelpoint = p0;
+    buckyBall.points.push_back((middelpoint + ((p1-middelpoint)/3))*rotatieMatrix * MatrixEyepoint);
+    buckyBall.points.push_back((middelpoint + ((p2-middelpoint)/3))*rotatieMatrix * MatrixEyepoint);
+    buckyBall.points.push_back((middelpoint + ((p3-middelpoint)/3))*rotatieMatrix * MatrixEyepoint);
+    buckyBall.points.push_back((middelpoint + ((p4-middelpoint)/3))*rotatieMatrix * MatrixEyepoint);
+    buckyBall.points.push_back((middelpoint + ((p5-middelpoint)/3))*rotatieMatrix * MatrixEyepoint);
 
     Face face;
-    face.point_indexes = {1,2,3,4,5};
-    vijfhoek.faces.push_back(face);
+    face.point_indexes = {1+pointsBuckyBall,2+pointsBuckyBall,3+pointsBuckyBall,4+pointsBuckyBall,5+pointsBuckyBall};
+    buckyBall.faces.push_back(face);
 
     //vijfhoek2
-    middelpoint = icosahedron.points[1];
-    vijfhoek.points.push_back((middelpoint + ((icosahedron.points[0]-middelpoint)/3))*rotatieMatrix * MatrixEyepoint);
-    vijfhoek.points.push_back((middelpoint + ((icosahedron.points[5]-middelpoint)/3))*rotatieMatrix * MatrixEyepoint);
-    vijfhoek.points.push_back((middelpoint + ((icosahedron.points[10]-middelpoint)/3))*rotatieMatrix * MatrixEyepoint);
-    vijfhoek.points.push_back((middelpoint + ((icosahedron.points[6]-middelpoint)/3))*rotatieMatrix * MatrixEyepoint);
-    vijfhoek.points.push_back((middelpoint + ((icosahedron.points[2]-middelpoint)/3))*rotatieMatrix * MatrixEyepoint);
+    middelpoint = p1;
+    buckyBall.points.push_back((middelpoint + ((p0-middelpoint)/3))*rotatieMatrix * MatrixEyepoint);
+    buckyBall.points.push_back((middelpoint + ((p5-middelpoint)/3))*rotatieMatrix * MatrixEyepoint);
+    buckyBall.points.push_back((middelpoint + ((p10-middelpoint)/3))*rotatieMatrix * MatrixEyepoint);
+    buckyBall.points.push_back((middelpoint + ((p6-middelpoint)/3))*rotatieMatrix * MatrixEyepoint);
+    buckyBall.points.push_back((middelpoint + ((p2-middelpoint)/3))*rotatieMatrix * MatrixEyepoint);
 
     face.point_indexes.clear();
-    face.point_indexes = {6,7,8,9,10};
-    vijfhoek.faces.push_back(face);
+    face.point_indexes = {6+pointsBuckyBall,7+pointsBuckyBall,8+pointsBuckyBall,9+pointsBuckyBall,10+pointsBuckyBall};
+    buckyBall.faces.push_back(face);
 
     //vijfhoek3
-    middelpoint = icosahedron.points[2];
-    vijfhoek.points.push_back((middelpoint + ((icosahedron.points[0]-middelpoint)/3))*rotatieMatrix * MatrixEyepoint);
-    vijfhoek.points.push_back((middelpoint + ((icosahedron.points[1]-middelpoint)/3))*rotatieMatrix * MatrixEyepoint);
-    vijfhoek.points.push_back((middelpoint + ((icosahedron.points[6]-middelpoint)/3))*rotatieMatrix * MatrixEyepoint);
-    vijfhoek.points.push_back((middelpoint + ((icosahedron.points[7]-middelpoint)/3))*rotatieMatrix * MatrixEyepoint);
-    vijfhoek.points.push_back((middelpoint + ((icosahedron.points[3]-middelpoint)/3))*rotatieMatrix * MatrixEyepoint);
+    middelpoint = p2;
+    buckyBall.points.push_back((middelpoint + ((p0-middelpoint)/3))*rotatieMatrix * MatrixEyepoint);
+    buckyBall.points.push_back((middelpoint + ((p1-middelpoint)/3))*rotatieMatrix * MatrixEyepoint);
+    buckyBall.points.push_back((middelpoint + ((p6-middelpoint)/3))*rotatieMatrix * MatrixEyepoint);
+    buckyBall.points.push_back((middelpoint + ((p7-middelpoint)/3))*rotatieMatrix * MatrixEyepoint);
+    buckyBall.points.push_back((middelpoint + ((p3-middelpoint)/3))*rotatieMatrix * MatrixEyepoint);
 
     face.point_indexes.clear();
-    face.point_indexes = {11,12,13,14,15};
-    vijfhoek.faces.push_back(face);
+    face.point_indexes = {11+pointsBuckyBall,12+pointsBuckyBall,13+pointsBuckyBall,14+pointsBuckyBall,15+pointsBuckyBall};
+    buckyBall.faces.push_back(face);
 
     //vijfhoek4
-    middelpoint = icosahedron.points[3];
-    vijfhoek.points.push_back((middelpoint + ((icosahedron.points[0]-middelpoint)/3))*rotatieMatrix * MatrixEyepoint);
-    vijfhoek.points.push_back((middelpoint + ((icosahedron.points[2]-middelpoint)/3))*rotatieMatrix * MatrixEyepoint);
-    vijfhoek.points.push_back((middelpoint + ((icosahedron.points[7]-middelpoint)/3))*rotatieMatrix * MatrixEyepoint);
-    vijfhoek.points.push_back((middelpoint + ((icosahedron.points[8]-middelpoint)/3))*rotatieMatrix * MatrixEyepoint);
-    vijfhoek.points.push_back((middelpoint + ((icosahedron.points[4]-middelpoint)/3))*rotatieMatrix * MatrixEyepoint);
+    middelpoint = p3;
+    buckyBall.points.push_back((middelpoint + ((p0-middelpoint)/3))*rotatieMatrix * MatrixEyepoint);
+    buckyBall.points.push_back((middelpoint + ((p2-middelpoint)/3))*rotatieMatrix * MatrixEyepoint);
+    buckyBall.points.push_back((middelpoint + ((p7-middelpoint)/3))*rotatieMatrix * MatrixEyepoint);
+    buckyBall.points.push_back((middelpoint + ((p8-middelpoint)/3))*rotatieMatrix * MatrixEyepoint);
+    buckyBall.points.push_back((middelpoint + ((p4-middelpoint)/3))*rotatieMatrix * MatrixEyepoint);
 
     face.point_indexes.clear();
-    face.point_indexes = {16,17,18,19,20};
-    vijfhoek.faces.push_back(face);
+    face.point_indexes = {16+pointsBuckyBall,17+pointsBuckyBall,18+pointsBuckyBall,19+pointsBuckyBall,20+pointsBuckyBall};
+    buckyBall.faces.push_back(face);
 
     //vijfhoek5
-    middelpoint = icosahedron.points[4];
-    vijfhoek.points.push_back((middelpoint + ((icosahedron.points[0]-middelpoint)/3))*rotatieMatrix * MatrixEyepoint);
-    vijfhoek.points.push_back((middelpoint + ((icosahedron.points[3]-middelpoint)/3))*rotatieMatrix * MatrixEyepoint);
-    vijfhoek.points.push_back((middelpoint + ((icosahedron.points[8]-middelpoint)/3))*rotatieMatrix * MatrixEyepoint);
-    vijfhoek.points.push_back((middelpoint + ((icosahedron.points[9]-middelpoint)/3))*rotatieMatrix * MatrixEyepoint);
-    vijfhoek.points.push_back((middelpoint + ((icosahedron.points[5]-middelpoint)/3))*rotatieMatrix * MatrixEyepoint);
+    middelpoint = p4;
+    buckyBall.points.push_back((middelpoint + ((p0-middelpoint)/3))*rotatieMatrix * MatrixEyepoint);
+    buckyBall.points.push_back((middelpoint + ((p3-middelpoint)/3))*rotatieMatrix * MatrixEyepoint);
+    buckyBall.points.push_back((middelpoint + ((p8-middelpoint)/3))*rotatieMatrix * MatrixEyepoint);
+    buckyBall.points.push_back((middelpoint + ((p9-middelpoint)/3))*rotatieMatrix * MatrixEyepoint);
+    buckyBall.points.push_back((middelpoint + ((p5-middelpoint)/3))*rotatieMatrix * MatrixEyepoint);
 
     face.point_indexes.clear();
-    face.point_indexes = {21,22,23,24,25};
-    vijfhoek.faces.push_back(face);
+    face.point_indexes = {21+pointsBuckyBall,22+pointsBuckyBall,23+pointsBuckyBall,24+pointsBuckyBall,25+pointsBuckyBall};
+    buckyBall.faces.push_back(face);
 
     //vijfhoek6
-    middelpoint = icosahedron.points[5];
-    vijfhoek.points.push_back((middelpoint + ((icosahedron.points[0]-middelpoint)/3))*rotatieMatrix * MatrixEyepoint);
-    vijfhoek.points.push_back((middelpoint + ((icosahedron.points[4]-middelpoint)/3))*rotatieMatrix * MatrixEyepoint);
-    vijfhoek.points.push_back((middelpoint + ((icosahedron.points[9]-middelpoint)/3))*rotatieMatrix * MatrixEyepoint);
-    vijfhoek.points.push_back((middelpoint + ((icosahedron.points[10]-middelpoint)/3))*rotatieMatrix * MatrixEyepoint);
-    vijfhoek.points.push_back((middelpoint + ((icosahedron.points[1]-middelpoint)/3))*rotatieMatrix * MatrixEyepoint);
+    middelpoint = p5;
+    buckyBall.points.push_back((middelpoint + ((p0-middelpoint)/3))*rotatieMatrix * MatrixEyepoint);
+    buckyBall.points.push_back((middelpoint + ((p4-middelpoint)/3))*rotatieMatrix * MatrixEyepoint);
+    buckyBall.points.push_back((middelpoint + ((p9-middelpoint)/3))*rotatieMatrix * MatrixEyepoint);
+    buckyBall.points.push_back((middelpoint + ((p10-middelpoint)/3))*rotatieMatrix * MatrixEyepoint);
+    buckyBall.points.push_back((middelpoint + ((p1-middelpoint)/3))*rotatieMatrix * MatrixEyepoint);
 
     face.point_indexes.clear();
-    face.point_indexes = {26,27,28,29,30};
-    vijfhoek.faces.push_back(face);
+    face.point_indexes = {26+pointsBuckyBall,27+pointsBuckyBall,28+pointsBuckyBall,29+pointsBuckyBall,30+pointsBuckyBall};
+    buckyBall.faces.push_back(face);
 
     //vijfhoek7
-    middelpoint = icosahedron.points[6];
-    vijfhoek.points.push_back((middelpoint + ((icosahedron.points[1]-middelpoint)/3))*rotatieMatrix * MatrixEyepoint);
-    vijfhoek.points.push_back((middelpoint + ((icosahedron.points[10]-middelpoint)/3))*rotatieMatrix * MatrixEyepoint);
-    vijfhoek.points.push_back((middelpoint + ((icosahedron.points[11]-middelpoint)/3))*rotatieMatrix * MatrixEyepoint);
-    vijfhoek.points.push_back((middelpoint + ((icosahedron.points[7]-middelpoint)/3))*rotatieMatrix * MatrixEyepoint);
-    vijfhoek.points.push_back((middelpoint + ((icosahedron.points[2]-middelpoint)/3))*rotatieMatrix * MatrixEyepoint);
+    middelpoint = p6;
+    buckyBall.points.push_back((middelpoint + ((p1-middelpoint)/3))*rotatieMatrix * MatrixEyepoint);
+    buckyBall.points.push_back((middelpoint + ((p10-middelpoint)/3))*rotatieMatrix * MatrixEyepoint);
+    buckyBall.points.push_back((middelpoint + ((p11-middelpoint)/3))*rotatieMatrix * MatrixEyepoint);
+    buckyBall.points.push_back((middelpoint + ((p7-middelpoint)/3))*rotatieMatrix * MatrixEyepoint);
+    buckyBall.points.push_back((middelpoint + ((p2-middelpoint)/3))*rotatieMatrix * MatrixEyepoint);
 
     face.point_indexes.clear();
-    face.point_indexes = {31,32,33,34,35};
-    vijfhoek.faces.push_back(face);
+    face.point_indexes = {31+pointsBuckyBall,32+pointsBuckyBall,33+pointsBuckyBall,34+pointsBuckyBall,35+pointsBuckyBall};
+    buckyBall.faces.push_back(face);
+
+    //vijfhoek8
+    middelpoint = p7;
+    buckyBall.points.push_back((middelpoint + ((p2-middelpoint)/3))*rotatieMatrix * MatrixEyepoint);
+    buckyBall.points.push_back((middelpoint + ((p6-middelpoint)/3))*rotatieMatrix * MatrixEyepoint);
+    buckyBall.points.push_back((middelpoint + ((p11-middelpoint)/3))*rotatieMatrix * MatrixEyepoint);
+    buckyBall.points.push_back((middelpoint + ((p8-middelpoint)/3))*rotatieMatrix * MatrixEyepoint);
+    buckyBall.points.push_back((middelpoint + ((p3-middelpoint)/3))*rotatieMatrix * MatrixEyepoint);
+
+    face.point_indexes.clear();
+    face.point_indexes = {36+pointsBuckyBall,37+pointsBuckyBall,38+pointsBuckyBall,39+pointsBuckyBall,40+pointsBuckyBall};
+    buckyBall.faces.push_back(face);
+
+    //vijfhoek9
+    middelpoint = p8;
+    buckyBall.points.push_back((middelpoint + ((p3-middelpoint)/3))*rotatieMatrix * MatrixEyepoint);
+    buckyBall.points.push_back((middelpoint + ((p7-middelpoint)/3))*rotatieMatrix * MatrixEyepoint);
+    buckyBall.points.push_back((middelpoint + ((p11-middelpoint)/3))*rotatieMatrix * MatrixEyepoint);
+    buckyBall.points.push_back((middelpoint + ((p9-middelpoint)/3))*rotatieMatrix * MatrixEyepoint);
+    buckyBall.points.push_back((middelpoint + ((p4-middelpoint)/3))*rotatieMatrix * MatrixEyepoint);
+
+    face.point_indexes.clear();
+    face.point_indexes = {41+pointsBuckyBall,42+pointsBuckyBall,43+pointsBuckyBall,44+pointsBuckyBall,45+pointsBuckyBall};
+    buckyBall.faces.push_back(face);
+
+    //vijfhoek10
+    middelpoint = p9;
+    buckyBall.points.push_back((middelpoint + ((p4-middelpoint)/3))*rotatieMatrix * MatrixEyepoint);
+    buckyBall.points.push_back((middelpoint + ((p8-middelpoint)/3))*rotatieMatrix * MatrixEyepoint);
+    buckyBall.points.push_back((middelpoint + ((p11-middelpoint)/3))*rotatieMatrix * MatrixEyepoint);
+    buckyBall.points.push_back((middelpoint + ((p10-middelpoint)/3))*rotatieMatrix * MatrixEyepoint);
+    buckyBall.points.push_back((middelpoint + ((p5-middelpoint)/3))*rotatieMatrix * MatrixEyepoint);
+
+    face.point_indexes.clear();
+    face.point_indexes = {46+pointsBuckyBall,47+pointsBuckyBall,48+pointsBuckyBall,49+pointsBuckyBall,50+pointsBuckyBall};
+    buckyBall.faces.push_back(face);
+
+    //vijfhoek11
+    middelpoint = p10;
+    buckyBall.points.push_back((middelpoint + ((p1-middelpoint)/3))*rotatieMatrix * MatrixEyepoint);
+    buckyBall.points.push_back((middelpoint + ((p5-middelpoint)/3))*rotatieMatrix * MatrixEyepoint);
+    buckyBall.points.push_back((middelpoint + ((p9-middelpoint)/3))*rotatieMatrix * MatrixEyepoint);
+    buckyBall.points.push_back((middelpoint + ((p11-middelpoint)/3))*rotatieMatrix * MatrixEyepoint);
+    buckyBall.points.push_back((middelpoint + ((p6-middelpoint)/3))*rotatieMatrix * MatrixEyepoint);
+
+    face.point_indexes.clear();
+    face.point_indexes = {51+pointsBuckyBall,52+pointsBuckyBall,53+pointsBuckyBall,54+pointsBuckyBall,55+pointsBuckyBall};
+    buckyBall.faces.push_back(face);
+
+    //vijfhoek12
+    middelpoint = p11;
+    buckyBall.points.push_back((middelpoint + ((p10-middelpoint)/3))*rotatieMatrix * MatrixEyepoint);
+    buckyBall.points.push_back((middelpoint + ((p9-middelpoint)/3))*rotatieMatrix * MatrixEyepoint);
+    buckyBall.points.push_back((middelpoint + ((p8-middelpoint)/3))*rotatieMatrix * MatrixEyepoint);
+    buckyBall.points.push_back((middelpoint + ((p7-middelpoint)/3))*rotatieMatrix * MatrixEyepoint);
+    buckyBall.points.push_back((middelpoint + ((p6-middelpoint)/3))*rotatieMatrix * MatrixEyepoint);
+
+    face.point_indexes.clear();
+    face.point_indexes = {56+pointsBuckyBall,57+pointsBuckyBall,58+pointsBuckyBall,59+pointsBuckyBall,60+pointsBuckyBall};
+    buckyBall.faces.push_back(face);
 
 
-//    int pointss = buckyBall.points.size();
-//
-//    for (auto & face : vijfhoek.faces) {
-//        for (int & point_indexe : face.point_indexes) {
-//            point_indexe+=pointss;
-//        }
-//    }
-//
-//    for (int i = 0; i < vijfhoek.faces.size(); ++i) {
-//        buckyBall.faces.push_back(vijfhoek.faces[i]);
-//    }
-//
-//
-//
-//    for (int i = 0; i < vijfhoek.points.size(); ++i) {
-//
-//        buckyBall.points.push_back(vijfhoek.points[i]);
-//
-//    }
-
-
-    return vijfhoek;
+    return buckyBall;
 }
 
 void drieDdrawings::createMengerSponge(int nrIterations, bool zBufdriehoek, vector<double> &color) {
