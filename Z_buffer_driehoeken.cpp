@@ -15,7 +15,10 @@ drieDdrawings Z_driehoek::triangulate(const drieDdrawings& oldDrawing) {
         Figure newFigure;
 
         //de points van de oude figuur blijven hetzelfde bij de nieuwe figuur als ook de kleur
-        newFigure.points = figure.points; newFigure.ambientReflection = figure.ambientReflection;
+        newFigure.points = figure.points;
+        newFigure.ambientReflection = figure.ambientReflection;
+        newFigure.diffuseRelfection = figure.diffuseRelfection;
+        newFigure.speculaireReflection = figure.speculaireReflection;
 
         //we maken hier de nieuwe figuren aan
         for (const auto& currentFace : figure.faces) createNewFace(currentFace, newFigure);
@@ -137,19 +140,22 @@ img::EasyImage Z_driehoek::drawTriangle(Figures3D &figures3D, const img::Color &
             Vector3D B_3D = figure.points[figure.faces[i].point_indexes[1] - 1];
             Vector3D C_3D = figure.points[figure.faces[i].point_indexes[2] - 1];
 
-            Vector3D u = Vector3D::vector(B_3D.x - A_3D.x, B_3D.y - A_3D.y, B_3D.z - A_3D.z);
-            Vector3D v = Vector3D::vector(C_3D.x - A_3D.x, C_3D.y - A_3D.y, C_3D.z - A_3D.z);
-            Vector3D w = Vector3D::vector((u.y*v.z)-(u.z*v.y), (u.z*v.x)-(u.x*v.z), (u.x*v.y)-(u.y*v.x));
+            Vector3D u = B_3D-A_3D;
+            Vector3D v = C_3D-A_3D;
+            Vector3D w = Vector3D::cross(u, v);
 
             double k = w.x * A_3D.x + w.y * A_3D.y + w.z * A_3D.z;
 
             double dzdx = (w.x)/(-d*k);
             double dzdy = (w.y)/(-d*k);
 
+
+            Vector3D n = Vector3D::normalise(w);
+
             //we voegen dit toe aan een vlak want elk vlak heeft zijn eigen dzdx en dzdy
             figure.faces[i].dzdx_dzdy = make_pair(dzdx, dzdy);
 
-            drawFaces(image, A_2D, B_2D, C_2D, figure, _1_over_Zg, figure.faces[i]);
+            drawFaces(image, A_2D, B_2D, C_2D, figure, _1_over_Zg, figure.faces[i], n);
 
         }
     }
@@ -157,7 +163,7 @@ img::EasyImage Z_driehoek::drawTriangle(Figures3D &figures3D, const img::Color &
     return image;
 }
 
-void Z_driehoek::drawFaces(img::EasyImage &image, const Point2D &A, const Point2D &B, const Point2D &C, const Figure& figure, double &_1_over_Zg, const Face &face) {
+void Z_driehoek::drawFaces(img::EasyImage &image, const Point2D &A, const Point2D &B, const Point2D &C, const Figure& figure, double &_1_over_Zg, const Face &face, const Vector3D &n) {
 
 
 
@@ -201,14 +207,14 @@ void Z_driehoek::drawFaces(img::EasyImage &image, const Point2D &A, const Point2
         unsigned int Xr = roundToInt(max(XlXr[0], XlXr[1])-0.5);
 
 
-        drawZ_bufferd_triangle(Xl, Yi, Xr, Yi, figure.ambientReflection, figure.diffuseRelfection, figure.speculaireReflection, figure.reflectionCoefficient, dzdx, dzdy, Xg, Yg, _1_over_Zg, image);
+        drawZ_bufferd_triangle(Xl, Yi, Xr, Yi, figure.ambientReflection, figure.diffuseRelfection, figure.speculaireReflection, figure.reflectionCoefficient, dzdx, dzdy, Xg, Yg, _1_over_Zg, image, n);
 
     }
 }
 
 void Z_driehoek::drawZ_bufferd_triangle(unsigned int x0, unsigned int y0, unsigned int x1, unsigned int y1, const Color &ambientReflection,
                                         const Color &diffuseReflection,const Color &specularReflection, double reflectionCoeff,
-                                        double dzdx, double  dzdy, double Xg, double Yg, double _1_over_Zg, img::EasyImage & image) {
+                                        double dzdx, double  dzdy, double Xg, double Yg, double _1_over_Zg, img::EasyImage & image, const Vector3D &n) {
 
 
     assert(x0 < image.get_width() && y0 < image.get_height());
@@ -218,15 +224,52 @@ void Z_driehoek::drawZ_bufferd_triangle(unsigned int x0, unsigned int y0, unsign
 
     vector<double> colors{0,0,0};
 
-    for (auto light : lights3D) {
+    for (const auto& light : lights3D) {
 
-        vector<double> tempVector{light.ambientLight.red, light.ambientLight.green, light.ambientLight.blue};
 
-        colors[0] += (tempVector[0]*ambientReflection.red);
-        colors[1] += (tempVector[1]*ambientReflection.green);
-        colors[2] += (tempVector[2]*ambientReflection.blue);
+        //ambientlight
+//        if (!light.second.first.first && !light.second.second.first){
+
+            vector<double> tempVector{light.first.ambientLight.red, light.first.ambientLight.green, light.first.ambientLight.blue};
+
+            colors[0] += (tempVector[0]*ambientReflection.red);
+            colors[1] += (tempVector[1]*ambientReflection.green);
+            colors[2] += (tempVector[2]*ambientReflection.blue);
+//        }
+
+        //diffuse infinity light
+        if(light.second.first.first && !light.second.second.first){
+
+            Vector3D l = -light.second.first.second.ldVector;
+
+            double cosA = cos((n.x*l.x) + (n.y*l.y) + (n.z*l.z));
+
+
+            vector<double> tempVector2{light.first.diffuseLight.red, light.first.diffuseLight.green, light.first.diffuseLight.blue};
+
+            colors[0] += (tempVector2[0]*diffuseReflection.red*cosA);
+            colors[1] += (tempVector2[1]*diffuseReflection.green*cosA);
+            colors[2] += (tempVector2[2]*diffuseReflection.blue*cosA);
+
+        }
+
+        //diffuse point light
+        else if(light.second.first.first && light.second.second.first){
+
+
+        }
+
+        //specularlight
+        else if(!light.second.first.first && light.second.second.first){
+
+
+        }
+
 
     }
+
+
+
 
     if (colors[0] > 1) colors[0] = 1;
     if (colors[1] > 1) colors[1] = 1;

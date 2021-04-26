@@ -15,9 +15,23 @@ void drieDdrawings::parse3Ddrawing(const ini::Configuration &configuration, int 
     double scale = configuration[figurex]["scale"].as_double_or_die();
     vector<double> center = configuration[figurex]["center"].as_double_tuple_or_die();
     vector<double> ambientReflection;
+    vector<double> diffuseReflection;
+    vector<double> speculaireReflection;
 
     if (!belichting) ambientReflection = configuration[figurex]["color"].as_double_tuple_or_die();
-    else ambientReflection = configuration[figurex]["ambientReflection"].as_double_tuple_or_die();
+    else
+    {
+        ambientReflection = configuration[figurex]["ambientReflection"].as_double_tuple_or_die();
+
+        if (configuration[figurex]["diffuseReflection"].exists()){
+            diffuseReflection = configuration[figurex]["diffuseReflection"].as_double_tuple_or_die();
+        }
+
+        if (configuration[figurex]["speculaireReflection"].exists()){
+            speculaireReflection = configuration[figurex]["speculaireReflection"].as_double_tuple_or_die();
+        }
+
+    }
 
     string fractal = type.substr(0, 7);
     int nrIterations;
@@ -145,6 +159,18 @@ void drieDdrawings::parse3Ddrawing(const ini::Configuration &configuration, int 
         newFigure.ambientReflection.green = ambientReflection[1];
         newFigure.ambientReflection.blue = ambientReflection[2];
 
+        if (configuration[figurex]["diffuseReflection"].exists()) {
+            newFigure.diffuseRelfection.red = diffuseReflection[0];
+            newFigure.diffuseRelfection.green = diffuseReflection[1];
+            newFigure.diffuseRelfection.blue = diffuseReflection[2];
+        }
+
+        if (configuration[figurex]["speculaireReflection"].exists()) {
+            newFigure.speculaireReflection.red = speculaireReflection[0];
+            newFigure.speculaireReflection.green = speculaireReflection[1];
+            newFigure.speculaireReflection.blue = speculaireReflection[2];
+        }
+
         drieDfiguren.push_back(newFigure);
 
         if(!zBufDriehoek && !newFigure.points.empty()) createDrawVector(newFigure);
@@ -156,6 +182,17 @@ void drieDdrawings::parse3Ddrawing(const ini::Configuration &configuration, int 
             fractaal.ambientReflection.green = ambientReflection[1];
             fractaal.ambientReflection.blue = ambientReflection[2];
 
+            if (configuration[figurex]["diffuseReflection"].exists()) {
+                fractaal.diffuseRelfection.red = diffuseReflection[0];
+                fractaal.diffuseRelfection.green = diffuseReflection[1];
+                fractaal.diffuseRelfection.blue = diffuseReflection[2];
+            }
+
+            if (configuration[figurex]["speculaireReflection"].exists()) {
+                fractaal.speculaireReflection.red = speculaireReflection[0];
+                fractaal.speculaireReflection.green = speculaireReflection[1];
+                fractaal.speculaireReflection.blue = speculaireReflection[2];
+            }
             drieDfiguren.push_back(fractaal);
 
             if(!zBufDriehoek) createDrawVector(fractaal);
@@ -167,7 +204,8 @@ void drieDdrawings::parse3Ddrawing(const ini::Configuration &configuration, int 
 }
 
 void drieDdrawings::createLights(const ini::Configuration &configuration, int nrLights, bool light) {
-
+    InfLight emptyInf;
+    PointLight emptyPointLight;
     if (light){
         for (int i = 0; i < nrLights; ++i) {
 
@@ -221,13 +259,15 @@ void drieDdrawings::createLights(const ini::Configuration &configuration, int nr
             }
 
 
+
+
             if (isAmbientLight) {
                 Light newLight;
                 vector<double> lightColors = configuration[light]["ambientLight"].as_double_tuple_or_die();
                 newLight.ambientLight.red = lightColors[0] * 1;
                 newLight.ambientLight.green = lightColors[1] * 1;
                 newLight.ambientLight.blue = lightColors[2] * 1;
-                lights.push_back(newLight);
+                lights.push_back(make_pair(newLight, make_pair(make_pair(false, emptyInf), make_pair(false, emptyPointLight))));
             }
 
             else if (isDiffuseSourceLight) {
@@ -248,7 +288,7 @@ void drieDdrawings::createLights(const ini::Configuration &configuration, int nr
                 newLight.ldVector.y = direction[1];
                 newLight.ldVector.z = direction[2];
 
-                lights.push_back(newLight);
+                lights.push_back(make_pair(newLight, make_pair(make_pair(true, newLight), make_pair(false, emptyPointLight))));
             }
 
             else if (isDiffusePointLight) {
@@ -272,7 +312,7 @@ void drieDdrawings::createLights(const ini::Configuration &configuration, int nr
 
                 newLight.spotAngle = Angle;
 
-                lights.push_back(newLight);
+                lights.push_back(make_pair(newLight, make_pair(make_pair(true, emptyInf), make_pair(true, newLight))));
             }
 
             else if (isSpecularLight) {
@@ -296,7 +336,7 @@ void drieDdrawings::createLights(const ini::Configuration &configuration, int nr
 
                 newLight.location = Vector3D::point(location[0], location[1], location[2]);
 
-                lights.push_back(newLight);
+                lights.push_back(make_pair(newLight, make_pair(make_pair(false, emptyInf), make_pair(true, newLight))));
             }
         }
     }
@@ -307,7 +347,7 @@ void drieDdrawings::createLights(const ini::Configuration &configuration, int nr
         newLight.ambientLight.green = 1.0;
         newLight.ambientLight.blue = 1.0;
 
-        lights.push_back(newLight);
+        lights.push_back(make_pair(newLight, make_pair(make_pair(false, emptyInf), make_pair(false, emptyPointLight))));
     }
 
 }
@@ -988,11 +1028,6 @@ void drieDdrawings::generateFractal(Figure &fig, Figures3D &fractal, const int n
 Figure drieDdrawings::createBuckyBall() {
     Figure buckyBall;
     Figure icosahedron = createIcosahedron(true);
-
-    Figure tempFigure;
-
-    vector<Vector3D> middelPoints;
-
     for (int i = 0; i < icosahedron.faces.size(); ++i) {
 
         int Ai = icosahedron.faces[i].point_indexes[0]-1;
@@ -1025,167 +1060,120 @@ Figure drieDdrawings::createBuckyBall() {
         //DEFGHI
         zeshoek.point_indexes = {1+(6*i), 2+(6*i), 3+(6*i) , 4+(6*i), 5+(6*i), 6+(6*i)};
         buckyBall.faces.push_back(zeshoek);
-
-
-        tempFigure.points.push_back(A*rotatieMatrix * MatrixEyepoint); //1 + 9i
-        tempFigure.points.push_back(D*rotatieMatrix * MatrixEyepoint); //2 + 9i
-        tempFigure.points.push_back(I*rotatieMatrix * MatrixEyepoint); //3 + 9i
-
-        Face tempFace;
-
-        tempFace.point_indexes = {1+(9*i), 2+(9*i), 3+(9*i)};
-
-        tempFigure.faces.push_back(tempFace);
-
-
-        tempFigure.points.push_back(B*rotatieMatrix * MatrixEyepoint); //4 + 9i
-        tempFigure.points.push_back(F*rotatieMatrix * MatrixEyepoint); //5 + 9i
-        tempFigure.points.push_back(E*rotatieMatrix * MatrixEyepoint); //6 + 9i
-
-
-        tempFace.point_indexes = {4+(9*i), 5+(9*i), 6+(9*i)};
-
-        tempFigure.faces.push_back(tempFace);
-
-        tempFigure.points.push_back(C*rotatieMatrix * MatrixEyepoint); //7 + 9i
-        tempFigure.points.push_back(H*rotatieMatrix * MatrixEyepoint); //8 + 9i
-        tempFigure.points.push_back(G*rotatieMatrix * MatrixEyepoint); //9 + 9i
-
-        tempFace.point_indexes = {7+(9*i), 8+(9*i), 9+(9*i)};
-
-        tempFigure.faces.push_back(tempFace);
-
-
-        middelPoints.push_back(A*rotatieMatrix*MatrixEyepoint);
-        middelPoints.push_back(B*rotatieMatrix*MatrixEyepoint);
-        middelPoints.push_back(C*rotatieMatrix*MatrixEyepoint);
-
-
-    }
-
-    bool sorted = true;
-
-    while (sorted){
-        bool isSorted = false;
-        for (int i = 0; i < middelPoints.size()-1; ++i) {
-
-            if (middelPoints[i].x > middelPoints[i+1].x){
-
-                Vector3D tempVec = middelPoints[i];
-                middelPoints[i] = middelPoints[i+1];
-                middelPoints[i+1] = tempVec;
-
-                isSorted = true;
-            }
-        }
-
-        sorted = isSorted;
     }
 
 
+    //vijfhoeken
+
+    //vijfhoek1
     Figure vijfhoek;
-    int counter = 0;
 
-    for (int i = 0; i < middelPoints.size(); ++i) {
+    Vector3D middelpoint = icosahedron.points[0];
+    vijfhoek.points.push_back((middelpoint + ((icosahedron.points[1]-middelpoint)/3))*rotatieMatrix * MatrixEyepoint);
+    vijfhoek.points.push_back((middelpoint + ((icosahedron.points[2]-middelpoint)/3))*rotatieMatrix * MatrixEyepoint);
+    vijfhoek.points.push_back((middelpoint + ((icosahedron.points[3]-middelpoint)/3))*rotatieMatrix * MatrixEyepoint);
+    vijfhoek.points.push_back((middelpoint + ((icosahedron.points[4]-middelpoint)/3))*rotatieMatrix * MatrixEyepoint);
+    vijfhoek.points.push_back((middelpoint + ((icosahedron.points[5]-middelpoint)/3))*rotatieMatrix * MatrixEyepoint);
 
-        if (i % 5 == 0){
+    Face face;
+    face.point_indexes = {1,2,3,4,5};
+    vijfhoek.faces.push_back(face);
 
-            Vector3D middePoint =  middelPoints[i];
+    //vijfhoek2
+    middelpoint = icosahedron.points[1];
+    vijfhoek.points.push_back((middelpoint + ((icosahedron.points[0]-middelpoint)/3))*rotatieMatrix * MatrixEyepoint);
+    vijfhoek.points.push_back((middelpoint + ((icosahedron.points[5]-middelpoint)/3))*rotatieMatrix * MatrixEyepoint);
+    vijfhoek.points.push_back((middelpoint + ((icosahedron.points[10]-middelpoint)/3))*rotatieMatrix * MatrixEyepoint);
+    vijfhoek.points.push_back((middelpoint + ((icosahedron.points[6]-middelpoint)/3))*rotatieMatrix * MatrixEyepoint);
+    vijfhoek.points.push_back((middelpoint + ((icosahedron.points[2]-middelpoint)/3))*rotatieMatrix * MatrixEyepoint);
 
-            Face newFace;
+    face.point_indexes.clear();
+    face.point_indexes = {6,7,8,9,10};
+    vijfhoek.faces.push_back(face);
+
+    //vijfhoek3
+    middelpoint = icosahedron.points[2];
+    vijfhoek.points.push_back((middelpoint + ((icosahedron.points[0]-middelpoint)/3))*rotatieMatrix * MatrixEyepoint);
+    vijfhoek.points.push_back((middelpoint + ((icosahedron.points[1]-middelpoint)/3))*rotatieMatrix * MatrixEyepoint);
+    vijfhoek.points.push_back((middelpoint + ((icosahedron.points[6]-middelpoint)/3))*rotatieMatrix * MatrixEyepoint);
+    vijfhoek.points.push_back((middelpoint + ((icosahedron.points[7]-middelpoint)/3))*rotatieMatrix * MatrixEyepoint);
+    vijfhoek.points.push_back((middelpoint + ((icosahedron.points[3]-middelpoint)/3))*rotatieMatrix * MatrixEyepoint);
+
+    face.point_indexes.clear();
+    face.point_indexes = {11,12,13,14,15};
+    vijfhoek.faces.push_back(face);
+
+    //vijfhoek4
+    middelpoint = icosahedron.points[3];
+    vijfhoek.points.push_back((middelpoint + ((icosahedron.points[0]-middelpoint)/3))*rotatieMatrix * MatrixEyepoint);
+    vijfhoek.points.push_back((middelpoint + ((icosahedron.points[2]-middelpoint)/3))*rotatieMatrix * MatrixEyepoint);
+    vijfhoek.points.push_back((middelpoint + ((icosahedron.points[7]-middelpoint)/3))*rotatieMatrix * MatrixEyepoint);
+    vijfhoek.points.push_back((middelpoint + ((icosahedron.points[8]-middelpoint)/3))*rotatieMatrix * MatrixEyepoint);
+    vijfhoek.points.push_back((middelpoint + ((icosahedron.points[4]-middelpoint)/3))*rotatieMatrix * MatrixEyepoint);
+
+    face.point_indexes.clear();
+    face.point_indexes = {16,17,18,19,20};
+    vijfhoek.faces.push_back(face);
+
+    //vijfhoek5
+    middelpoint = icosahedron.points[4];
+    vijfhoek.points.push_back((middelpoint + ((icosahedron.points[0]-middelpoint)/3))*rotatieMatrix * MatrixEyepoint);
+    vijfhoek.points.push_back((middelpoint + ((icosahedron.points[3]-middelpoint)/3))*rotatieMatrix * MatrixEyepoint);
+    vijfhoek.points.push_back((middelpoint + ((icosahedron.points[8]-middelpoint)/3))*rotatieMatrix * MatrixEyepoint);
+    vijfhoek.points.push_back((middelpoint + ((icosahedron.points[9]-middelpoint)/3))*rotatieMatrix * MatrixEyepoint);
+    vijfhoek.points.push_back((middelpoint + ((icosahedron.points[5]-middelpoint)/3))*rotatieMatrix * MatrixEyepoint);
+
+    face.point_indexes.clear();
+    face.point_indexes = {21,22,23,24,25};
+    vijfhoek.faces.push_back(face);
+
+    //vijfhoek6
+    middelpoint = icosahedron.points[5];
+    vijfhoek.points.push_back((middelpoint + ((icosahedron.points[0]-middelpoint)/3))*rotatieMatrix * MatrixEyepoint);
+    vijfhoek.points.push_back((middelpoint + ((icosahedron.points[4]-middelpoint)/3))*rotatieMatrix * MatrixEyepoint);
+    vijfhoek.points.push_back((middelpoint + ((icosahedron.points[9]-middelpoint)/3))*rotatieMatrix * MatrixEyepoint);
+    vijfhoek.points.push_back((middelpoint + ((icosahedron.points[10]-middelpoint)/3))*rotatieMatrix * MatrixEyepoint);
+    vijfhoek.points.push_back((middelpoint + ((icosahedron.points[1]-middelpoint)/3))*rotatieMatrix * MatrixEyepoint);
+
+    face.point_indexes.clear();
+    face.point_indexes = {26,27,28,29,30};
+    vijfhoek.faces.push_back(face);
+
+    //vijfhoek7
+    middelpoint = icosahedron.points[6];
+    vijfhoek.points.push_back((middelpoint + ((icosahedron.points[1]-middelpoint)/3))*rotatieMatrix * MatrixEyepoint);
+    vijfhoek.points.push_back((middelpoint + ((icosahedron.points[10]-middelpoint)/3))*rotatieMatrix * MatrixEyepoint);
+    vijfhoek.points.push_back((middelpoint + ((icosahedron.points[11]-middelpoint)/3))*rotatieMatrix * MatrixEyepoint);
+    vijfhoek.points.push_back((middelpoint + ((icosahedron.points[7]-middelpoint)/3))*rotatieMatrix * MatrixEyepoint);
+    vijfhoek.points.push_back((middelpoint + ((icosahedron.points[2]-middelpoint)/3))*rotatieMatrix * MatrixEyepoint);
+
+    face.point_indexes.clear();
+    face.point_indexes = {31,32,33,34,35};
+    vijfhoek.faces.push_back(face);
 
 
-            for (int j = 0; j < tempFigure.faces.size(); ++j) {
-                if (tempFigure.points[tempFigure.faces[j].point_indexes[0]-1].x == middePoint.x &&
-                    tempFigure.points[tempFigure.faces[j].point_indexes[0]-1].y == middePoint.y){
+//    int pointss = buckyBall.points.size();
+//
+//    for (auto & face : vijfhoek.faces) {
+//        for (int & point_indexe : face.point_indexes) {
+//            point_indexe+=pointss;
+//        }
+//    }
+//
+//    for (int i = 0; i < vijfhoek.faces.size(); ++i) {
+//        buckyBall.faces.push_back(vijfhoek.faces[i]);
+//    }
+//
+//
+//
+//    for (int i = 0; i < vijfhoek.points.size(); ++i) {
+//
+//        buckyBall.points.push_back(vijfhoek.points[i]);
+//
+//    }
 
 
-                    vijfhoek.points.push_back(tempFigure.points[tempFigure.faces[j].point_indexes[2]-1]);
-
-                }
-            }
-
-
-            counter++;
-
-
-            switch (counter) {
-
-                case 1:
-                    newFace.point_indexes = {3+(5*(counter-1)), 4+(5*(counter-1)), 5+(5*(counter-1)) , 2+(5*(counter-1)), 1+(5*(counter-1))};
-                    break;
-                case 2:
-                    newFace.point_indexes = {1+(5*(counter-1)), 4+(5*(counter-1)), 5+(5*(counter-1)) , 3+(5*(counter-1)), 2 +(5*(counter-1))};
-
-                    break;
-                case 3:
-                    newFace.point_indexes = {1+(5*(counter-1)), 4+(5*(counter-1)), 5+(5*(counter-1)) , 3+(5*(counter-1)), 2 +(5*(counter-1))};
-                    break;
-
-                case 4:
-
-                    newFace.point_indexes = {2+(5*(counter-1)), 4+(5*(counter-1)), 5+(5*(counter-1)) , 3+(5*(counter-1)), 1+(5*(counter-1))};
-                    break;
-
-                case 5:
-
-                    newFace.point_indexes = {2+(5*(counter-1)), 5+(5*(counter-1)), 4+(5*(counter-1)) , 3+(5*(counter-1)), 1+(5*(counter-1))};
-                    break;
-                case 6:
-
-                    newFace.point_indexes = {1+(5*(counter-1)), 5+(5*(counter-1)), 4+(5*(counter-1)) , 3+(5*(counter-1)), 2+(5*(counter-1))};
-                    break;
-                case 7:
-
-                    newFace.point_indexes = {1+(5*(counter-1)), 5+(5*(counter-1)), 4+(5*(counter-1)) , 3+(5*(counter-1)), 2+(5*(counter-1))};
-                    break;
-
-                case 8:
-
-                    newFace.point_indexes = {2+(5*(counter-1)), 4+(5*(counter-1)), 5+(5*(counter-1)) , 3+(5*(counter-1)), 1+(5*(counter-1))};
-                    break;
-
-                case 9:
-
-                    newFace.point_indexes = {1+(5*(counter-1)), 4+(5*(counter-1)), 5+(5*(counter-1)) , 3+(5*(counter-1)), 2+(5*(counter-1))};
-                    break;
-                case 10:
-
-                    newFace.point_indexes = {2+(5*(counter-1)), 5+(5*(counter-1)), 4+(5*(counter-1)) , 3+(5*(counter-1)), 1+(5*(counter-1))};
-                    break;
-                case 11:
-
-                    newFace.point_indexes = {2+(5*(counter-1)), 5+(5*(counter-1)), 4+(5*(counter-1)) , 3+(5*(counter-1)), 1+(5*(counter-1))};
-                    break;
-
-                case 12:
-
-                    newFace.point_indexes = {1+(5*(counter-1)), 4+(5*(counter-1)), 5+(5*(counter-1)) , 3+(5*(counter-1)), 2+(5*(counter-1))};
-                    break;
-            }
-            vijfhoek.faces.push_back(newFace);
-        }
-    }
-
-    int points = buckyBall.points.size();
-
-    for (int i = 0; i < vijfhoek.faces.size(); ++i) {
-
-        Face face = vijfhoek.faces[i];
-
-        Face newFace;
-
-        for (int j = 0; j < face.point_indexes.size(); ++j) {
-            newFace.point_indexes.push_back(face.point_indexes[j]+points);
-        }
-        buckyBall.faces.push_back(newFace);
-    }
-
-    for (int i = 0; i < vijfhoek.points.size(); ++i) {
-        buckyBall.points.push_back(vijfhoek.points[i]);
-    }
-
-    return buckyBall;
+    return vijfhoek;
 }
 
 void drieDdrawings::createMengerSponge(int nrIterations, bool zBufdriehoek, vector<double> &color) {

@@ -67,7 +67,7 @@ public:
 };
 
 typedef std::list<Figure> Figures3D;
-typedef std::list<Light> Lights3D;
+typedef std::list<pair<Light, pair<pair<bool, InfLight>, pair<bool, PointLight>>>> Lights3D;
 
 class drieDdrawings {
 public:
