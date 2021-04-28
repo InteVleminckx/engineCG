@@ -244,7 +244,6 @@ void Z_driehoek::drawZ_bufferd_triangle(unsigned int x0, unsigned int y0, unsign
 
             double cosA = cos((n.x*l.x) + (n.y*l.y) + (n.z*l.z));
 
-
             vector<double> tempVector2{light.first.diffuseLight.red, light.first.diffuseLight.green, light.first.diffuseLight.blue};
 
             colors[0] += (tempVector2[0]*diffuseReflection.red*cosA);

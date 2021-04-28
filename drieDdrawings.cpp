@@ -1028,41 +1028,6 @@ void drieDdrawings::generateFractal(Figure &fig, Figures3D &fractal, const int n
 Figure drieDdrawings::createBuckyBall() {
     Figure buckyBall;
     Figure icosahedron = createIcosahedron(true);
-    for (int i = 0; i < icosahedron.faces.size(); ++i) {
-
-        int Ai = icosahedron.faces[i].point_indexes[0]-1;
-        int Bi = icosahedron.faces[i].point_indexes[1]-1;
-        int Ci = icosahedron.faces[i].point_indexes[2]-1;
-
-        Vector3D A = icosahedron.points[Ai];
-        Vector3D B = icosahedron.points[Bi];
-        Vector3D C = icosahedron.points[Ci];
-
-        Vector3D D = A + ((B-A)/3);
-        Vector3D E = B - ((B-A)/3);
-
-        Vector3D F = B + ((C-B)/3);
-        Vector3D G = C - ((C-B)/3);
-
-        Vector3D H = C + ((A-C)/3);
-        Vector3D I = A - ((A-C)/3);
-
-
-        buckyBall.points.push_back(D*rotatieMatrix * MatrixEyepoint); //1 + 6i  D
-        buckyBall.points.push_back(E*rotatieMatrix * MatrixEyepoint); //2 + 6i  E
-        buckyBall.points.push_back(F*rotatieMatrix * MatrixEyepoint); //3 + 6i  F
-        buckyBall.points.push_back(G*rotatieMatrix * MatrixEyepoint); //4 + 6i  G
-        buckyBall.points.push_back(H*rotatieMatrix * MatrixEyepoint); //5 + 6i  H
-        buckyBall.points.push_back(I*rotatieMatrix * MatrixEyepoint); //6 + 6i  I
-
-        Face zeshoek;
-
-        //DEFGHI
-        zeshoek.point_indexes = {1+(6*i), 2+(6*i), 3+(6*i) , 4+(6*i), 5+(6*i), 6+(6*i)};
-        buckyBall.faces.push_back(zeshoek);
-    }
-
-    int pointsBuckyBall = buckyBall.points.size();
 
     //vijfhoeken
 
@@ -1082,148 +1047,247 @@ Figure drieDdrawings::createBuckyBall() {
     //vijfhoek1
 
     Vector3D middelpoint = p0;
-    buckyBall.points.push_back((middelpoint + ((p1-middelpoint)/3))*rotatieMatrix * MatrixEyepoint);
-    buckyBall.points.push_back((middelpoint + ((p2-middelpoint)/3))*rotatieMatrix * MatrixEyepoint);
-    buckyBall.points.push_back((middelpoint + ((p3-middelpoint)/3))*rotatieMatrix * MatrixEyepoint);
-    buckyBall.points.push_back((middelpoint + ((p4-middelpoint)/3))*rotatieMatrix * MatrixEyepoint);
-    buckyBall.points.push_back((middelpoint + ((p5-middelpoint)/3))*rotatieMatrix * MatrixEyepoint);
+    buckyBall.points.push_back((middelpoint + ((p1-middelpoint)/3))*rotatieMatrix * MatrixEyepoint); //point 1
+    buckyBall.points.push_back((middelpoint + ((p2-middelpoint)/3))*rotatieMatrix * MatrixEyepoint); //point 2
+    buckyBall.points.push_back((middelpoint + ((p3-middelpoint)/3))*rotatieMatrix * MatrixEyepoint); //point 3
+    buckyBall.points.push_back((middelpoint + ((p4-middelpoint)/3))*rotatieMatrix * MatrixEyepoint); //point 4
+    buckyBall.points.push_back((middelpoint + ((p5-middelpoint)/3))*rotatieMatrix * MatrixEyepoint); //point 5
 
     Face face;
-    face.point_indexes = {1+pointsBuckyBall,2+pointsBuckyBall,3+pointsBuckyBall,4+pointsBuckyBall,5+pointsBuckyBall};
+    face.point_indexes = {1,2,3,4,5};
     buckyBall.faces.push_back(face);
 
     //vijfhoek2
     middelpoint = p1;
-    buckyBall.points.push_back((middelpoint + ((p0-middelpoint)/3))*rotatieMatrix * MatrixEyepoint);
-    buckyBall.points.push_back((middelpoint + ((p5-middelpoint)/3))*rotatieMatrix * MatrixEyepoint);
-    buckyBall.points.push_back((middelpoint + ((p10-middelpoint)/3))*rotatieMatrix * MatrixEyepoint);
-    buckyBall.points.push_back((middelpoint + ((p6-middelpoint)/3))*rotatieMatrix * MatrixEyepoint);
-    buckyBall.points.push_back((middelpoint + ((p2-middelpoint)/3))*rotatieMatrix * MatrixEyepoint);
+    buckyBall.points.push_back((middelpoint + ((p0-middelpoint)/3))*rotatieMatrix * MatrixEyepoint); //point 6
+    buckyBall.points.push_back((middelpoint + ((p5-middelpoint)/3))*rotatieMatrix * MatrixEyepoint); //point 7
+    buckyBall.points.push_back((middelpoint + ((p10-middelpoint)/3))*rotatieMatrix* MatrixEyepoint); //point 8
+    buckyBall.points.push_back((middelpoint + ((p6-middelpoint)/3))*rotatieMatrix * MatrixEyepoint); //point 9
+    buckyBall.points.push_back((middelpoint + ((p2-middelpoint)/3))*rotatieMatrix * MatrixEyepoint); //point 10
 
     face.point_indexes.clear();
-    face.point_indexes = {6+pointsBuckyBall,7+pointsBuckyBall,8+pointsBuckyBall,9+pointsBuckyBall,10+pointsBuckyBall};
+    face.point_indexes = {6,7,8,9,10};
     buckyBall.faces.push_back(face);
 
     //vijfhoek3
     middelpoint = p2;
-    buckyBall.points.push_back((middelpoint + ((p0-middelpoint)/3))*rotatieMatrix * MatrixEyepoint);
-    buckyBall.points.push_back((middelpoint + ((p1-middelpoint)/3))*rotatieMatrix * MatrixEyepoint);
-    buckyBall.points.push_back((middelpoint + ((p6-middelpoint)/3))*rotatieMatrix * MatrixEyepoint);
-    buckyBall.points.push_back((middelpoint + ((p7-middelpoint)/3))*rotatieMatrix * MatrixEyepoint);
-    buckyBall.points.push_back((middelpoint + ((p3-middelpoint)/3))*rotatieMatrix * MatrixEyepoint);
+    buckyBall.points.push_back((middelpoint + ((p0-middelpoint)/3))*rotatieMatrix * MatrixEyepoint); //point 11
+    buckyBall.points.push_back((middelpoint + ((p1-middelpoint)/3))*rotatieMatrix * MatrixEyepoint); //point 12
+    buckyBall.points.push_back((middelpoint + ((p6-middelpoint)/3))*rotatieMatrix * MatrixEyepoint); //point 13
+    buckyBall.points.push_back((middelpoint + ((p7-middelpoint)/3))*rotatieMatrix * MatrixEyepoint); //point 14
+    buckyBall.points.push_back((middelpoint + ((p3-middelpoint)/3))*rotatieMatrix * MatrixEyepoint); //point 15
 
     face.point_indexes.clear();
-    face.point_indexes = {11+pointsBuckyBall,12+pointsBuckyBall,13+pointsBuckyBall,14+pointsBuckyBall,15+pointsBuckyBall};
+    face.point_indexes = {11,12,13,14,15};
     buckyBall.faces.push_back(face);
 
     //vijfhoek4
     middelpoint = p3;
-    buckyBall.points.push_back((middelpoint + ((p0-middelpoint)/3))*rotatieMatrix * MatrixEyepoint);
-    buckyBall.points.push_back((middelpoint + ((p2-middelpoint)/3))*rotatieMatrix * MatrixEyepoint);
-    buckyBall.points.push_back((middelpoint + ((p7-middelpoint)/3))*rotatieMatrix * MatrixEyepoint);
-    buckyBall.points.push_back((middelpoint + ((p8-middelpoint)/3))*rotatieMatrix * MatrixEyepoint);
-    buckyBall.points.push_back((middelpoint + ((p4-middelpoint)/3))*rotatieMatrix * MatrixEyepoint);
+    buckyBall.points.push_back((middelpoint + ((p0-middelpoint)/3))*rotatieMatrix * MatrixEyepoint); //point 16
+    buckyBall.points.push_back((middelpoint + ((p2-middelpoint)/3))*rotatieMatrix * MatrixEyepoint); //point 17
+    buckyBall.points.push_back((middelpoint + ((p7-middelpoint)/3))*rotatieMatrix * MatrixEyepoint); //point 18
+    buckyBall.points.push_back((middelpoint + ((p8-middelpoint)/3))*rotatieMatrix * MatrixEyepoint); //point 19
+    buckyBall.points.push_back((middelpoint + ((p4-middelpoint)/3))*rotatieMatrix * MatrixEyepoint); //point 20
 
     face.point_indexes.clear();
-    face.point_indexes = {16+pointsBuckyBall,17+pointsBuckyBall,18+pointsBuckyBall,19+pointsBuckyBall,20+pointsBuckyBall};
+    face.point_indexes = {16,17,18,19,20};
     buckyBall.faces.push_back(face);
 
     //vijfhoek5
     middelpoint = p4;
-    buckyBall.points.push_back((middelpoint + ((p0-middelpoint)/3))*rotatieMatrix * MatrixEyepoint);
-    buckyBall.points.push_back((middelpoint + ((p3-middelpoint)/3))*rotatieMatrix * MatrixEyepoint);
-    buckyBall.points.push_back((middelpoint + ((p8-middelpoint)/3))*rotatieMatrix * MatrixEyepoint);
-    buckyBall.points.push_back((middelpoint + ((p9-middelpoint)/3))*rotatieMatrix * MatrixEyepoint);
-    buckyBall.points.push_back((middelpoint + ((p5-middelpoint)/3))*rotatieMatrix * MatrixEyepoint);
+    buckyBall.points.push_back((middelpoint + ((p0-middelpoint)/3))*rotatieMatrix * MatrixEyepoint); //point 21
+    buckyBall.points.push_back((middelpoint + ((p3-middelpoint)/3))*rotatieMatrix * MatrixEyepoint); //point 22
+    buckyBall.points.push_back((middelpoint + ((p8-middelpoint)/3))*rotatieMatrix * MatrixEyepoint); //point 23
+    buckyBall.points.push_back((middelpoint + ((p9-middelpoint)/3))*rotatieMatrix * MatrixEyepoint); //point 24
+    buckyBall.points.push_back((middelpoint + ((p5-middelpoint)/3))*rotatieMatrix * MatrixEyepoint); //point 25
 
     face.point_indexes.clear();
-    face.point_indexes = {21+pointsBuckyBall,22+pointsBuckyBall,23+pointsBuckyBall,24+pointsBuckyBall,25+pointsBuckyBall};
+    face.point_indexes = {21,22,23,24,25};
     buckyBall.faces.push_back(face);
 
     //vijfhoek6
     middelpoint = p5;
-    buckyBall.points.push_back((middelpoint + ((p0-middelpoint)/3))*rotatieMatrix * MatrixEyepoint);
-    buckyBall.points.push_back((middelpoint + ((p4-middelpoint)/3))*rotatieMatrix * MatrixEyepoint);
-    buckyBall.points.push_back((middelpoint + ((p9-middelpoint)/3))*rotatieMatrix * MatrixEyepoint);
-    buckyBall.points.push_back((middelpoint + ((p10-middelpoint)/3))*rotatieMatrix * MatrixEyepoint);
-    buckyBall.points.push_back((middelpoint + ((p1-middelpoint)/3))*rotatieMatrix * MatrixEyepoint);
+    buckyBall.points.push_back((middelpoint + ((p0-middelpoint)/3))*rotatieMatrix * MatrixEyepoint); //point 26
+    buckyBall.points.push_back((middelpoint + ((p4-middelpoint)/3))*rotatieMatrix * MatrixEyepoint); //point 27
+    buckyBall.points.push_back((middelpoint + ((p9-middelpoint)/3))*rotatieMatrix * MatrixEyepoint); //point 28
+    buckyBall.points.push_back((middelpoint + ((p10-middelpoint)/3))*rotatieMatrix* MatrixEyepoint); //point 29
+    buckyBall.points.push_back((middelpoint + ((p1-middelpoint)/3))*rotatieMatrix * MatrixEyepoint); //point 30
 
     face.point_indexes.clear();
-    face.point_indexes = {26+pointsBuckyBall,27+pointsBuckyBall,28+pointsBuckyBall,29+pointsBuckyBall,30+pointsBuckyBall};
+    face.point_indexes = {26,27,28,29,30};
     buckyBall.faces.push_back(face);
 
     //vijfhoek7
     middelpoint = p6;
-    buckyBall.points.push_back((middelpoint + ((p1-middelpoint)/3))*rotatieMatrix * MatrixEyepoint);
-    buckyBall.points.push_back((middelpoint + ((p10-middelpoint)/3))*rotatieMatrix * MatrixEyepoint);
-    buckyBall.points.push_back((middelpoint + ((p11-middelpoint)/3))*rotatieMatrix * MatrixEyepoint);
-    buckyBall.points.push_back((middelpoint + ((p7-middelpoint)/3))*rotatieMatrix * MatrixEyepoint);
-    buckyBall.points.push_back((middelpoint + ((p2-middelpoint)/3))*rotatieMatrix * MatrixEyepoint);
+    buckyBall.points.push_back((middelpoint + ((p1-middelpoint)/3))*rotatieMatrix * MatrixEyepoint); //point 31
+    buckyBall.points.push_back((middelpoint + ((p10-middelpoint)/3))*rotatieMatrix* MatrixEyepoint); //point 32
+    buckyBall.points.push_back((middelpoint + ((p11-middelpoint)/3))*rotatieMatrix* MatrixEyepoint); //point 33
+    buckyBall.points.push_back((middelpoint + ((p7-middelpoint)/3))*rotatieMatrix * MatrixEyepoint); //point 34
+    buckyBall.points.push_back((middelpoint + ((p2-middelpoint)/3))*rotatieMatrix * MatrixEyepoint); //point 35
 
     face.point_indexes.clear();
-    face.point_indexes = {31+pointsBuckyBall,32+pointsBuckyBall,33+pointsBuckyBall,34+pointsBuckyBall,35+pointsBuckyBall};
+    face.point_indexes = {31,32,33,34,35};
     buckyBall.faces.push_back(face);
 
     //vijfhoek8
     middelpoint = p7;
-    buckyBall.points.push_back((middelpoint + ((p2-middelpoint)/3))*rotatieMatrix * MatrixEyepoint);
-    buckyBall.points.push_back((middelpoint + ((p6-middelpoint)/3))*rotatieMatrix * MatrixEyepoint);
-    buckyBall.points.push_back((middelpoint + ((p11-middelpoint)/3))*rotatieMatrix * MatrixEyepoint);
-    buckyBall.points.push_back((middelpoint + ((p8-middelpoint)/3))*rotatieMatrix * MatrixEyepoint);
-    buckyBall.points.push_back((middelpoint + ((p3-middelpoint)/3))*rotatieMatrix * MatrixEyepoint);
+    buckyBall.points.push_back((middelpoint + ((p2-middelpoint)/3))*rotatieMatrix * MatrixEyepoint); //point 36
+    buckyBall.points.push_back((middelpoint + ((p6-middelpoint)/3))*rotatieMatrix * MatrixEyepoint); //point 37
+    buckyBall.points.push_back((middelpoint + ((p11-middelpoint)/3))*rotatieMatrix* MatrixEyepoint); //point 38
+    buckyBall.points.push_back((middelpoint + ((p8-middelpoint)/3))*rotatieMatrix * MatrixEyepoint); //point 39
+    buckyBall.points.push_back((middelpoint + ((p3-middelpoint)/3))*rotatieMatrix * MatrixEyepoint); //point 40
 
     face.point_indexes.clear();
-    face.point_indexes = {36+pointsBuckyBall,37+pointsBuckyBall,38+pointsBuckyBall,39+pointsBuckyBall,40+pointsBuckyBall};
+    face.point_indexes = {36,37,38,39,40};
     buckyBall.faces.push_back(face);
 
     //vijfhoek9
     middelpoint = p8;
-    buckyBall.points.push_back((middelpoint + ((p3-middelpoint)/3))*rotatieMatrix * MatrixEyepoint);
-    buckyBall.points.push_back((middelpoint + ((p7-middelpoint)/3))*rotatieMatrix * MatrixEyepoint);
-    buckyBall.points.push_back((middelpoint + ((p11-middelpoint)/3))*rotatieMatrix * MatrixEyepoint);
-    buckyBall.points.push_back((middelpoint + ((p9-middelpoint)/3))*rotatieMatrix * MatrixEyepoint);
-    buckyBall.points.push_back((middelpoint + ((p4-middelpoint)/3))*rotatieMatrix * MatrixEyepoint);
+    buckyBall.points.push_back((middelpoint + ((p3-middelpoint)/3))*rotatieMatrix * MatrixEyepoint); //point 41
+    buckyBall.points.push_back((middelpoint + ((p7-middelpoint)/3))*rotatieMatrix * MatrixEyepoint); //point 42
+    buckyBall.points.push_back((middelpoint + ((p11-middelpoint)/3))*rotatieMatrix* MatrixEyepoint); //point 43
+    buckyBall.points.push_back((middelpoint + ((p9-middelpoint)/3))*rotatieMatrix * MatrixEyepoint); //point 44
+    buckyBall.points.push_back((middelpoint + ((p4-middelpoint)/3))*rotatieMatrix * MatrixEyepoint); //point 45
 
     face.point_indexes.clear();
-    face.point_indexes = {41+pointsBuckyBall,42+pointsBuckyBall,43+pointsBuckyBall,44+pointsBuckyBall,45+pointsBuckyBall};
+    face.point_indexes = {41,42,43,44,45};
     buckyBall.faces.push_back(face);
 
     //vijfhoek10
     middelpoint = p9;
-    buckyBall.points.push_back((middelpoint + ((p4-middelpoint)/3))*rotatieMatrix * MatrixEyepoint);
-    buckyBall.points.push_back((middelpoint + ((p8-middelpoint)/3))*rotatieMatrix * MatrixEyepoint);
-    buckyBall.points.push_back((middelpoint + ((p11-middelpoint)/3))*rotatieMatrix * MatrixEyepoint);
-    buckyBall.points.push_back((middelpoint + ((p10-middelpoint)/3))*rotatieMatrix * MatrixEyepoint);
-    buckyBall.points.push_back((middelpoint + ((p5-middelpoint)/3))*rotatieMatrix * MatrixEyepoint);
+    buckyBall.points.push_back((middelpoint + ((p4-middelpoint)/3))*rotatieMatrix * MatrixEyepoint); //point 46
+    buckyBall.points.push_back((middelpoint + ((p8-middelpoint)/3))*rotatieMatrix * MatrixEyepoint); //point 47
+    buckyBall.points.push_back((middelpoint + ((p11-middelpoint)/3))*rotatieMatrix* MatrixEyepoint); //point 48
+    buckyBall.points.push_back((middelpoint + ((p10-middelpoint)/3))*rotatieMatrix* MatrixEyepoint); //point 49
+    buckyBall.points.push_back((middelpoint + ((p5-middelpoint)/3))*rotatieMatrix * MatrixEyepoint); //point 50
 
     face.point_indexes.clear();
-    face.point_indexes = {46+pointsBuckyBall,47+pointsBuckyBall,48+pointsBuckyBall,49+pointsBuckyBall,50+pointsBuckyBall};
+    face.point_indexes = {46,47,48,49,50};
     buckyBall.faces.push_back(face);
 
     //vijfhoek11
     middelpoint = p10;
-    buckyBall.points.push_back((middelpoint + ((p1-middelpoint)/3))*rotatieMatrix * MatrixEyepoint);
-    buckyBall.points.push_back((middelpoint + ((p5-middelpoint)/3))*rotatieMatrix * MatrixEyepoint);
-    buckyBall.points.push_back((middelpoint + ((p9-middelpoint)/3))*rotatieMatrix * MatrixEyepoint);
-    buckyBall.points.push_back((middelpoint + ((p11-middelpoint)/3))*rotatieMatrix * MatrixEyepoint);
-    buckyBall.points.push_back((middelpoint + ((p6-middelpoint)/3))*rotatieMatrix * MatrixEyepoint);
+    buckyBall.points.push_back((middelpoint + ((p1-middelpoint)/3))*rotatieMatrix * MatrixEyepoint); //point 51
+    buckyBall.points.push_back((middelpoint + ((p5-middelpoint)/3))*rotatieMatrix * MatrixEyepoint); //point 52
+    buckyBall.points.push_back((middelpoint + ((p9-middelpoint)/3))*rotatieMatrix * MatrixEyepoint); //point 53
+    buckyBall.points.push_back((middelpoint + ((p11-middelpoint)/3))*rotatieMatrix* MatrixEyepoint); //point 54
+    buckyBall.points.push_back((middelpoint + ((p6-middelpoint)/3))*rotatieMatrix * MatrixEyepoint); //point 55
 
     face.point_indexes.clear();
-    face.point_indexes = {51+pointsBuckyBall,52+pointsBuckyBall,53+pointsBuckyBall,54+pointsBuckyBall,55+pointsBuckyBall};
+    face.point_indexes = {51,52,53,54,55};
     buckyBall.faces.push_back(face);
 
     //vijfhoek12
     middelpoint = p11;
-    buckyBall.points.push_back((middelpoint + ((p10-middelpoint)/3))*rotatieMatrix * MatrixEyepoint);
-    buckyBall.points.push_back((middelpoint + ((p9-middelpoint)/3))*rotatieMatrix * MatrixEyepoint);
-    buckyBall.points.push_back((middelpoint + ((p8-middelpoint)/3))*rotatieMatrix * MatrixEyepoint);
-    buckyBall.points.push_back((middelpoint + ((p7-middelpoint)/3))*rotatieMatrix * MatrixEyepoint);
-    buckyBall.points.push_back((middelpoint + ((p6-middelpoint)/3))*rotatieMatrix * MatrixEyepoint);
+    buckyBall.points.push_back((middelpoint + ((p10-middelpoint)/3))*rotatieMatrix* MatrixEyepoint); //point 56
+    buckyBall.points.push_back((middelpoint + ((p9-middelpoint)/3))*rotatieMatrix * MatrixEyepoint); //point 57
+    buckyBall.points.push_back((middelpoint + ((p8-middelpoint)/3))*rotatieMatrix * MatrixEyepoint); //point 58
+    buckyBall.points.push_back((middelpoint + ((p7-middelpoint)/3))*rotatieMatrix * MatrixEyepoint); //point 59
+    buckyBall.points.push_back((middelpoint + ((p6-middelpoint)/3))*rotatieMatrix * MatrixEyepoint); //point 60
 
     face.point_indexes.clear();
-    face.point_indexes = {56+pointsBuckyBall,57+pointsBuckyBall,58+pointsBuckyBall,59+pointsBuckyBall,60+pointsBuckyBall};
+    face.point_indexes = {56,57,58,59,60};
     buckyBall.faces.push_back(face);
 
+    //zeshoek1
+    face.point_indexes.clear();
+    face.point_indexes = {1,6,10,12,11,2};
+    buckyBall.faces.push_back(face);
+
+    //zeshoek2
+    face.point_indexes.clear();
+    face.point_indexes = {2,11,15,17,16,3};
+    buckyBall.faces.push_back(face);
+
+    //zeshoek3
+    face.point_indexes.clear();
+    face.point_indexes = {4,3,16,20,22,21};
+    buckyBall.faces.push_back(face);
+
+    //zeshoek4
+    face.point_indexes.clear();
+    face.point_indexes = {5,4,21,25,27,26};
+    buckyBall.faces.push_back(face);
+
+    //zeshoek5
+    face.point_indexes.clear();
+    face.point_indexes = {7,6,1,5,26,30};
+    buckyBall.faces.push_back(face);
+
+    //zeshoek6
+    face.point_indexes.clear();
+    face.point_indexes = {30,29,52,51,8,7};
+    buckyBall.faces.push_back(face);
+
+    //zeshoek7
+    face.point_indexes.clear();
+    face.point_indexes = {9,8,51,55,32,31};
+    buckyBall.faces.push_back(face);
+
+    //zeshoek8
+    face.point_indexes.clear();
+    face.point_indexes = {9,31,35,13,12,10};
+    buckyBall.faces.push_back(face);
+
+    //zeshoek9
+    face.point_indexes.clear();
+    face.point_indexes = {13,35,34,37,36,14};
+    buckyBall.faces.push_back(face);
+
+    //zeshoek10
+    face.point_indexes.clear();
+    face.point_indexes = {17,15,14,36,40,18};
+    buckyBall.faces.push_back(face);
+
+    //zeshoek11
+    face.point_indexes.clear();
+    face.point_indexes = {42,41,19,18,40,39};
+    buckyBall.faces.push_back(face);
+
+    //zeshoek12
+    face.point_indexes.clear();
+    face.point_indexes = {23,22,20,19,41,45};
+    buckyBall.faces.push_back(face);
+
+    //zeshoek13
+    face.point_indexes.clear();
+    face.point_indexes = {44,47,46,24,23,45};
+    buckyBall.faces.push_back(face);
+
+    //zeshoek14
+    face.point_indexes.clear();
+    face.point_indexes = {50,28,27,25,24,46};
+    buckyBall.faces.push_back(face);
+
+    //zeshoek15
+    face.point_indexes.clear();
+    face.point_indexes = {50,49,53,52,29,28};
+    buckyBall.faces.push_back(face);
+
+    //zeshoek16
+    face.point_indexes.clear();
+    face.point_indexes = {32,55,54,56,60,33};
+    buckyBall.faces.push_back(face);
+
+    //zeshoek17
+    face.point_indexes.clear();
+    face.point_indexes = {53,49,48,57,56,54};
+    buckyBall.faces.push_back(face);
+
+    //zeshoek18
+    face.point_indexes.clear();
+    face.point_indexes = {57,48,47,44,43,58};
+    buckyBall.faces.push_back(face);
+
+    //zeshoek19
+    face.point_indexes.clear();
+    face.point_indexes = {58,43,42,39,38,59};
+    buckyBall.faces.push_back(face);
+
+    //zeshoek20
+    face.point_indexes.clear();
+    face.point_indexes = {33,60,59,38,37,34};
+    buckyBall.faces.push_back(face);
 
     return buckyBall;
 }
