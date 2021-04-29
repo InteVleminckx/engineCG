@@ -137,6 +137,7 @@ img::EasyImage generate_3DdrawingWithZbufferingWireFrame(const ini::Configuratio
 
     drawlines = drawing.getLines();
 
+
     return draw2DLines(drawlines, size, backColor, true);
 
 }
@@ -211,6 +212,7 @@ img::EasyImage generate_LightedZBuffering(const ini::Configuration &configuratio
     zDriehoek.size = size;
 
     drieDdrawings newFaceAndPoints = zDriehoek.triangulate(drawing);
+    zDriehoek.eyePointMatrix = drawing.getMatrix();
 
     return zDriehoek.drawTriangle(newFaceAndPoints.drieDfiguren, backColor, drawing.lights);
 

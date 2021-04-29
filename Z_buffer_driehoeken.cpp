@@ -136,12 +136,12 @@ img::EasyImage Z_driehoek::drawTriangle(Figures3D &figures3D, const img::Color &
              * Gaan hier dzdx en dzdy berekenen
              * Daarvoor hebben we vector W voor nodig en k
              */
-            Vector3D A_3D = figure.points[figure.faces[i].point_indexes[0] - 1];
-            Vector3D B_3D = figure.points[figure.faces[i].point_indexes[1] - 1];
-            Vector3D C_3D = figure.points[figure.faces[i].point_indexes[2] - 1];
+            Vector3D A_3D = Vector3D::point(figure.points[figure.faces[i].point_indexes[0] - 1]);
+            Vector3D B_3D = Vector3D::point(figure.points[figure.faces[i].point_indexes[1] - 1]);
+            Vector3D C_3D = Vector3D::point(figure.points[figure.faces[i].point_indexes[2] - 1]);
 
-            Vector3D u = B_3D-A_3D;
-            Vector3D v = C_3D-A_3D;
+            Vector3D u = Vector3D::vector(B_3D-A_3D);
+            Vector3D v = Vector3D::vector(C_3D-A_3D);
             Vector3D w = Vector3D::cross(u, v);
 
             double k = w.x * A_3D.x + w.y * A_3D.y + w.z * A_3D.z;
@@ -220,6 +220,8 @@ void Z_driehoek::drawZ_bufferd_triangle(unsigned int x0, unsigned int y0, unsign
     assert(x0 < image.get_width() && y0 < image.get_height());
     assert(x1 < image.get_width() && y1 < image.get_height());
 
+    bool isDrawed = false;
+
     img::Color newColor;
 
     vector<double> colors{0,0,0};
@@ -240,22 +242,49 @@ void Z_driehoek::drawZ_bufferd_triangle(unsigned int x0, unsigned int y0, unsign
         //diffuse infinity light
         if(light.second.first.first && !light.second.second.first){
 
-            Vector3D l = -light.second.first.second.ldVector;
+            Vector3D l = -Vector3D::vector(light.second.first.second.ldVector);
+            l = Vector3D::normalise(l);
+            l*=eyePointMatrix;
 
-            double cosA = cos((n.x*l.x) + (n.y*l.y) + (n.z*l.z));
+            double cosA = (n.x*l.x) + (n.y*l.y) + (n.z*l.z);
 
             vector<double> tempVector2{light.first.diffuseLight.red, light.first.diffuseLight.green, light.first.diffuseLight.blue};
 
-            colors[0] += (tempVector2[0]*diffuseReflection.red*cosA);
-            colors[1] += (tempVector2[1]*diffuseReflection.green*cosA);
-            colors[2] += (tempVector2[2]*diffuseReflection.blue*cosA);
+            if  (cosA > 0 ){
+                colors[0] += (tempVector2[0]*diffuseReflection.red*cosA);
+                colors[1] += (tempVector2[1]*diffuseReflection.green*cosA);
+                colors[2] += (tempVector2[2]*diffuseReflection.blue*cosA);
+            }
 
         }
 
         //diffuse point light
         else if(light.second.first.first && light.second.second.first){
 
+//            Vector3D location = Vector3D::vector(light.second.second.second.location);
+//            double spotAngle = light.second.second.second.spotAngle;
+//
+//            Vector3D locNorm = Vector3D::normalise(location);
+//
+//            location = - Vector3D::vector(location.x/locNorm.x,location.y/locNorm.y,location.z/locNorm.z );
+//
+//            location = Vector3D::normalise(location);
+//
+//            location*=eyePointMatrix;
 
+//            double cosA = (n.x*l.x) + (n.y*l.y) + (n.z*l.z);
+
+//            for (unsigned int i = x0; i <= x1; ++i) {
+//                double _1_over_Zi = _1_over_Zg + (i-Xg)*dzdx + (y0-Yg)*dzdy;
+//
+//                if (zBuffer.zBuffer[i][y0] > _1_over_Zi){
+//                    zBuffer.zBuffer[i][y0] = _1_over_Zi;
+//                    (image)(i, y0) = newColor;
+//
+//                }
+//            }
+
+            isDrawed = true;
         }
 
         //specularlight
@@ -268,8 +297,6 @@ void Z_driehoek::drawZ_bufferd_triangle(unsigned int x0, unsigned int y0, unsign
     }
 
 
-
-
     if (colors[0] > 1) colors[0] = 1;
     if (colors[1] > 1) colors[1] = 1;
     if (colors[2] > 1) colors[2] = 1;
@@ -278,12 +305,15 @@ void Z_driehoek::drawZ_bufferd_triangle(unsigned int x0, unsigned int y0, unsign
     newColor.green = colors[1]*255;
     newColor.blue = colors[2]*255;
 
-    for (unsigned int i = x0; i <= x1; ++i) {
-        double _1_over_Zi = _1_over_Zg + (i-Xg)*dzdx + (y0-Yg)*dzdy;
+    if (!isDrawed){
+        for (unsigned int i = x0; i <= x1; ++i) {
+            double _1_over_Zi = _1_over_Zg + (i-Xg)*dzdx + (y0-Yg)*dzdy;
 
-        if (zBuffer.zBuffer[i][y0] > _1_over_Zi){
-            zBuffer.zBuffer[i][y0] = _1_over_Zi;
-            (image)(i, y0) = newColor;
+            if (zBuffer.zBuffer[i][y0] > _1_over_Zi){
+                zBuffer.zBuffer[i][y0] = _1_over_Zi;
+                (image)(i, y0) = newColor;
+
+            }
         }
     }
 

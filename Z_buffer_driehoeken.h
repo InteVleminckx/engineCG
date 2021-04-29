@@ -22,6 +22,7 @@ class Z_driehoek {
     double dx;
     double dy;
 
+
     Lights3D lights3D;
 
     void createNewFace(const Face& curFace, Figure &newFigure);
@@ -37,6 +38,7 @@ class Z_driehoek {
 public:
 
     int size;
+    Matrix eyePointMatrix;
 
     Z_driehoek() {}
 

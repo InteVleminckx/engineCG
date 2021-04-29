@@ -15,6 +15,8 @@
 #include "ini_configuration.h"
 #include "easy_image.h"
 #include "DrieDLsystems.h"
+#include <algorithm>
+
 using namespace std;
 
 
@@ -133,6 +135,10 @@ public:
     Lines2D getLines() {return lines;}
 
     Point2D doProjection(const Vector3D &point, double d = 1);
+
+    Matrix getMatrix(){
+        return MatrixEyepoint;
+    }
 
 };
 

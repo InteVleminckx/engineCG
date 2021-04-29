@@ -574,7 +574,7 @@ Figure drieDdrawings::createTetrahedron() {
     vlakken.push_back(rij3v);
 
     for (int i = 0; i < punten[0].size(); ++i) {
-        Vector3D vector3D = vector3D.point(punten[0][i], punten[1][i], punten[2][i]);
+        Vector3D vector3D = Vector3D::point(punten[0][i], punten[1][i], punten[2][i]);
         vector3D *= rotatieMatrix * MatrixEyepoint;
         tetrahedron.points.push_back(vector3D);
     }
@@ -607,7 +607,7 @@ Figure drieDdrawings::createOctahedron() {
     vlakken.push_back(rij3v);
 
     for (int i = 0; i < punten[0].size(); ++i) {
-        Vector3D vector3D = vector3D.point(punten[0][i], punten[1][i], punten[2][i]);
+        Vector3D vector3D = Vector3D::point(punten[0][i], punten[1][i], punten[2][i]);
         vector3D *= rotatieMatrix * MatrixEyepoint;
         octahedron.points.push_back(vector3D);
     }
@@ -669,7 +669,7 @@ Figure drieDdrawings::createIcosahedron(bool usage) {
     vlakken.push_back(rij3v);
 
     for (int i = 0; i < punten[0].size(); ++i) {
-        Vector3D vector3D = vector3D.point(punten[0][i], punten[1][i], punten[2][i]);
+        Vector3D vector3D = Vector3D::point(punten[0][i], punten[1][i], punten[2][i]);
         if (!usage){
             vector3D *= rotatieMatrix * MatrixEyepoint;
         }
@@ -735,7 +735,7 @@ Figure drieDdrawings::createDodecahedron() {
 
 
     for (int i = 0; i < punten[0].size(); ++i) {
-        Vector3D vector3D = vector3D.point(punten[0][i], punten[1][i], punten[2][i]);
+        Vector3D vector3D = Vector3D::point(punten[0][i], punten[1][i], punten[2][i]);
         vector3D *= rotatieMatrix * MatrixEyepoint;
         dodecahedron.points.push_back(vector3D);
     }
@@ -756,12 +756,12 @@ Figure drieDdrawings::createCone(int n, double height) {
 
     for (int i = 0; i < n; ++i) {
 
-        Vector3D punti = punti.point(cos((2*i*PI)/n), sin((2*i*PI)/n), 0);
+        Vector3D punti = Vector3D::point(cos((2*i*PI)/n), sin((2*i*PI)/n), 0);
         punti *= rotatieMatrix * MatrixEyepoint;
         cone.points.push_back(punti);
     }
 
-    Vector3D bovenpunt = bovenpunt.point(0,0,height);
+    Vector3D bovenpunt = Vector3D::point(0,0,height);
     bovenpunt *= rotatieMatrix * MatrixEyepoint;
     cone.points.push_back(bovenpunt);
 
@@ -799,14 +799,14 @@ Figure drieDdrawings::createCylinder(int n, double height) {
 
     for (int i = 0; i < n; ++i) {
 
-        Vector3D punti = punti.point(cos((2*i*PI)/n), sin((2*i*PI)/n), 0);
+        Vector3D punti = Vector3D::point(cos((2*i*PI)/n), sin((2*i*PI)/n), 0);
         punti *= rotatieMatrix * MatrixEyepoint;
         cylinder.points.push_back(punti);
     }
 
     for (int i = 0; i < n; ++i) {
 
-        Vector3D punti = punti.point(cos((2*i*PI)/n), sin((2*i*PI)/n), height);
+        Vector3D punti = Vector3D::point(cos((2*i*PI)/n), sin((2*i*PI)/n), height);
         punti *= rotatieMatrix * MatrixEyepoint;
         cylinder.points.push_back(punti);
     }
@@ -834,12 +834,22 @@ Figure drieDdrawings::createCylinder(int n, double height) {
     for (int i = -1; i < n-1; ++i) {
         vlak.point_indexes.push_back(n-(1+i));
     }
+
+    //////////////////////////////////////////////////////////////
+    reverse(vlak.point_indexes.begin(), vlak.point_indexes.end());
+    //////////////////////////////////////////////////////////////
+
     cylinder.faces.push_back(vlak);
     vlak.point_indexes.clear();
 
     for (int i = -1; i < n-1; ++i) {
         vlak.point_indexes.push_back((n-(1+i))+n);
     }
+
+    //////////////////////////////////////////////////////////////
+    reverse(vlak.point_indexes.begin(), vlak.point_indexes.end());
+    //////////////////////////////////////////////////////////////
+
     cylinder.faces.push_back(vlak);
 
     return cylinder;
@@ -865,12 +875,12 @@ Figure drieDdrawings::createSphere(int n) {
             //CEF  = C, (A+C)/2, (B+C)/2
             //DFE  = (A+B)/2, (B+C)/2, (A+C)/2
 
-            Vector3D A = icosahedron.points[Ap-1];
-            Vector3D B = icosahedron.points[Bp-1];
-            Vector3D C = icosahedron.points[Cp-1];
-            Vector3D D = (A+B)/2;
-            Vector3D E = (A+C)/2;
-            Vector3D F = (B+C)/2;
+            Vector3D A = Vector3D::point(icosahedron.points[Ap-1]);
+            Vector3D B = Vector3D::point(icosahedron.points[Bp-1]);
+            Vector3D C = Vector3D::point(icosahedron.points[Cp-1]);
+            Vector3D D = Vector3D::point((A+B)/2);
+            Vector3D E = Vector3D::point((A+C)/2);
+            Vector3D F = Vector3D::point((B+C)/2);
 
             tempFigure.points.push_back(A); //1+j*6
             tempFigure.points.push_back(B); //2+j*6
@@ -910,12 +920,12 @@ Figure drieDdrawings::createSphere(int n) {
 
 
     for (int i = 0; i < icosahedron.points.size(); ++i) {
-        Vector3D punt = icosahedron.points[i];
+        Vector3D punt = Vector3D::point(icosahedron.points[i]);
         double xP = pow(punt.x, 2.0);
         double yP = pow(punt.y, 2.0);
         double zP = pow(punt.z, 2.0);
         double r = sqrt(xP + yP + zP);
-        sphere.points.push_back(Vector3D().point((punt.x)/r,(punt.y)/r,(punt.z)/r));
+        sphere.points.push_back(Vector3D::point((punt.x)/r,(punt.y)/r,(punt.z)/r));
         sphere.points[i] *= rotatieMatrix * MatrixEyepoint;
     }
 
@@ -1005,8 +1015,8 @@ void drieDdrawings::generateFractal(Figure &fig, Figures3D &fractal, const int n
 
             for (int j = 0; j < fractaal.points.size(); ++j) {
 
-                Vector3D Pi = fractaal.points[j];
-                Vector3D P_accent = scaledFigure.points[j];
+                Vector3D Pi = Vector3D::point(fractaal.points[j]);
+                Vector3D P_accent = Vector3D::point(scaledFigure.points[j]);
                 Vector3D moveVector = Vector3D::vector(Pi-P_accent);
 
                 Figure newFigure;
@@ -1031,18 +1041,18 @@ Figure drieDdrawings::createBuckyBall() {
 
     //vijfhoeken
 
-    Vector3D p0 = icosahedron.points[0];
-    Vector3D p1 = icosahedron.points[1];
-    Vector3D p2 = icosahedron.points[2];
-    Vector3D p3 = icosahedron.points[3];
-    Vector3D p4 = icosahedron.points[4];
-    Vector3D p5 = icosahedron.points[5];
-    Vector3D p6 = icosahedron.points[6];
-    Vector3D p7 = icosahedron.points[7];
-    Vector3D p8 = icosahedron.points[8];
-    Vector3D p9 = icosahedron.points[9];
-    Vector3D p10 = icosahedron.points[10];
-    Vector3D p11 = icosahedron.points[11];
+    Vector3D p0 = Vector3D::point(icosahedron.points[0]);
+    Vector3D p1 = Vector3D::point(icosahedron.points[1]);
+    Vector3D p2 = Vector3D::point(icosahedron.points[2]);
+    Vector3D p3 = Vector3D::point(icosahedron.points[3]);
+    Vector3D p4 = Vector3D::point(icosahedron.points[4]);
+    Vector3D p5 = Vector3D::point(icosahedron.points[5]);
+    Vector3D p6 = Vector3D::point(icosahedron.points[6]);
+    Vector3D p7 = Vector3D::point(icosahedron.points[7]);
+    Vector3D p8 = Vector3D::point(icosahedron.points[8]);
+    Vector3D p9 = Vector3D::point(icosahedron.points[9]);
+    Vector3D p10 = Vector3D::point(icosahedron.points[10]);
+    Vector3D p11 = Vector3D::point(icosahedron.points[11]);
 
     //vijfhoek1
 
@@ -1326,19 +1336,19 @@ void drieDdrawings::createMengerSponge(int nrIterations, bool zBufdriehoek, vect
                 int Ci = figuur.faces[j].point_indexes[2]-1;
                 int Di = figuur.faces[j].point_indexes[3]-1;
 
-                Vector3D A = figuur.points[Ai];
-                Vector3D B = figuur.points[Bi];
-                Vector3D C = figuur.points[Ci];
-                Vector3D D = figuur.points[Di];
-                Vector3D E = A + ((B-A)/3);
-                Vector3D L = A - ((A-D)/3);
-                Vector3D G = B + ((C-B)/3);
-                Vector3D J = D - ((D-C)/3);
+                Vector3D A = Vector3D::point(figuur.points[Ai]);
+                Vector3D B = Vector3D::point(figuur.points[Bi]);
+                Vector3D C = Vector3D::point(figuur.points[Ci]);
+                Vector3D D = Vector3D::point(figuur.points[Di]);
+                Vector3D E = Vector3D::point(A + ((B-A)/3));
+                Vector3D L = Vector3D::point(A - ((A-D)/3));
+                Vector3D G = Vector3D::point(B + ((C-B)/3));
+                Vector3D J = Vector3D::point(D - ((D-C)/3));
 
-                Vector3D Ac = figuur.points[Ai]*scaleM;
-                Vector3D Bc = figuur.points[Bi]*scaleM;
-                Vector3D Cc = figuur.points[Ci]*scaleM;
-                Vector3D Dc = figuur.points[Di]*scaleM;
+                Vector3D Ac = Vector3D::point(figuur.points[Ai]*scaleM);
+                Vector3D Bc = Vector3D::point(figuur.points[Bi]*scaleM);
+                Vector3D Cc = Vector3D::point(figuur.points[Ci]*scaleM);
+                Vector3D Dc = Vector3D::point(figuur.points[Di]*scaleM);
 
 
                 Vector3D mVec1 = Vector3D::vector(A-Ac);
@@ -1371,6 +1381,7 @@ void drieDdrawings::createMengerSponge(int nrIterations, bool zBufdriehoek, vect
                         newFigure.ambientReflection.red = color[0];
                         newFigure.ambientReflection.green = color[1];
                         newFigure.ambientReflection.blue = color[2];
+
 
                         drieDfiguren.push_back(newFigure);
 

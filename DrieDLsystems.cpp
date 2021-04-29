@@ -77,38 +77,38 @@ pair<vector<Vector3D>,vector<Face>> DrieDLsystems::create3DPointsVector() {
     for (char command : Initiator) {
 
         if (command == '+'){
-            Vector3D Hnew = H*cos(Angle) + L*sin((Angle));
-            Vector3D Lnew = -H*sin((Angle)) + L*cos((Angle));
+            Vector3D Hnew = Vector3D::vector(H*cos(Angle) + L*sin((Angle)));
+            Vector3D Lnew = Vector3D::vector(-H*sin((Angle)) + L*cos((Angle)));
             H=Hnew; L=Lnew;
         }
         else if (command == '-'){
-            Vector3D Hnew = H*cos((Angle)) + L*sin((-Angle));
-            Vector3D Lnew = -H*sin((-Angle)) + L*cos((Angle));
+            Vector3D Hnew = Vector3D::vector(H*cos((Angle)) + L*sin((-Angle)));
+            Vector3D Lnew = Vector3D::vector(-H*sin((-Angle)) + L*cos((Angle)));
             H=Hnew; L=Lnew;
         }
         else if (command == '^'){
-            Vector3D Hnew = H*cos((Angle)) + U*sin((Angle));
-            Vector3D Unew = -H*sin((Angle)) + U*cos((Angle));
+            Vector3D Hnew = Vector3D::vector(H*cos((Angle)) + U*sin((Angle)));
+            Vector3D Unew = Vector3D::vector(-H*sin((Angle)) + U*cos((Angle)));
             H=Hnew; U=Unew;
         }
         else if (command == '&'){
-            Vector3D Hnew = H*cos((Angle)) + U*sin((-Angle));
-            Vector3D Unew = -H*sin((-Angle)) + U*cos((Angle));
+            Vector3D Hnew = Vector3D::vector(H*cos((Angle)) + U*sin((-Angle)));
+            Vector3D Unew = Vector3D::vector(-H*sin((-Angle)) + U*cos((Angle)));
             H=Hnew; U=Unew;
         }
         else if (command == 92){
-            Vector3D Lnew = L*cos((Angle)) + U*sin((-Angle));
-            Vector3D Unew = -L*sin((-Angle)) + U*cos((Angle));
+            Vector3D Lnew = Vector3D::vector(L*cos((Angle)) + U*sin((-Angle)));
+            Vector3D Unew = Vector3D::vector(-L*sin((-Angle)) + U*cos((Angle)));
             L=Lnew; U=Unew;
         }
         else if (command == '/'){
-            Vector3D Lnew = L*cos((Angle)) + U*sin((Angle));
-            Vector3D Unew = -L*sin((Angle)) + U*cos((Angle));
+            Vector3D Lnew = Vector3D::vector(L*cos((Angle)) + U*sin((Angle)));
+            Vector3D Unew = Vector3D::vector(-L*sin((Angle)) + U*cos((Angle)));
             L=Lnew; U=Unew;
         }
         else if (command == '|'){
-            Vector3D Hnew = H*cos(gradesToRad(180)) + L*sin(gradesToRad(180));
-            Vector3D Lnew = -H*sin(gradesToRad(180)) + L*cos(gradesToRad(180));
+            Vector3D Hnew = Vector3D::vector(H*cos(gradesToRad(180)) + L*sin(gradesToRad(180)));
+            Vector3D Lnew = Vector3D::vector(-H*sin(gradesToRad(180)) + L*cos(gradesToRad(180)));
             H=Hnew; L=Lnew;
         }
 
