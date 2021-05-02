@@ -66,7 +66,10 @@ public:
     Vector3D location;
     //de hoek van een spotlicht
     double spotAngle;
+    //zegt of het een spot is of niet
+    bool isSpot;
 };
+
 
 typedef std::list<Figure> Figures3D;
 typedef std::list<pair<Light, pair<pair<bool, InfLight>, pair<bool, PointLight>>>> Lights3D;
@@ -108,7 +111,7 @@ public:
 
     void createDrawVector(Figure &figure);
 
-    void createMengerSponge(int nrIterations, bool zBufdriehoek, vector<double> &color);
+    void createMengerSponge(int nrIterations, bool zBufdriehoek, vector<double> &color, vector<double> diffuus, vector<double> spec);
 
     Matrix scaleMatrix(double &scale);
 

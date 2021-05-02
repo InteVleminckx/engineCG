@@ -49,6 +49,7 @@ public:
 
     vector<vector<double>> zBuffer;
 
+
     ZBuffer(const int width, const int height);
 
 };

@@ -27,8 +27,9 @@ void drieDdrawings::parse3Ddrawing(const ini::Configuration &configuration, int 
             diffuseReflection = configuration[figurex]["diffuseReflection"].as_double_tuple_or_die();
         }
 
-        if (configuration[figurex]["speculaireReflection"].exists()){
-            speculaireReflection = configuration[figurex]["speculaireReflection"].as_double_tuple_or_die();
+        if (configuration[figurex]["specularReflection"].exists()){
+            speculaireReflection = configuration[figurex]["specularReflection"].as_double_tuple_or_die();
+
         }
 
     }
@@ -141,7 +142,7 @@ void drieDdrawings::parse3Ddrawing(const ini::Configuration &configuration, int 
     else if (type == "MengerSponge"){
 
         nrIterations = configuration[figurex]["nrIterations"].as_int_or_die();
-        createMengerSponge(nrIterations, zBufDriehoek, ambientReflection);
+        createMengerSponge(nrIterations, zBufDriehoek, ambientReflection, diffuseReflection, speculaireReflection);
         return;
 
     }
@@ -165,10 +166,11 @@ void drieDdrawings::parse3Ddrawing(const ini::Configuration &configuration, int 
             newFigure.diffuseRelfection.blue = diffuseReflection[2];
         }
 
-        if (configuration[figurex]["speculaireReflection"].exists()) {
+        if (configuration[figurex]["specularReflection"].exists()) {
             newFigure.speculaireReflection.red = speculaireReflection[0];
             newFigure.speculaireReflection.green = speculaireReflection[1];
             newFigure.speculaireReflection.blue = speculaireReflection[2];
+            newFigure.reflectionCoefficient = configuration[figurex]["reflectionCoefficient"];
         }
 
         drieDfiguren.push_back(newFigure);
@@ -188,10 +190,11 @@ void drieDdrawings::parse3Ddrawing(const ini::Configuration &configuration, int 
                 fractaal.diffuseRelfection.blue = diffuseReflection[2];
             }
 
-            if (configuration[figurex]["speculaireReflection"].exists()) {
+            if (configuration[figurex]["specularReflection"].exists()) {
                 fractaal.speculaireReflection.red = speculaireReflection[0];
                 fractaal.speculaireReflection.green = speculaireReflection[1];
                 fractaal.speculaireReflection.blue = speculaireReflection[2];
+                newFigure.reflectionCoefficient = configuration[figurex]["reflectionCoefficient"];
             }
             drieDfiguren.push_back(fractaal);
 
@@ -218,7 +221,6 @@ void drieDdrawings::createLights(const ini::Configuration &configuration, int nr
             diffuse = configuration[light]["diffuseLight"].exists();
             specular = configuration[light]["specularLight"].exists();
             location = configuration[light]["location"].exists();
-            spotAngle = configuration[light]["spotAngle"].exists();
             direction = configuration[light]["direction"].exists();
 
             if (infinityExist) infinity = configuration[light]["infinity"].as_bool_or_die();
@@ -227,7 +229,7 @@ void drieDdrawings::createLights(const ini::Configuration &configuration, int nr
             bool isAmbientLight, isDiffusePointLight, isDiffuseSourceLight, isSpecularLight;
 
             //ambientlight
-            if (!infinity && ambient && !diffuse && !specular && !location && !spotAngle && !direction) {
+            if (!infinity && ambient && !diffuse && !specular && !location && !direction) {
                 isAmbientLight = true;
                 isDiffusePointLight = false;
                 isDiffuseSourceLight = false;
@@ -235,7 +237,7 @@ void drieDdrawings::createLights(const ini::Configuration &configuration, int nr
             }
 
                 //puntbron
-            else if (!infinity && ambient && diffuse && !specular && location && spotAngle && !direction) {
+            else if (!infinity && ambient && diffuse && !specular && location && !direction) {
                 isAmbientLight = false;
                 isDiffusePointLight = true;
                 isDiffuseSourceLight = false;
@@ -243,7 +245,7 @@ void drieDdrawings::createLights(const ini::Configuration &configuration, int nr
             }
 
                 //lichtbron op oneindig
-            else if (infinity && ambient && diffuse && !specular && !location && !spotAngle && direction) {
+            else if (infinity && ambient && diffuse && !specular && !location && direction) {
                 isAmbientLight = false;
                 isDiffusePointLight = false;
                 isDiffuseSourceLight = true;
@@ -251,7 +253,7 @@ void drieDdrawings::createLights(const ini::Configuration &configuration, int nr
             }
 
                 //speculiar glazendlicht
-            else if (!infinity && ambient && diffuse && specular && location && !spotAngle && !direction) {
+            else if (!infinity && ambient && diffuse && specular && location && !direction) {
                 isAmbientLight = false;
                 isDiffusePointLight = false;
                 isDiffuseSourceLight = false;
@@ -304,13 +306,21 @@ void drieDdrawings::createLights(const ini::Configuration &configuration, int nr
                 newLight.diffuseLight.blue = lightColors[2] * 1;
 
 
-                vector<double> location = configuration[light]["direction"].as_double_tuple_or_die();
+                vector<double> location = configuration[light]["location"].as_double_tuple_or_die();
 
                 newLight.location = Vector3D::point(location[0], location[1], location[2]);
 
-                double Angle = configuration[light]["spotAngle"].as_double_or_die();
+                if (configuration[light]["spotAngle"].exists()){
+                    double Angle = configuration[light]["spotAngle"].as_double_or_die();
 
-                newLight.spotAngle = Angle;
+                    newLight.spotAngle = Angle;
+
+                    newLight.isSpot = true;
+                }
+
+                else newLight.isSpot = false;
+
+
 
                 lights.push_back(make_pair(newLight, make_pair(make_pair(true, emptyInf), make_pair(true, newLight))));
             }
@@ -332,7 +342,7 @@ void drieDdrawings::createLights(const ini::Configuration &configuration, int nr
                 newLight.specularLight.green = lightColors[1] * 1;
                 newLight.specularLight.blue = lightColors[2] * 1;
 
-                vector<double> location = configuration[light]["direction"].as_double_tuple_or_die();
+                vector<double> location = configuration[light]["location"].as_double_tuple_or_die();
 
                 newLight.location = Vector3D::point(location[0], location[1], location[2]);
 
@@ -1302,7 +1312,7 @@ Figure drieDdrawings::createBuckyBall() {
     return buckyBall;
 }
 
-void drieDdrawings::createMengerSponge(int nrIterations, bool zBufdriehoek, vector<double> &color) {
+void drieDdrawings::createMengerSponge(int nrIterations, bool zBufdriehoek, vector<double> &color, vector<double> diffuus, vector<double> spec) {
     Figure cube = createCube(false);
 
     double scale =  1.0/3.0;
@@ -1317,6 +1327,21 @@ void drieDdrawings::createMengerSponge(int nrIterations, bool zBufdriehoek, vect
         cube.ambientReflection.red = color[0];
         cube.ambientReflection.green = color[1];
         cube.ambientReflection.blue = color[2];
+
+        if(!diffuus.empty()){
+            cube.diffuseRelfection.red = diffuus[0];
+            cube.diffuseRelfection.green = diffuus[1];
+            cube.diffuseRelfection.blue = diffuus[2];
+        }
+
+        if (!spec.empty()){
+            cube.speculaireReflection.red = spec[0];
+            cube.speculaireReflection.green = spec[1];
+            cube.speculaireReflection.blue = spec[2];
+        }
+
+
+
         drieDfiguren.push_back(cube);
         if(!zBufdriehoek) createDrawVector(cube);
         return;
@@ -1382,6 +1407,17 @@ void drieDdrawings::createMengerSponge(int nrIterations, bool zBufdriehoek, vect
                         newFigure.ambientReflection.green = color[1];
                         newFigure.ambientReflection.blue = color[2];
 
+                        if(!diffuus.empty()){
+                            newFigure.diffuseRelfection.red = diffuus[0];
+                            newFigure.diffuseRelfection.green = diffuus[1];
+                            newFigure.diffuseRelfection.blue = diffuus[2];
+                        }
+
+                        if (!spec.empty()){
+                            newFigure.speculaireReflection.red = spec[0];
+                            newFigure.speculaireReflection.green = spec[1];
+                            newFigure.speculaireReflection.blue = spec[2];
+                        }
 
                         drieDfiguren.push_back(newFigure);
 

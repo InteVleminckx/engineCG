@@ -26,10 +26,10 @@ X: Niet werkend of niet geïmplementeerd
 |   | BuckyBall                 | V |
 |   | Mengerspons               | V |
 |   | View Frustum              |   |
-| 7 | Ambient licht             |   |
-|   | Diffuus licht (oneindig)  |   |
-|   | Diffuus licht (puntbron)  |   |
-|   | Speculair licht           |   |
+| 7 | Ambient licht             | V |
+|   | Diffuus licht (oneindig)  | V |
+|   | Diffuus licht (puntbron)  | V |
+|   | Speculair licht           | V |
 | 8 | Schaduw                   |   |
 |   | Texture mapping           |   |
 | 9 | Bollen en cylinders       |   |
@@ -39,7 +39,9 @@ X: Niet werkend of niet geïmplementeerd
 Geïmplementeerde vorm van texture mapping:
 
 ## Gekende problemen 
-...
+Als ik alle bestanden van diffuuslicht run, begin het rond de 500 trager te gaan en worden de figuren niet helemaal juist gekleurd. Als ik deze bepaalde figuren dan opnieuw laat maken, maar apart worden deze wel juist gegenereerd.
+
+
 ## Niet-gequoteerde functionaliteit
 ...
 

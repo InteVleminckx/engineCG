@@ -68,6 +68,7 @@ img::EasyImage draw2DLines(const Lines2D &lines, const int size, const img::Colo
 ZBuffer::ZBuffer(const int width, const int height) {
     for (int w = 0; w < width; ++w) {
         vector<double> row;
+
         for (int h = 0; h < height; ++h) {
             row.push_back(numeric_limits<double>::infinity());
         }

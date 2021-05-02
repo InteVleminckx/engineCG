@@ -22,6 +22,7 @@ class Z_driehoek {
     double dx;
     double dy;
 
+    double reflCoeff;
 
     Lights3D lights3D;
 
@@ -34,6 +35,21 @@ class Z_driehoek {
     void drawZ_bufferd_triangle(unsigned int x0, unsigned int y0, unsigned int x1, unsigned int y1, const Color &ambientReflection,
                                 const Color &diffuseReflection,const Color &specularReflection, double reflectionCoeff,
                                 double dzdx, double  dzdy, double Xg, double Yg, double _1_over_Zg, img::EasyImage & image, const Vector3D &n);
+
+    void createAmbientLight(vector<double> &ambientLight, const Color &ambientReflection);
+
+    void createDiffuseInfinityLight(vector<double> &diffuseInfinityLight, const Color &diffuseReflection, const Vector3D &n);
+
+    void createDiffusepointLight(vector<double> &diffusepointLight, const Color &diffuseReflection, const Vector3D &n, double _1_over_Zi,
+                                 unsigned int i, unsigned int y0);
+
+    void createDiffuseSpotLight(vector<double> &diffusepointLight, const Color &diffuseReflection, const Vector3D &n, double _1_over_Zi,
+                                unsigned int i, unsigned int y0);
+
+    void createSpeculaireLight(vector<double> &speculaireLight, const Color &speculaireReflection, const Vector3D &n,
+                               double _1_over_Zi, unsigned int i, unsigned int y0, vector<double> &diffusepointLight, const Color &diffuseReflection);
+
+    img::Color createLight(vector<double> ambientLight, vector<double> diffuseInfinityLight, vector<double> diffusepointLight, vector<double> diffuseSportLight, vector<double> speculaireLight);
 
 public:
 

@@ -19,6 +19,7 @@ drieDdrawings Z_driehoek::triangulate(const drieDdrawings& oldDrawing) {
         newFigure.ambientReflection = figure.ambientReflection;
         newFigure.diffuseRelfection = figure.diffuseRelfection;
         newFigure.speculaireReflection = figure.speculaireReflection;
+        newFigure.reflectionCoefficient = figure.reflectionCoefficient;
 
         //we maken hier de nieuwe figuren aan
         for (const auto& currentFace : figure.faces) createNewFace(currentFace, newFigure);
@@ -109,6 +110,8 @@ img::EasyImage Z_driehoek::drawTriangle(Figures3D &figures3D, const img::Color &
 
     //lopen over de figuren
     for (auto &figure : figures3D) {
+
+        reflCoeff = figure.reflectionCoefficient;
 
         /*
          * nu we de dx, dy en d waarde hebben bepaaldt in de doProjection functie kunnen we elk punt van de figuur
@@ -220,26 +223,53 @@ void Z_driehoek::drawZ_bufferd_triangle(unsigned int x0, unsigned int y0, unsign
     assert(x0 < image.get_width() && y0 < image.get_height());
     assert(x1 < image.get_width() && y1 < image.get_height());
 
-    bool isDrawed = false;
 
     img::Color newColor;
 
     vector<double> colors{0,0,0};
+    vector<double> ambientLight{0,0,0};
+    vector<double> diffuseInfinityLight{0,0,0};
 
-    for (const auto& light : lights3D) {
+
+    createAmbientLight(ambientLight, ambientReflection);
+    createDiffuseInfinityLight(diffuseInfinityLight, diffuseReflection, n);
+
+    for (unsigned int i = x0; i <= x1; ++i) {
+        double _1_over_Zi = _1_over_Zg + (i-Xg)*dzdx + (y0-Yg)*dzdy;
+
+        vector<double> diffusepointLight{0,0,0};
+        vector<double> diffuseSpotLight{0, 0, 0};
+        vector<double> speculaireLight{0,0,0};
+
+        createDiffusepointLight(diffusepointLight, diffuseReflection, n, _1_over_Zi, i, y0);
+        createDiffuseSpotLight(diffuseSpotLight, diffuseReflection, n, _1_over_Zi, i, y0);
+        createSpeculaireLight(speculaireLight,specularReflection, n , _1_over_Zi, i , y0, diffusepointLight, diffuseReflection);
+
+        newColor = createLight(ambientLight, diffuseInfinityLight, diffusepointLight, diffuseSpotLight, speculaireLight);
+
+        if (zBuffer.zBuffer[i][y0] > _1_over_Zi){
+            zBuffer.zBuffer[i][y0] = _1_over_Zi;
+            (image)(i, y0) = newColor;
+
+        }
+    }
 
 
-        //ambientlight
-//        if (!light.second.first.first && !light.second.second.first){
+}
 
-            vector<double> tempVector{light.first.ambientLight.red, light.first.ambientLight.green, light.first.ambientLight.blue};
+void Z_driehoek::createAmbientLight(vector<double>& ambientLight, const Color &ambientReflection) {
 
-            colors[0] += (tempVector[0]*ambientReflection.red);
-            colors[1] += (tempVector[1]*ambientReflection.green);
-            colors[2] += (tempVector[2]*ambientReflection.blue);
-//        }
+    for (const auto& light : lights3D){
+        ambientLight[0]+=(light.first.ambientLight.red * ambientReflection.red);
+        ambientLight[1]+=(light.first.ambientLight.green * ambientReflection.green);
+        ambientLight[2]+=(light.first.ambientLight.blue * ambientReflection.blue);
+    }
+}
 
-        //diffuse infinity light
+void Z_driehoek::createDiffuseInfinityLight(vector<double> &diffuseInfinityLight, const Color &diffuseReflection, const Vector3D &n) {
+
+    for (const auto& light : lights3D){
+
         if(light.second.first.first && !light.second.second.first){
 
             Vector3D l = -Vector3D::vector(light.second.first.second.ldVector);
@@ -248,75 +278,154 @@ void Z_driehoek::drawZ_bufferd_triangle(unsigned int x0, unsigned int y0, unsign
 
             double cosA = (n.x*l.x) + (n.y*l.y) + (n.z*l.z);
 
-            vector<double> tempVector2{light.first.diffuseLight.red, light.first.diffuseLight.green, light.first.diffuseLight.blue};
-
-            if  (cosA > 0 ){
-                colors[0] += (tempVector2[0]*diffuseReflection.red*cosA);
-                colors[1] += (tempVector2[1]*diffuseReflection.green*cosA);
-                colors[2] += (tempVector2[2]*diffuseReflection.blue*cosA);
-            }
-
-        }
-
-        //diffuse point light
-        else if(light.second.first.first && light.second.second.first){
-
-//            Vector3D location = Vector3D::vector(light.second.second.second.location);
-//            double spotAngle = light.second.second.second.spotAngle;
-//
-//            Vector3D locNorm = Vector3D::normalise(location);
-//
-//            location = - Vector3D::vector(location.x/locNorm.x,location.y/locNorm.y,location.z/locNorm.z );
-//
-//            location = Vector3D::normalise(location);
-//
-//            location*=eyePointMatrix;
-
-//            double cosA = (n.x*l.x) + (n.y*l.y) + (n.z*l.z);
-
-//            for (unsigned int i = x0; i <= x1; ++i) {
-//                double _1_over_Zi = _1_over_Zg + (i-Xg)*dzdx + (y0-Yg)*dzdy;
-//
-//                if (zBuffer.zBuffer[i][y0] > _1_over_Zi){
-//                    zBuffer.zBuffer[i][y0] = _1_over_Zi;
-//                    (image)(i, y0) = newColor;
-//
-//                }
-//            }
-
-            isDrawed = true;
-        }
-
-        //specularlight
-        else if(!light.second.first.first && light.second.second.first){
-
-
-        }
-
-
-    }
-
-
-    if (colors[0] > 1) colors[0] = 1;
-    if (colors[1] > 1) colors[1] = 1;
-    if (colors[2] > 1) colors[2] = 1;
-
-    newColor.red = colors[0]*255;
-    newColor.green = colors[1]*255;
-    newColor.blue = colors[2]*255;
-
-    if (!isDrawed){
-        for (unsigned int i = x0; i <= x1; ++i) {
-            double _1_over_Zi = _1_over_Zg + (i-Xg)*dzdx + (y0-Yg)*dzdy;
-
-            if (zBuffer.zBuffer[i][y0] > _1_over_Zi){
-                zBuffer.zBuffer[i][y0] = _1_over_Zi;
-                (image)(i, y0) = newColor;
-
+            if  (cosA > 0){
+                diffuseInfinityLight[0] += (light.first.diffuseLight.red*diffuseReflection.red*cosA);
+                diffuseInfinityLight[1] += (light.first.diffuseLight.green*diffuseReflection.green*cosA);
+                diffuseInfinityLight[2] += (light.first.diffuseLight.blue*diffuseReflection.blue*cosA);
             }
         }
     }
+}
+
+void Z_driehoek::createDiffusepointLight(vector<double> &diffusepointLight, const Color &diffuseReflection, const Vector3D &n, double _1_over_Zi,
+                                         unsigned int i, unsigned int y0)
+{
+
+
+    for (const auto& light : lights3D)
+    {
+        if(light.second.first.first && light.second.second.first && !light.second.second.second.isSpot)
+        {
+
+            double z = 1/_1_over_Zi;
+            double x = (-((double)i - dx) *z)/d ;
+            double y = (-((double)y0 - dy)*z)/d;
+
+            Vector3D location = Vector3D::point(light.second.second.second.location);
+            location*=eyePointMatrix;
+            Vector3D l = Vector3D::normalise(Vector3D::vector(location.x-x, location.y-y, location.z - z));
+
+
+            double cosA = (n.x*l.x) + (n.y*l.y) + (n.z*l.z);
+            double omzetting = 1-((1-cosA)/(1-cos(M_PI/2)));
+
+            if (cosA > 0)
+            {
+                diffusepointLight[0] = (light.first.diffuseLight.red*diffuseReflection.red*omzetting);
+                diffusepointLight[1] = (light.first.diffuseLight.green*diffuseReflection.green*omzetting);
+                diffusepointLight[2] = (light.first.diffuseLight.blue*diffuseReflection.blue*omzetting);
+            }
+        }
+    }
+}
+
+void Z_driehoek::createDiffuseSpotLight(vector<double> &diffusepointLight, const Color &diffuseReflection, const Vector3D &n,
+                                   double _1_over_Zi, unsigned int i, unsigned int y0)
+{
+    for (const auto& light : lights3D)
+    {
+        if(light.second.first.first && light.second.second.first && light.second.second.second.isSpot)
+        {
+
+            double z = 1/_1_over_Zi;
+            double x = (-((double)i - dx) *z)/d ;
+            double y = (-((double)y0 - dy)*z)/d;
+
+            Vector3D location = Vector3D::point(light.second.second.second.location);
+            location*=eyePointMatrix;
+            Vector3D l = Vector3D::normalise(Vector3D::vector(location.x-x, location.y-y, location.z - z));
+
+            double angle = light.second.second.second.spotAngle;
+            angle = gradesToRad(angle);
+
+            double cosA = (n.x*l.x) + (n.y*l.y) + (n.z*l.z);
+            double omzetting = 1-((1-cosA)/(1-cos(angle)));
+
+
+
+            if (cosA > cos(angle))
+            {
+
+                diffusepointLight[0] = (light.first.diffuseLight.red*diffuseReflection.red*omzetting);
+                diffusepointLight[1] = (light.first.diffuseLight.green*diffuseReflection.green*omzetting);
+                diffusepointLight[2] = (light.first.diffuseLight.blue*diffuseReflection.blue*omzetting);
+            }
+        }
+    }
+
 
 }
 
+void Z_driehoek::createSpeculaireLight(vector<double> &speculaireLight, const Color &speculaireReflection, const Vector3D &n,
+                                       double _1_over_Zi, unsigned int i, unsigned int y0, vector<double> &diffusepointLight, const Color &diffuseReflection)
+{
+    for (const auto& light : lights3D)
+    {
+        if(!light.second.first.first && light.second.second.first)
+        {
+            double z = 1/_1_over_Zi;
+            double x = (-((double)i - dx) *z)/d ;
+            double y = (-((double)y0 - dy)*z)/d;
+
+            Vector3D location = Vector3D::point(light.second.second.second.location);
+            location*=eyePointMatrix;
+            Vector3D l = Vector3D::normalise(Vector3D::vector(location.x-x, location.y-y, location.z - z));
+
+
+            double cosA = (n.x*l.x) + (n.y*l.y) + (n.z*l.z);
+
+            Vector3D r = Vector3D::normalise(Vector3D::vector((2*n*cosA)-l));
+            Vector3D camera = Vector3D::normalise(-Vector3D::vector(x,y,z));
+
+            double cosB = (camera.x*r.x) + (camera.y*r.y) + (camera.z*r.z);
+
+            if (cosB > 0)
+            {
+
+                speculaireLight[0] = (light.first.specularLight.red*speculaireReflection.red*pow(cosB, reflCoeff));
+                speculaireLight[1] = (light.first.specularLight.green*speculaireReflection.green*pow(cosB, reflCoeff));
+                speculaireLight[2] = (light.first.specularLight.blue*speculaireReflection.blue*pow(cosB, reflCoeff));
+
+            }
+
+            double omzetting = 1-((1-cosA)/(1-cos(M_PI/2)));
+
+            if (cosA > 0)
+            {
+                diffusepointLight[0] = (light.first.diffuseLight.red*diffuseReflection.red*omzetting);
+                diffusepointLight[1] = (light.first.diffuseLight.green*diffuseReflection.green*omzetting);
+                diffusepointLight[2] = (light.first.diffuseLight.blue*diffuseReflection.blue*omzetting);
+            }
+
+
+        }
+    }
+}
+
+
+img::Color Z_driehoek::createLight(vector<double> ambientLight, vector<double> diffuseInfinityLight,
+                                   vector<double> diffusepointLight, vector<double> diffuseSportLight,
+                                   vector<double> speculaireLight)
+{
+
+    vector<double> color{0,0,0};
+    img::Color imgColor;
+
+
+    color[0] = ambientLight[0] + diffuseInfinityLight[0] + diffusepointLight[0] + diffuseSportLight[0] + speculaireLight[0];
+    color[1] = ambientLight[1] + diffuseInfinityLight[1] + diffusepointLight[1] + diffuseSportLight[1] + speculaireLight[1];
+    color[2] = ambientLight[2] + diffuseInfinityLight[2] + diffusepointLight[2] + diffuseSportLight[2] + speculaireLight[2];
+
+
+    if (color[0] > 1) color[0] = 1;
+    if (color[1] > 1) color[1] = 1;
+    if (color[2] > 1) color[2] = 1;
+
+    imgColor.red = color[0]*255;
+    imgColor.green = color[1]*255;
+    imgColor.blue = color[2]*255;
+
+    return imgColor;
+
+}
 
