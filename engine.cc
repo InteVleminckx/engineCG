@@ -59,6 +59,8 @@ img::EasyImage testFunctionDraw2DLine(const ini::Configuration &configuration){
 
 img::EasyImage generate_2DLSystem(const ini::Configuration &configuration){
 
+    img::EasyImage image;
+
     img::Color backColor;
     TweeDLSystem system;
 
@@ -74,7 +76,16 @@ img::EasyImage generate_2DLSystem(const ini::Configuration &configuration){
     system.parse2DL(configuration["2DLSystem"]["inputfile"]);
     Lines2D drawLines = system.createDrawVector(lineColor);
 
-    return draw2DLines(drawLines, size, backColor, false);
+    image = draw2DLines(drawLines, size, backColor, false);
+
+
+
+    if (image.get_height() <= 0 || image.get_width() <= 0 )
+    {
+        image = generate_2DLSystem(configuration);
+    }
+
+    return image;
 }
 
 img::EasyImage generate_3Ddrawing(const ini::Configuration &configuration){
@@ -163,6 +174,8 @@ img::EasyImage generate_3DdrawingWithZbuffering(const ini::Configuration &config
 
     int nrFigures = configuration["General"]["nrFigures"].as_int_or_die();
 
+
+
     drawing.eyePointTrans(eyepoint);
     for (int i = 0; i < nrFigures; ++i) {
         drawing.parse3Ddrawing(configuration, i, true, false);
@@ -201,6 +214,16 @@ img::EasyImage generate_LightedZBuffering(const ini::Configuration &configuratio
     int nrLights = configuration["General"]["nrLights"].as_int_or_die();
 
 
+    int shadowMask = 0;
+    if (configuration["General"]["shadowEnabled"].exists())
+    {
+        if (configuration["General"]["shadowEnabled"].as_bool_or_die())
+        {
+            shadowMask = configuration["General"]["shadowMask"].as_int_or_die();
+        }
+    }
+
+
     drawing.eyePointTrans(eyepoint);
     for (int i = 0; i < nrFigures; ++i) {
         drawing.parse3Ddrawing(configuration, i, true, true);
@@ -214,7 +237,7 @@ img::EasyImage generate_LightedZBuffering(const ini::Configuration &configuratio
     drieDdrawings newFaceAndPoints = zDriehoek.triangulate(drawing);
     zDriehoek.eyePointMatrix = drawing.getMatrix();
 
-    return zDriehoek.drawTriangle(newFaceAndPoints.drieDfiguren, backColor, drawing.lights);
+    return zDriehoek.drawTriangle(newFaceAndPoints.drieDfiguren, backColor, drawing.lights, shadowMask);
 
 }
 
@@ -275,8 +298,18 @@ int main(int argc, char const* argv[])
                 retVal = 1;
                 continue;
             }
+            auto start = high_resolution_clock::now();
 
             img::EasyImage image = generate_image(conf);
+
+            // stoppen de chrono
+            auto stop = high_resolution_clock::now();
+            //eindtijd min starttijd == duration tijd
+            auto duration = duration_cast<milliseconds >(stop - start);
+
+            //heb dit gevonden op: https://www.geeksforgeeks.org/measure-execution-time-function-cpp/
+            cout << "Time for making \"" << fileName << "\" : " << duration.count() << " miliseconds" << endl;
+
             if(image.get_height() > 0 && image.get_width() > 0)
             {
                 std::string::size_type pos = fileName.rfind('.');

@@ -29,10 +29,11 @@ void drieDdrawings::parse3Ddrawing(const ini::Configuration &configuration, int 
 
         if (configuration[figurex]["specularReflection"].exists()){
             speculaireReflection = configuration[figurex]["specularReflection"].as_double_tuple_or_die();
-
         }
 
     }
+
+
 
     string fractal = type.substr(0, 7);
     int nrIterations;
@@ -142,7 +143,15 @@ void drieDdrawings::parse3Ddrawing(const ini::Configuration &configuration, int 
     else if (type == "MengerSponge"){
 
         nrIterations = configuration[figurex]["nrIterations"].as_int_or_die();
-        createMengerSponge(nrIterations, zBufDriehoek, ambientReflection, diffuseReflection, speculaireReflection);
+
+        double refl = 0;
+
+        if (configuration[figurex]["reflectionCoefficient"].exists())
+        {
+            refl = configuration[figurex]["reflectionCoefficient"];
+        }
+
+        createMengerSponge(nrIterations, zBufDriehoek, ambientReflection, diffuseReflection, speculaireReflection, refl);
         return;
 
     }
@@ -153,6 +162,8 @@ void drieDdrawings::parse3Ddrawing(const ini::Configuration &configuration, int 
         system.parse3DL(configuration[figurex]["inputfile"]);
         newFigure = system.create3DLsystem();
     }
+
+
 
 
     if(fractal != "Fractal"){
@@ -180,6 +191,8 @@ void drieDdrawings::parse3Ddrawing(const ini::Configuration &configuration, int 
 
     else{
         for (auto &fractaal : fractalen) {
+
+
             fractaal.ambientReflection.red = ambientReflection[0];
             fractaal.ambientReflection.green = ambientReflection[1];
             fractaal.ambientReflection.blue = ambientReflection[2];
@@ -194,7 +207,7 @@ void drieDdrawings::parse3Ddrawing(const ini::Configuration &configuration, int 
                 fractaal.speculaireReflection.red = speculaireReflection[0];
                 fractaal.speculaireReflection.green = speculaireReflection[1];
                 fractaal.speculaireReflection.blue = speculaireReflection[2];
-                newFigure.reflectionCoefficient = configuration[figurex]["reflectionCoefficient"];
+                fractaal.reflectionCoefficient = configuration[figurex]["reflectionCoefficient"];
             }
             drieDfiguren.push_back(fractaal);
 
@@ -207,8 +220,8 @@ void drieDdrawings::parse3Ddrawing(const ini::Configuration &configuration, int 
 }
 
 void drieDdrawings::createLights(const ini::Configuration &configuration, int nrLights, bool light) {
-    InfLight emptyInf;
-    PointLight emptyPointLight;
+
+
     if (light){
         for (int i = 0; i < nrLights; ++i) {
 
@@ -222,131 +235,202 @@ void drieDdrawings::createLights(const ini::Configuration &configuration, int nr
             specular = configuration[light]["specularLight"].exists();
             location = configuration[light]["location"].exists();
             direction = configuration[light]["direction"].exists();
+            spotAngle = configuration[light] ["spotAngle"].exists();
 
             if (infinityExist) infinity = configuration[light]["infinity"].as_bool_or_die();
             else infinity = false;
 
-            bool isAmbientLight, isDiffusePointLight, isDiffuseSourceLight, isSpecularLight;
+            string lightType;
 
-            //ambientlight
-            if (!infinity && ambient && !diffuse && !specular && !location && !direction) {
-                isAmbientLight = true;
-                isDiffusePointLight = false;
-                isDiffuseSourceLight = false;
-                isSpecularLight = false;
-            }
+            //geen diffuselicht dus ook al geen specular dus het is ambientlight
+            if (!diffuse) lightType = "Ambient";
 
-                //puntbron
-            else if (!infinity && ambient && diffuse && !specular && location && !direction) {
-                isAmbientLight = false;
-                isDiffusePointLight = true;
-                isDiffuseSourceLight = false;
-                isSpecularLight = false;
-            }
+            /*
+             * we hebben diffuse maar geen specular
+             * we kunnen dit nog opsplitsen in:
+             * infinity
+             * finity point
+             * finity spot
+             */
+            else if (diffuse && !specular)
+            {
+                //infinity
+                if (infinity) lightType = "infDiff";
 
-                //lichtbron op oneindig
-            else if (infinity && ambient && diffuse && !specular && !location && direction) {
-                isAmbientLight = false;
-                isDiffusePointLight = false;
-                isDiffuseSourceLight = true;
-                isSpecularLight = false;
-            }
+                else
+                {
+                    //spot
+                    if (spotAngle) lightType = "fDiffSpot";
 
-                //speculiar glazendlicht
-            else if (!infinity && ambient && diffuse && specular && location && !direction) {
-                isAmbientLight = false;
-                isDiffusePointLight = false;
-                isDiffuseSourceLight = false;
-                isSpecularLight = true;
-            }
-
-
-
-
-            if (isAmbientLight) {
-                Light newLight;
-                vector<double> lightColors = configuration[light]["ambientLight"].as_double_tuple_or_die();
-                newLight.ambientLight.red = lightColors[0] * 1;
-                newLight.ambientLight.green = lightColors[1] * 1;
-                newLight.ambientLight.blue = lightColors[2] * 1;
-                lights.push_back(make_pair(newLight, make_pair(make_pair(false, emptyInf), make_pair(false, emptyPointLight))));
-            }
-
-            else if (isDiffuseSourceLight) {
-                InfLight newLight;
-                vector<double> lightColors = configuration[light]["ambientLight"].as_double_tuple_or_die();
-                newLight.ambientLight.red = lightColors[0] * 1;
-                newLight.ambientLight.green = lightColors[1] * 1;
-                newLight.ambientLight.blue = lightColors[2] * 1;
-
-                lightColors = configuration[light]["diffuseLight"].as_double_tuple_or_die();
-                newLight.diffuseLight.red = lightColors[0] * 1;
-                newLight.diffuseLight.green = lightColors[1] * 1;
-                newLight.diffuseLight.blue = lightColors[2] * 1;
-
-                vector<double> direction = configuration[light]["direction"].as_double_tuple_or_die();
-
-                newLight.ldVector.x = direction[0];
-                newLight.ldVector.y = direction[1];
-                newLight.ldVector.z = direction[2];
-
-                lights.push_back(make_pair(newLight, make_pair(make_pair(true, newLight), make_pair(false, emptyPointLight))));
-            }
-
-            else if (isDiffusePointLight) {
-                PointLight newLight;
-                vector<double> lightColors = configuration[light]["ambientLight"].as_double_tuple_or_die();
-                newLight.ambientLight.red = lightColors[0] * 1;
-                newLight.ambientLight.green = lightColors[1] * 1;
-                newLight.ambientLight.blue = lightColors[2] * 1;
-
-                lightColors = configuration[light]["diffuseLight"].as_double_tuple_or_die();
-                newLight.diffuseLight.red = lightColors[0] * 1;
-                newLight.diffuseLight.green = lightColors[1] * 1;
-                newLight.diffuseLight.blue = lightColors[2] * 1;
-
-
-                vector<double> location = configuration[light]["location"].as_double_tuple_or_die();
-
-                newLight.location = Vector3D::point(location[0], location[1], location[2]);
-
-                if (configuration[light]["spotAngle"].exists()){
-                    double Angle = configuration[light]["spotAngle"].as_double_or_die();
-
-                    newLight.spotAngle = Angle;
-
-                    newLight.isSpot = true;
+                    //point
+                    else lightType = "fDiffPoint";
                 }
-
-                else newLight.isSpot = false;
-
-
-
-                lights.push_back(make_pair(newLight, make_pair(make_pair(true, emptyInf), make_pair(true, newLight))));
             }
 
-            else if (isSpecularLight) {
-                PointLight newLight;
+            /*
+             * specularelight bevat ook 2 types
+             * infinity diff
+             * finity diff point
+             */
+            else if (specular)
+            {
+                //infinity
+                if (infinity) lightType = "infSpec";
+
+                //finity point
+                else lightType = "fSpecPoint";
+            }
+
+            if (lightType == "Ambient") {
+                Light newLight;
+                newLight.type = lightType;
+
                 vector<double> lightColors = configuration[light]["ambientLight"].as_double_tuple_or_die();
-                newLight.ambientLight.red = lightColors[0] * 1;
-                newLight.ambientLight.green = lightColors[1] * 1;
-                newLight.ambientLight.blue = lightColors[2] * 1;
+                newLight.ambientLight.red = lightColors[0];
+                newLight.ambientLight.green = lightColors[1];
+                newLight.ambientLight.blue = lightColors[2];
 
+                lights.push_back(make_pair(lightType, newLight));
+
+            }
+
+            else if (lightType == "infDiff") {
+                Light newLight;
+
+                //type
+                newLight.type = lightType;
+
+                //ambientlight
+                vector<double> lightColors = configuration[light]["ambientLight"].as_double_tuple_or_die();
+                newLight.ambientLight.red = lightColors[0];
+                newLight.ambientLight.green = lightColors[1];
+                newLight.ambientLight.blue = lightColors[2];
+
+                //diffuselight
                 lightColors = configuration[light]["diffuseLight"].as_double_tuple_or_die();
-                newLight.diffuseLight.red = lightColors[0] * 1;
-                newLight.diffuseLight.green = lightColors[1] * 1;
-                newLight.diffuseLight.blue = lightColors[2] * 1;
+                newLight.diffuseLight.red = lightColors[0];
+                newLight.diffuseLight.green = lightColors[1];
+                newLight.diffuseLight.blue = lightColors[2];
 
+                //direction
+                vector<double> directionLight = configuration[light]["direction"].as_double_tuple_or_die();
+                newLight.ldVector = Vector3D::vector(directionLight[0],directionLight[1],directionLight[2]);
+
+                lights.push_back(make_pair(lightType, newLight));
+            }
+
+            else if (lightType == "fDiffPoint") {
+                Light newLight;
+
+                //type
+                newLight.type = lightType;
+
+                //ambientlight
+                vector<double> lightColors = configuration[light]["ambientLight"].as_double_tuple_or_die();
+                newLight.ambientLight.red = lightColors[0];
+                newLight.ambientLight.green = lightColors[1];
+                newLight.ambientLight.blue = lightColors[2];
+
+                //diffuselight
+                lightColors = configuration[light]["diffuseLight"].as_double_tuple_or_die();
+                newLight.diffuseLight.red = lightColors[0];
+                newLight.diffuseLight.green = lightColors[1];
+                newLight.diffuseLight.blue = lightColors[2];
+
+                //location
+                vector<double> locationLight = configuration[light]["location"].as_double_tuple_or_die();
+                newLight.location = Vector3D::point(locationLight[0],locationLight[1],locationLight[2]);
+                lights.push_back(make_pair(lightType, newLight));
+            }
+
+            else if (lightType == "fDiffSpot") {
+                Light newLight;
+
+                //type
+                newLight.type = lightType;
+
+                //ambientlight
+                vector<double> lightColors = configuration[light]["ambientLight"].as_double_tuple_or_die();
+                newLight.ambientLight.red = lightColors[0];
+                newLight.ambientLight.green = lightColors[1];
+                newLight.ambientLight.blue = lightColors[2];
+
+                //diffuselight
+                lightColors = configuration[light]["diffuseLight"].as_double_tuple_or_die();
+                newLight.diffuseLight.red = lightColors[0];
+                newLight.diffuseLight.green = lightColors[1];
+                newLight.diffuseLight.blue = lightColors[2];
+
+                //location
+                vector<double> locationLight = configuration[light]["location"].as_double_tuple_or_die();
+                newLight.location = Vector3D::point(locationLight[0],locationLight[1],locationLight[2]);
+
+                //angle
+                double angle = configuration[light]["spotAngle"].as_double_or_die();
+                newLight.spotAngle = angle;
+
+                lights.push_back(make_pair(lightType, newLight));
+            }
+
+            else if (lightType == "infSpec") {
+                Light newLight;
+
+                //type
+                newLight.type = lightType;
+
+                //ambientlight
+                vector<double> lightColors = configuration[light]["ambientLight"].as_double_tuple_or_die();
+                newLight.ambientLight.red = lightColors[0];
+                newLight.ambientLight.green = lightColors[1];
+                newLight.ambientLight.blue = lightColors[2];
+
+                //diffuselight
+                lightColors = configuration[light]["diffuseLight"].as_double_tuple_or_die();
+                newLight.diffuseLight.red = lightColors[0];
+                newLight.diffuseLight.green = lightColors[1];
+                newLight.diffuseLight.blue = lightColors[2];
+
+                //speculareLight
                 lightColors = configuration[light]["specularLight"].as_double_tuple_or_die();
-                newLight.specularLight.red = lightColors[0] * 1;
-                newLight.specularLight.green = lightColors[1] * 1;
-                newLight.specularLight.blue = lightColors[2] * 1;
+                newLight.specularLight.red = lightColors[0];
+                newLight.specularLight.green = lightColors[1];
+                newLight.specularLight.blue = lightColors[2];
 
-                vector<double> location = configuration[light]["location"].as_double_tuple_or_die();
+                //direction
+                vector<double> directionLight = configuration[light]["direction"].as_double_tuple_or_die();
+                newLight.ldVector = Vector3D::vector(directionLight[0],directionLight[1],directionLight[2]);
 
-                newLight.location = Vector3D::point(location[0], location[1], location[2]);
+                lights.push_back(make_pair(lightType, newLight));
+            }
 
-                lights.push_back(make_pair(newLight, make_pair(make_pair(false, emptyInf), make_pair(true, newLight))));
+            else if (lightType == "fSpecPoint") {
+                Light newLight;
+
+                //type
+                newLight.type = lightType;
+
+                //ambientlight
+                vector<double> lightColors = configuration[light]["ambientLight"].as_double_tuple_or_die();
+                newLight.ambientLight.red = lightColors[0];
+                newLight.ambientLight.green = lightColors[1];
+                newLight.ambientLight.blue = lightColors[2];
+
+                //diffuselight
+                lightColors = configuration[light]["diffuseLight"].as_double_tuple_or_die();
+                newLight.diffuseLight.red = lightColors[0];
+                newLight.diffuseLight.green = lightColors[1];
+                newLight.diffuseLight.blue = lightColors[2];
+
+                //speculareLight
+                lightColors = configuration[light]["specularLight"].as_double_tuple_or_die();
+                newLight.specularLight.red = lightColors[0];
+                newLight.specularLight.green = lightColors[1];
+                newLight.specularLight.blue = lightColors[2];
+
+                //location
+                vector<double> locationLight = configuration[light]["location"].as_double_tuple_or_die();
+                newLight.location = Vector3D::point(locationLight[0],locationLight[1],locationLight[2]);
+                lights.push_back(make_pair(lightType, newLight));
             }
         }
     }
@@ -357,7 +441,7 @@ void drieDdrawings::createLights(const ini::Configuration &configuration, int nr
         newLight.ambientLight.green = 1.0;
         newLight.ambientLight.blue = 1.0;
 
-        lights.push_back(make_pair(newLight, make_pair(make_pair(false, emptyInf), make_pair(false, emptyPointLight))));
+        lights.push_back(make_pair("normal", newLight));
     }
 
 }
@@ -1312,7 +1396,7 @@ Figure drieDdrawings::createBuckyBall() {
     return buckyBall;
 }
 
-void drieDdrawings::createMengerSponge(int nrIterations, bool zBufdriehoek, vector<double> &color, vector<double> diffuus, vector<double> spec) {
+void drieDdrawings::createMengerSponge(int nrIterations, bool zBufdriehoek, vector<double> &color, vector<double> diffuus, vector<double> spec, double reflCoeff) {
     Figure cube = createCube(false);
 
     double scale =  1.0/3.0;
@@ -1321,6 +1405,7 @@ void drieDdrawings::createMengerSponge(int nrIterations, bool zBufdriehoek, vect
 
     Figures3D figuren;
     figuren.push_back(cube);
+
 
 
     if (nrIterations == 0){
@@ -1338,6 +1423,7 @@ void drieDdrawings::createMengerSponge(int nrIterations, bool zBufdriehoek, vect
             cube.speculaireReflection.red = spec[0];
             cube.speculaireReflection.green = spec[1];
             cube.speculaireReflection.blue = spec[2];
+            cube.reflectionCoefficient = reflCoeff;
         }
 
 
@@ -1417,7 +1503,10 @@ void drieDdrawings::createMengerSponge(int nrIterations, bool zBufdriehoek, vect
                             newFigure.speculaireReflection.red = spec[0];
                             newFigure.speculaireReflection.green = spec[1];
                             newFigure.speculaireReflection.blue = spec[2];
+                            newFigure.reflectionCoefficient = reflCoeff;
                         }
+
+
 
                         drieDfiguren.push_back(newFigure);
 

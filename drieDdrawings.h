@@ -39,6 +39,7 @@ public:
     Color diffuseRelfection;
     Color speculaireReflection;
     double reflectionCoefficient;
+
 };
 
 class Light
@@ -50,29 +51,40 @@ public:
     Color diffuseLight;
     //de diffuse licht component
     Color specularLight;
-};
 
-class InfLight : public Light
-{
-public:
+    string type;
+
     //de richting waarin het licht schijnt
     Vector3D ldVector;
-};
 
-class PointLight : public Light
-{
-public:
     //de locatie van de puntbron
     Vector3D location;
     //de hoek van een spotlicht
     double spotAngle;
-    //zegt of het een spot is of niet
-    bool isSpot;
+
+    ZBuffer shadowMask;
+
+    Matrix eye;
+
+    double d, dx, dy;
+
 };
+
+//class InfLight : public Light
+//{
+//public:
+//
+//};
+//
+//class PointLight : public Light
+//{
+//public:
+//
+//};
 
 
 typedef std::list<Figure> Figures3D;
-typedef std::list<pair<Light, pair<pair<bool, InfLight>, pair<bool, PointLight>>>> Lights3D;
+typedef std::list<pair<string, Light>> Lights3D;
 
 class drieDdrawings {
 public:
@@ -111,7 +123,7 @@ public:
 
     void createDrawVector(Figure &figure);
 
-    void createMengerSponge(int nrIterations, bool zBufdriehoek, vector<double> &color, vector<double> diffuus, vector<double> spec);
+    void createMengerSponge(int nrIterations, bool zBufdriehoek, vector<double> &color, vector<double> diffuus, vector<double> spec, double reflCoeff);
 
     Matrix scaleMatrix(double &scale);
 
